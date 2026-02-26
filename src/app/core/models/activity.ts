@@ -1,3 +1,5 @@
+import { ActivityCategory } from "../enums/activity-category.enum";
+
 export interface Activity {
   id: string;
   trip_id: string;
@@ -7,5 +9,5 @@ export interface Activity {
   end_time?: string;
   cost: number;
   user_notes?: string;
-  category: string;
+  category: ActivityCategory;
 }
