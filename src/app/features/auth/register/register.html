@@ -1,0 +1,10 @@
+<form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+  <input formControlName="name" type="text" placeholder="Nombre" />
+  <input formControlName="email" type="email" placeholder="Email" />
+  <input formControlName="password" type="password" placeholder="Contraseña" />
+  <button type="submit" [disabled]="registerForm.invalid">Registrarse</button>
+  @if (errorMessage) {
+    <p>{{ errorMessage }}</p>
+  }
+  <a routerLink="/login">¿Ya tienes cuenta? Inicia sesión</a>
+</form>
