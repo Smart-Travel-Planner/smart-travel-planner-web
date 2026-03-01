@@ -1,3 +1,5 @@
+import { jwtDecode, JwtPayload } from 'jwt-decode';
+// import { jwtDecode, JwtPayload } from './../../../../node_modules/jwt-decode/build/cjs/index.d';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
@@ -39,6 +41,13 @@ export class AuthService {
 
   isLoggedIn(): boolean {
     return !!this.getToken();
+  }
+
+  getCurrentUserId(): string | null {
+    const token = this.getToken();
+    if (!token) return null;
+    const decoded = jwtDecode<JwtPayload>(token);
+    return decoded.sub ?? null;
   }
 
   private saveToken(token: string): void {

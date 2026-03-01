@@ -1,0 +1,26 @@
+<p>trip-detail works!</p>
+<main>
+  @if (trip()) {
+    <section>
+      <h1>{{ trip()!.title }}</h1>
+      <p>Inicio: {{ trip()!.start_date }}</p>
+      @if (trip()!.end_date) {
+        <p>Fin: {{ trip()!.end_date }}</p>
+      }
+      <p>Presupuesto: {{ trip()!.total_budget }}</p>
+      <p>{{ trip()!.is_public ? 'Público' : 'Privado' }}</p>
+    </section>
+
+    <section>
+      <button (click)="goBack()">Volver</button>
+      @if (isOwner()) {
+        <button (click)="goToEdit()">Editar</button>
+        <button (click)="deleteTrip()">Eliminar</button>
+      }
+    </section>
+  }
+
+  @if (errorMessage()) {
+    <p>{{ errorMessage() }}</p>
+  }
+</main>
