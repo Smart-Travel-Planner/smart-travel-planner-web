@@ -1,0 +1,31 @@
+<p>trip-list works!</p>
+<main>
+  <section>
+    <button (click)="goToCreate()">Nuevo viaje</button>
+  </section>
+
+  <section>
+    <button (click)="setFilter('all')">Todos</button>
+    <button (click)="setFilter('mine')">Mis viajes</button>
+    <button (click)="setFilter('public')">Viajes públicos</button>
+
+    <label for="inputDateFrom">Fecha inicio: </label>
+    <input type="date" (change)="setDateFrom($any($event.target).value)" name="inputDateFrom"/>
+    <label for="inputDateTo">Fecha inicio: </label>
+    <input type="date" (change)="setDateTo($any($event.target).value)" name="inputDateTo"/>
+  </section>
+
+  @if (errorMessage()) {
+    <p>{{errorMessage()}}</p>
+  }
+
+  <section>
+    @for (trip of filteredTrips(); track trip.id) {
+      <article>
+        <span>{{ trip.title }}</span>
+        <span>{{ trip.start_date }}</span>
+        <button (click)="goToDetail(trip.id)">Ver detalle</button>
+      </article>
+    }
+  </section>
+</main>

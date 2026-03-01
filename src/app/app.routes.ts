@@ -12,12 +12,12 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./features/auth/register/register').then(m => m.RegisterComponent),
   },
-  // {
-  //   path: 'trips',
-  //   canActivate: [authGuard],
-  //   loadComponent: () =>
-  //     import('./features/trips/trip-list/trip-list').then(m => m.TripListComponent),
-  // },
+  {
+    path: 'trips',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./features/trips/trip-list/trip-list').then(m => m.TripListComponent),
+  },
   {
     path: '',
     // redirectTo: 'trips',

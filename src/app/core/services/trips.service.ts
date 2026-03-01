@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Trip, CreateTripRequest, UpdateTripRequest } from '../models/trip';
+import { Trip, CreateTripRequest, UpdateTripRequest } from '../models/trip.model';
 
 @Injectable({
   providedIn: 'root'
