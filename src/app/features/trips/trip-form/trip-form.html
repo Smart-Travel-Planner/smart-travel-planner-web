@@ -1,0 +1,31 @@
+<p>trip-form works!</p>
+<main>
+  <h1>{{ isEditMode() ? 'Editar viaje' : 'Nuevo viaje' }}</h1>
+
+  <form [formGroup]="tripForm" (ngSubmit)="onSubmit()">
+    <section>
+      <label for="inputTitle">Título:</label>
+      <input type="text" formControlName="title" placeholder="Viaje a Japón" name="inputTitle" />
+      <label for="inputStartDate">Título:</label>
+      <input type="date" formControlName="start_date" name="inputStartDate" />
+      <label for="inputEndDate">Título:</label>
+      <input type="date" formControlName="end_date" name="inputEndDate" />
+      <label for="inputTotalBudget">Título:</label>
+      <input type="number" formControlName="total_budget" placeholder="5000" name="inputTotalBudget" />
+      <label for="inputImageUrl">Título:</label>
+      <input type="text" formControlName="image_url" placeholder="URL de la imagen" name="inputImageUrl" />
+      <label for="inputIsPublic">
+        <input type="checkbox" formControlName="is_public" name="inputIsPublic"/>Viaje público
+      </label>
+    </section>
+
+    @if (errorMessage()) {
+      <p>{{ errorMessage() }}</p>
+    }
+
+    <section>
+      <button type="button" (click)="goBack()">Cancelar</button>
+      <button type="submit" [disabled]="tripForm.invalid">{{ isEditMode() ? 'Guardar cambios' : 'Crear viaje' }}</button>
+    </section>
+  </form>
+</main>

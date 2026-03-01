@@ -18,24 +18,24 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./features/trips/trip-list/trip-list').then(m => m.TripListComponent),
   },
-  // {
-  //   path: 'trips/new',
-  //   canActivate: [authGuard],
-  //   loadComponent: () =>
-  //     import('./features/trips/trip-form/trip-form.component').then(m => m.TripFormComponent),
-  // },
+  {
+    path: 'trips/new',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./features/trips/trip-form/trip-form').then(m => m.TripFormComponent),
+  },
   {
     path: 'trips/:id',
     canActivate: [authGuard],
     loadComponent: () =>
       import('./features/trips/trip-detail/trip-detail').then(m => m.TripDetailComponent),
   },
-  // {
-  //   path: 'trips/:id/edit',
-  //   canActivate: [authGuard],
-  //   loadComponent: () =>
-  //     import('./features/trips/trip-form/trip-form.component').then(m => m.TripFormComponent),
-  // },
+  {
+    path: 'trips/:id/edit',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./features/trips/trip-form/trip-form').then(m => m.TripFormComponent),
+  },
   {
     path: '',
     // redirectTo: 'trips',
