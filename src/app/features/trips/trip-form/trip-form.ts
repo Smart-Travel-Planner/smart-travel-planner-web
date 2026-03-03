@@ -17,6 +17,7 @@ export class TripFormComponent implements OnInit {
 
   tripForm: FormGroup = this.fb.group({
     title: ['', Validators.required],
+    destination: [''],
     start_date: ['', Validators.required],
     end_date: [''],
     total_budget: [0, [Validators.required, Validators.min(0)]],
@@ -53,6 +54,7 @@ export class TripFormComponent implements OnInit {
       ...formValue,
       end_date: formValue.end_date || undefined,
       image_url: formValue.image_url || undefined,
+      destination: formValue.destination || undefined,
     }
 
     const id = this.tripId();

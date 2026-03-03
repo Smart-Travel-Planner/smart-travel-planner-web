@@ -3,6 +3,9 @@
   @if (trip()) {
     <section>
       <h1>{{ trip()!.title }}</h1>
+      @if (trip()!.destination) {
+        <p>Destino: {{ trip()!.destination }}</p>
+      }
       <p>Inicio: {{ trip()!.start_date }}</p>
       @if (trip()!.end_date) {
         <p>Fin: {{ trip()!.end_date }}</p>

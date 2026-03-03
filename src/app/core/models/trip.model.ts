@@ -1,6 +1,7 @@
 export interface Trip {
   id: string;
   title: string;
+  destination?: string;
   user_id: string;
   image_url?: string;
   start_date: string;
@@ -12,6 +13,7 @@ export interface Trip {
 
 export interface CreateTripRequest {
   title: string;
+  destination?: string;
   start_date: string;
   end_date?: string;
   total_budget: number;
@@ -21,6 +23,7 @@ export interface CreateTripRequest {
 
 export interface UpdateTripRequest {
   title?: string;
+  destination?: string;
   start_date?: string;
   end_date?: string;
   total_budget?: number;
