@@ -12,3 +12,23 @@ export interface Location {
   rating?: number;
   place_id?: string;
 }
+
+export interface CreateLocationRequest {
+  name: string;
+  category: ActivityCategory;
+  lat: number;
+  lng: number;
+  address?: string;
+  rating?: number;
+  place_id?: string;
+}
+
+export interface UpdateLocationRequest {
+  name?: string;
+  category?: ActivityCategory;
+  lat?: number;
+  lng?: number;
+  address?: string;
+  rating?: number;
+  place_id?: string;
+}
