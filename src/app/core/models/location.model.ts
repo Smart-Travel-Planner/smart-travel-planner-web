@@ -1,6 +1,6 @@
 import { ActivityCategory } from '../enums/activity-category.enum';
 
-export interface Location {
+export interface TripLocation {
   id: string;
   name: string;
   address?: string;

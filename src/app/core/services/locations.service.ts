@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { CreateLocationRequest, UpdateLocationRequest } from '../models/location.model';
+import { CreateLocationRequest, TripLocation, UpdateLocationRequest } from '../models/location.model';
 
 @Injectable({
   providedIn: 'root',
@@ -10,20 +10,20 @@ export class LocationsService {
   private readonly apiURL = 'http://localhost:3000/locations';
   private http = inject(HttpClient);
 
-  getLocations(): Observable<Location[]> {
-    return this.http.get<Location[]>(this.apiURL);
+  getLocations(): Observable<TripLocation[]> {
+    return this.http.get<TripLocation[]>(this.apiURL);
   };
 
-  getLocationById(id: string): Observable<Location> {
-    return this.http.get<Location>(`${this.apiURL}/${id}`);
+  getLocationById(id: string): Observable<TripLocation> {
+    return this.http.get<TripLocation>(`${this.apiURL}/${id}`);
   };
 
-  createLocation(data: CreateLocationRequest): Observable<Location> {
-    return this.http.post<Location>(this.apiURL, data);
+  createLocation(data: CreateLocationRequest): Observable<TripLocation> {
+    return this.http.post<TripLocation>(this.apiURL, data);
   };
 
-  updateLocation(id: string, data: UpdateLocationRequest): Observable<Location> {
-    return this.http.put<Location>(`${this.apiURL}/${id}`, data);
+  updateLocation(id: string, data: UpdateLocationRequest): Observable<TripLocation> {
+    return this.http.put<TripLocation>(`${this.apiURL}/${id}`, data);
   };
 
   deleteLocation(id: string): Observable<void> {
