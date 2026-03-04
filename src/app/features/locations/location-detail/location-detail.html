@@ -1,0 +1,32 @@
+<p>location-detail works!</p>
+<main>
+  @if (location()) {
+    <section>
+      <h1>{{ location()!.name }}</h1>
+      <p>Categoría: {{ location()!.category }}</p>
+      <p>Latitud: {{ location()!.lat }}</p>
+      <p>Longitud: {{ location()!.lng }}</p>
+      @if (location()!.address) {
+        <p>Dirección: {{ location()!.address }}</p>
+      }
+      @if (location()!.rating) {
+        <p>Valoración: {{ location()!.rating }}</p>
+      }
+      @if (location()!.is_verified) {
+        <p>Verificada</p>
+      }
+    </section>
+
+    <section>
+      <button type="button" (click)="goBack()">Volver</button>
+      @if (isOwner()) {
+        <button type="button" (click)="goToEdit()">Editar</button>
+        <button type="button" (click)="deleteLocation()">Eliminar</button>
+      }
+    </section>
+
+    @if (errorMessage()) {
+      <p>{{ errorMessage() }}</p>
+    }
+  }
+</main>
