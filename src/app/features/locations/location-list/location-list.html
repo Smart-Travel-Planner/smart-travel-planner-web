@@ -1,1 +1,30 @@
 <p>location-list works!</p>
+<main>
+  <section>
+    <button type="button" (click)="goToCreate()">Nueva ubicación</button>
+  </section>
+
+  <section>
+    <button type="button" (click)="setCategory('all')">Todas</button>
+    @for (category of categories; track category) {
+      <button type="button" (click)="setCategory(category)">{{ category }}</button>
+    }
+  </section>
+
+  @if (errorMessage()) {
+    <p>{{ errorMessage() }}</p>
+  }
+
+  <section>
+    @for (location of filteredLocations(); track location.id) {
+      <article>
+        <span>{{ location.name }}</span>
+        <span>{{ location.category }}</span>
+        @if (location.address) {
+          <span>{{ location.address }}</span>
+        }
+        <button type="button" (click)="goToDetail(location.id)">Ver detalle</button>
+      </article>
+    }
+  </section>
+</main>

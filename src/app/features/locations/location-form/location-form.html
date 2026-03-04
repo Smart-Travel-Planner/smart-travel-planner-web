@@ -9,7 +9,7 @@
       <label for="inputCategory">Categoría: </label>
       <select name="inputCategory" formControlName="category">
         @for (category of categories; track category) {
-          <option value="category">{{ category }}</option>
+          <option [value]="category">{{ category }}</option>
         }
       </select>
       <label for="inputLat">Latitud -90 a 90: </label>
