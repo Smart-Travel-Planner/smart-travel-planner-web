@@ -60,6 +60,12 @@ export const routes: Routes = [
   loadComponent: () =>
     import('./features/locations/location-detail/location-detail').then(m => m.LocationDetailComponent),
 },
+{
+  path: 'trips/:tripId/activities',
+  canActivate: [authGuard],
+  loadComponent: () =>
+    import('./features/activities/activity-list/activity-list').then(m => m.ActivityListComponent),
+},
   {
     path: '',
     // redirectTo: 'trips',

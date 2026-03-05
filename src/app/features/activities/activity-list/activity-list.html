@@ -1,0 +1,28 @@
+<p>activity-list works!</p>
+<main>
+  <section>
+    <button type="button" (click)="goToCreate()">Nueva actividad</button>
+  </section>
+
+  <section>
+    <button type="button" (click)="setCategory('all')">Todas</button>
+    @for (category of categories; track category) {
+      <button type="button" (click)="setCategory(category)">{{ category }}</button>
+    }
+  </section>
+
+  @if (errorMessage()) {
+    <p>{{ errorMessage() }}</p>
+  }
+
+  <section>
+    @for (activity of filteredActivities(); track activity.id) {
+      <article>
+        <span>Título: {{ activity.title }}</span>
+        <span>Categoría: {{ activity.category }}</span>
+        <span>Inicio: {{ activity.start_time }}</span>
+        <span>Coste: {{ activity.cost }}</span>
+      </article>
+    }
+  </section>
+</main>
