@@ -11,3 +11,24 @@ export interface Activity {
   user_notes?: string;
   category: ActivityCategory;
 }
+
+export interface CreateActivityRequest {
+  title: string;
+  trip_id: string;
+  start_time: string;
+  cost: number;
+  category: ActivityCategory;
+  location_id?: string;
+  end_time?: string;
+  user_notes?: string;
+}
+
+export interface UpdateActivityRequest {
+  title?: string;
+  start_time?: string;
+  cost?: number;
+  category?: ActivityCategory;
+  location_id?: string;
+  end_time?: string;
+  user_notes?: string;
+}
