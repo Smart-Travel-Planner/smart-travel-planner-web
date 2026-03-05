@@ -1,0 +1,30 @@
+<p>activity-detail works!</p>
+<main>
+  @if (activity()) {
+    <section>
+      <h1>{{ activity()!.title }}</h1>
+      <p>Categoría: {{ activity()!.category }}</p>
+      <p>Inicio: {{ activity()!.start_time }}</p>
+      @if (activity()!.end_time) {
+        <p>Fin: {{ activity()!.end_time }}</p>
+      }
+      <p>Coste: {{ activity()!.cost }}</p>
+      @if (activity()!.user_notes) {
+        <p>Notas: {{ activity()!.user_notes }}</p>
+      }
+      @if (activity()!.location_id) {
+        <p>Localización: {{ activity()!.location_id }}</p>
+      }
+    </section>
+
+    <section>
+      <button type="button" (click)="goBack()">Volver</button>
+      <button type="button" (click)="goToEdit()">Editar</button>
+      <button type="button" (click)="deleteActivity()">Eliminar</button>
+    </section>
+  }
+
+  @if (errorMessage()) {
+    <p>{{ errorMessage() }}</p>
+  }
+</main>
