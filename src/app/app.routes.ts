@@ -66,6 +66,24 @@ export const routes: Routes = [
   loadComponent: () =>
     import('./features/activities/activity-list/activity-list').then(m => m.ActivityListComponent),
 },
+{
+  path: 'trips/:tripId/activities/new',
+  canActivate: [authGuard],
+  loadComponent: () =>
+    import('./features/activities/activity-form/activity-form').then(m => m.ActivityFormComponent),
+},
+{
+  path: 'trips/:tripId/activities/:id/edit',
+  canActivate: [authGuard],
+  loadComponent: () =>
+    import('./features/activities/activity-form/activity-form').then(m => m.ActivityFormComponent),
+},
+{
+  path: 'trips/:tripId/activities/:id',
+  canActivate: [authGuard],
+  loadComponent: () =>
+    import('./features/activities/activity-detail/activity-detail').then(m => m.ActivityDetailComponent),
+},
   {
     path: '',
     // redirectTo: 'trips',

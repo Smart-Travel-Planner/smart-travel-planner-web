@@ -1,10 +1,12 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivitiesService } from '../../../core/services/activities.service';
 import { LocationsService } from '../../../core/services/locations.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ActivityCategory } from '../../../core/enums/activity-category.enum';
 import { TripLocation } from '../../../core/models/location.model';
+import { MatDialog } from '@angular/material/dialog';
+import { LocationDialogComponent } from '../location-dialog/location-dialog';
 
 @Component({
   selector: 'app-activity-form',
@@ -16,15 +18,24 @@ export class ActivityFormComponent implements OnInit {
   private fb = inject(FormBuilder);
   private activitiesService = inject(ActivitiesService);
   private locationsService = inject(LocationsService);
+  private dialog = inject(MatDialog);
   private router = inject(Router);
   private route = inject(ActivatedRoute);
 
   categories = Object.values(ActivityCategory);
   locations = signal<TripLocation[]>([]);
+  locationSearch = signal<string>('');
+  selectedLocation = signal<TripLocation | null>(null);
   isEditMode = signal<boolean>(false);
   activityId = signal<string | null>(null);
   tripId = signal<string>('');
   errorMessage = signal<string>('');
+
+  filteredLocations = computed(() => {
+    const search = this.locationSearch().toLowerCase();
+    if (!search) return this.locations();
+    return this.locations().filter(loc => loc.name.toLowerCase().includes(search));
+  })
 
   activityForm: FormGroup = this.fb.group({
     title: ['', Validators.required],
@@ -64,8 +75,36 @@ export class ActivityFormComponent implements OnInit {
 
   private loadActivity(id: string): void {
     this.activitiesService.getActivityById(id).subscribe({
-      next: activity => this.activityForm.patchValue(activity),
+      next: activity => {
+        this.activityForm.patchValue(activity);
+        if (activity.location_id) {
+          const location = this.locations().find(loc => loc.id === activity.location_id);
+          if (location) this.selectedLocation.set(location);
+        }
+      },
       error: () => this.errorMessage.set('Error cargando la actividad'),
+    });
+  };
+
+  setLocation(location: TripLocation): void {
+    this.selectedLocation.set(location);
+    this.activityForm.patchValue({ location_id: location.id});
+    this.locationSearch.set('');
+  };
+
+  clearLocation(): void {
+    this.selectedLocation.set(null);
+    this.activityForm.patchValue({ location_id: ''});
+  };
+
+  openLocationDialog(): void {
+    const dialogRef = this.dialog.open(LocationDialogComponent, { width: '90vw', maxWidth: '500px'});
+
+    dialogRef.afterClosed().subscribe((location: TripLocation | null) => {
+      if (location) {
+        this.locations.update(locations => [...locations, location]);
+        this.setLocation(location);
+      };
     });
   };
 

@@ -22,6 +22,7 @@
         <span>Categoría: {{ activity.category }}</span>
         <span>Inicio: {{ activity.start_time }}</span>
         <span>Coste: {{ activity.cost }}</span>
+        <button type="button" (click)="goToDetail(activity.id)">Detalle actividad</button>
       </article>
     }
   </section>

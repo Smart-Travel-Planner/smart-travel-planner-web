@@ -20,9 +20,9 @@ export class LocationFormComponent implements OnInit {
 
   locationForm: FormGroup = this.fb.group({
     name: ['', Validators.required],
-    category: ['', Validators.required],
-    lat: [null, [Validators.required, Validators.min(-90), Validators.max(90)]],
-    lng: [null, [Validators.required, Validators.min(-180), Validators.max(180)]],
+    category: [ActivityCategory.Transporte, Validators.required],
+    lat: [0, [Validators.required, Validators.min(-90), Validators.max(90)]],
+    lng: [0, [Validators.required, Validators.min(-180), Validators.max(180)]],
     address: [''],
     rating: [null, [Validators.min(0), Validators.max(5)]],
     place_id: [''],
@@ -54,7 +54,10 @@ export class LocationFormComponent implements OnInit {
     const formValue = this.locationForm.value;
 
     const payload = {
-      ...formValue,
+      name: formValue.name as string,
+      category: formValue.category as ActivityCategory,
+      lat: formValue.lat as number,
+      lng: formValue.lng as number,
       address: formValue.address || undefined,
       rating: formValue.rating ?? undefined,
       place_id: formValue.place_id || undefined,

@@ -1,4 +1,4 @@
-<p>activity-form works!</p>
+
 <main>
   <h1>{{ isEditMode() ? 'Editar actividad' : 'Nueva actividad' }}</h1>
 
@@ -20,17 +20,37 @@
       <input type="number" formControlName="cost" placeholder="Coste" name="inputCost">
       <label for="inputUserNotes">Título: </label>
       <textarea type="text" formControlName="user_notes" placeholder="Notas" name="inputUserNotes"></textarea>
-      <label for="inputLocation">Ubicación: </label>
+    </section>
+    <section>
+      @if (selectedLocation()) {
+        <p>Ubicación: {{ selectedLocation()!.name }}</p>
+        <button type="button" (click)="clearLocation()">Quitar ubicación</button>
+      } @else {
+        <label for="inputLocationSearch">Ubicación: </label>
+        <input type="text" [value]="locationSearch()" (input)="locationSearch.set($any($event.target).value)" placeholder="Buscar ubicación..." name="inputLocationSearch">
+        @if (locationSearch()) {
+          <ul>
+            @for (location of filteredLocations(); track location.id) {
+              <li (click)="setLocation(location)">{{ location.name }}</li>
+            }
+            @if (filteredLocations().length === 0) {
+              <li>No se encontraron resultados</li>
+            }
+          </ul>
+        }
+        <button type="button" (click)="openLocationDialog()">Crear nueva ubicación</button>
+      }
+      <!-- <label for="inputLocation">Ubicación: </label>
       <select formControlName="location_id" name="inputLocation">
         @for (location of locations(); track location.id) {
           <option [value]="location.id">{{ location.name }}</option>
         }
-      </select>
+      </select> -->
     </section>
 
     <section>
       <button type="button" (click)="goBack()">Cancelar</button>
-      <button type="button" [disabled]="activityForm.invalid">
+      <button type="button" (click)="onSubmit()" [disabled]="activityForm.invalid">
         {{ isEditMode() ? 'Guardar cambios' : 'Crear actividad' }}
       </button>
     </section>
