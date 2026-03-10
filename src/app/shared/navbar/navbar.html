@@ -1,0 +1,137 @@
+<nav class="px-4 md:px-6 py-4 md:py-6">
+  <div class="flex flex-row justify-between items-center">
+
+    <a routerLink="/" class="flex items-center gap-2 md:gap-3 group z-50">
+      <p class="text-2xl md:text-2xl font-bold text-indigo-700 group-hover:text-indigo-600 transition-colors duration-300">
+        Smart Travel Planner
+      </p>
+    </a>
+
+    @if (authService.isLoggedIn()) {
+
+      <div class="hidden lg:flex items-center gap-4">
+        <!-- <a routerLink="/events"
+           routerLinkActive="text-stone-700"
+           [routerLinkActiveOptions]="{exact: true}"
+           class="text-indigo-700 hover:text-indigo-900 font-semibold
+                  transition-all duration-300 px-3 py-2 text-base">
+          Cositas
+        </a>
+        <a routerLink="/events/map"
+           routerLinkActive="text-stone-700"
+           [routerLinkActiveOptions]="{exact: true}"
+           class="text-indigo-700 hover:text-indigo-900 font-semibold
+                  transition-all duration-300 px-3 py-2 text-base">
+          Mapa
+        </a>
+        <a routerLink="/calendar"
+           routerLinkActive="text-stone-700"
+           [routerLinkActiveOptions]="{exact: false}"
+           class="text-indigo-700 hover:text-indigo-900 font-semibold
+                  transition-all duration-300 px-3 py-2 text-base">
+          Calendario
+        </a>
+        <a routerLink="/dashboard"
+           routerLinkActive="text-stone-700"
+           [routerLinkActiveOptions]="{exact: false}"
+           class="text-indigo-700 hover:text-indigo-900 font-semibold
+                  transition-all duration-300 px-3 py-2 text-base">
+          Gráficos
+        </a> -->
+
+        <button id="profileButton">
+          <span class="text-2xl">👤</span> 
+        </button>
+
+
+        <button (click)="onLogout()"
+           class="border-2 border-white text-stone-900 bg-white rounded-3xl
+                  shadow-lg hover:shadow-2xl hover:scale-105 hover:bg-pink-300
+                  hover:text-gray-950 transition-all duration-300 px-5 py-2
+                  font-semibold text-base">
+          Cerrar sesión
+        </button>
+      </div>
+
+
+      <button
+        (click)="toggleMenu()"
+        class="lg:hidden z-50 p-2 rounded-lg hover:bg-indigo-50 transition-colors duration-300"
+        [attr.aria-label]="isMenuOpen() ? 'Close menu' : 'Open menu'"
+        [attr.aria-expanded]="isMenuOpen()">
+        <div class="w-6 h-5 flex flex-col justify-between">
+          <span class="block h-0.5 w-full bg-indigo-700 transition-all duration-300"
+                [class.rotate-45]="isMenuOpen()"
+                [class.translate-y-2]="isMenuOpen()"></span>
+          <span class="block h-0.5 w-full bg-indigo-700 transition-all duration-300"
+                [class.opacity-0]="isMenuOpen()"></span>
+          <span class="block h-0.5 w-full bg-indigo-700 transition-all duration-300"
+                [class.-rotate-45]="isMenuOpen()"
+                [class.-translate-y-2]="isMenuOpen()"></span>
+        </div>
+      </button>
+
+
+      <div
+        class="fixed inset-0 bg-white z-40 lg:hidden transition-all duration-300 ease-in-out"
+        [class.opacity-0]="!isMenuOpen()"
+        [class.pointer-events-none]="!isMenuOpen()"
+        [class.opacity-100]="isMenuOpen()">
+
+        <div class="flex flex-col items-center justify-center h-full gap-8 px-8">
+          <a routerLink="/events"
+             (click)="closeMenu()"
+             routerLinkActive="text-stone-700"
+             [routerLinkActiveOptions]="{exact: true}"
+             class="text-indigo-700 hover:text-indigo-900 font-semibold
+                    transition-all duration-300 text-2xl">
+            Eventos
+          </a>
+          <a routerLink="/events/map"
+             (click)="closeMenu()"
+             routerLinkActive="text-stone-700"
+             [routerLinkActiveOptions]="{exact: true}"
+             class="text-indigo-700 hover:text-indigo-900 font-semibold
+                    transition-all duration-300 text-2xl">
+            Mapas
+          </a>
+          <a routerLink="/calendar"
+             (click)="closeMenu()"
+             routerLinkActive="text-stone-700"
+             [routerLinkActiveOptions]="{exact: false}"
+             class="text-indigo-700 hover:text-indigo-900 font-semibold
+                    transition-all duration-300 text-2xl">
+            Calendario
+          </a>
+          <a routerLink="/dashboard"
+             (click)="closeMenu()"
+             routerLinkActive="text-stone-700"
+             [routerLinkActiveOptions]="{exact: false}"
+             class="text-indigo-700 hover:text-indigo-900 font-semibold
+                    transition-all duration-300 text-2xl">
+            Gráficos
+          </a>
+
+          <button (click)="onLogout()"
+             class="border-2 border-white text-stone-900 bg-white rounded-3xl
+                    shadow-lg hover:shadow-2xl hover:scale-105 hover:bg-pink-300
+                    hover:text-gray-950 transition-all duration-300 px-8 py-3
+                    font-semibold text-xl mt-4">
+            Cerrar sesión
+          </button>
+        </div>
+      </div>
+
+    } @else {
+
+      <a routerLink="/login"
+         class="border-2 border-white text-stone-900 bg-white rounded-3xl
+                shadow-lg hover:shadow-2xl hover:scale-105 hover:bg-pink-200
+                hover:text-gray-950 transition-all duration-300 px-4 md:px-5 py-2 md:py-2
+                font-semibold text-sm md:text-base z-50">
+        Iniciar sesión
+      </a>
+    }
+
+  </div>
+</nav>
