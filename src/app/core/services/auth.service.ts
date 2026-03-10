@@ -10,12 +10,14 @@ import {
   RegisterRequest,
   RegisterResponse,
 } from '../../features/auth/auth.interfaces';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  private readonly apiUrl = 'http://localhost:3000/auth';
+  private readonly apiUrl = environment.apiUrl + '/auth';
+  // private readonly apiUrl = 'http://localhost:3000/auth';
   private readonly tokenKey = 'access_token';
 
   constructor(private http: HttpClient, private router: Router) {}
