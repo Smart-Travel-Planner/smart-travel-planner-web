@@ -99,6 +99,12 @@ export const routes: Routes = [
       import('./features/activities/activity-detail/activity-detail').then(m => m.ActivityDetailComponent),
   },
   {
+    path: 'map',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./features/map/mapa').then(m => m.MapComponent),
+  },
+  {
     path: '**',
     redirectTo: '',
   },
