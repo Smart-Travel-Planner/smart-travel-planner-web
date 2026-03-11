@@ -15,15 +15,29 @@
     <p>{{ errorMessage() }}</p>
   }
 
-  <section>
-    @for (activity of filteredActivities(); track activity.id) {
-      <article>
-        <span>Título: {{ activity.title }}</span>
-        <span>Categoría: {{ activity.category }}</span>
-        <span>Inicio: {{ activity.start_time }}</span>
-        <span>Coste: {{ activity.cost }}</span>
-        <button type="button" (click)="goToDetail(activity.id)">Detalle actividad</button>
-      </article>
-    }
-  </section>
+  <div class="activity-map-layout">
+    <section class="activity-list">
+      @for (activity of filteredActivities(); track activity.id) {
+        <article
+          [id]="'activity-' + activity.id"
+          [class.highlighted]="highlightedActivityId() === activity.id"
+          (click)="onActivityClicked(activity)">
+          <span>Título: {{ activity.title }}</span>
+          <span>Categoría: {{ activity.category }}</span>
+          <span>Inicio: {{ activity.start_time }}</span>
+          <span>Coste: {{ activity.cost }}</span>
+          <button type="button" (click)="goToDetail(activity.id); $event.stopPropagation()">Detalle actividad</button>
+        </article>
+      }
+    </section>
+
+    <section class="activity-map">
+      <app-map #mapRef
+        mode = 'view'
+        containerId="activity-map"
+        [activities]="filteredActivities()"
+        [locations]="locations()"
+        (markerClicked)="onMarkerClicked($event)"></app-map>
+    </section>
+  </div>
 </main>

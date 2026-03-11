@@ -1,0 +1,24 @@
+.activity-map-layout {
+  display: flex;
+  gap: 16px;
+  height: 600px;
+}
+
+.activity-list {
+  flex: 1;
+  overflow-y: auto;
+}
+
+.activity-map {
+  flex: 1;
+  height: 100%;
+}
+
+article {
+  cursor: pointer;
+}
+
+article.highlighted {
+  background-color: #f0f4ff;
+  border-left: 4px solid #3b82f6;
+}

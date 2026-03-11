@@ -1,32 +1,41 @@
-import { Component, computed, inject, OnInit, signal } from '@angular/core';
+import { Component, computed, inject, OnInit, signal, viewChild } from '@angular/core';
 import { ActivitiesService } from '../../../core/services/activities.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Activity } from '../../../core/models/activity.model';
 import { ActivityCategory } from '../../../core/enums/activity-category.enum';
+import { MapComponent } from '../../../shared/components/map/map';
+import { LocationsService } from '../../../core/services/locations.service';
+import { TripLocation } from '../../../core/models/location.model';
 
 @Component({
   selector: 'app-activity-list',
-  imports: [],
+  imports: [MapComponent],
   templateUrl: './activity-list.html',
   styleUrl: './activity-list.css',
 })
 export class ActivityListComponent implements OnInit {
   activitiesService = inject(ActivitiesService);
+  locationsService = inject(LocationsService);
   private router = inject(Router);
   private route = inject(ActivatedRoute);
 
+  private mapComponent = viewChild<MapComponent>('mapRef');
+
   private activities = signal<Activity[]>([]);
+  locations = signal<TripLocation[]>([]);
   activeCategory = signal<ActivityCategory | 'all'>('all');
   tripId = signal<string>('');
   errorMessage = signal<string>('');
+  highlightedActivityId = signal<string | null>(null);
 
   categories = Object.values(ActivityCategory);
 
   filteredActivities = computed(() => {
+    const category = this.activeCategory();
     let activities = this.activities();
 
     if (this.activeCategory() !== 'all') {
-      activities = activities.filter(a => a.category === this.activeCategory());
+      activities = activities.filter(a => a.category === category);
     };
     return activities.sort((a, b) => a.start_time.localeCompare(b.start_time));
   });
@@ -39,6 +48,7 @@ export class ActivityListComponent implements OnInit {
     };
     this.tripId.set(tripId);
     this.loadActivities(tripId);
+    this.loadLocations();
   }
 
   private loadActivities(tripId: string): void {
@@ -48,9 +58,29 @@ export class ActivityListComponent implements OnInit {
     });
   };
 
+  private loadLocations(): void {
+    this.locationsService.getLocations().subscribe({
+      next: locations => this.locations.set(locations),
+      error: () => this.errorMessage.set('Error cargando las ubicaciones'),
+    });
+  };
+
   setCategory(category: ActivityCategory | 'all'): void {
     this.activeCategory.set(category);
   };
+
+  onMarkerClicked(activityId: string): void {
+    this.highlightedActivityId.set(activityId);
+    const element = document.getElementById(`activity-${activityId}`);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth', block: 'center'});
+    };
+  };
+
+  onActivityClicked(activity: Activity): void {
+    this.highlightedActivityId.set(activity.id);
+    this.mapComponent()?.highlightActivity(activity.id);
+  }
 
   goToCreate(): void {
     this.router.navigate(['/trips', this.tripId(), 'activities', 'new']);
