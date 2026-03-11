@@ -50,30 +50,30 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./features/trips/trip-form/trip-form').then(m => m.TripFormComponent),
   },
-  {
-    path: 'locations',
-    canActivate: [authGuard],
-    loadComponent: () =>
-      import('./features/locations/location-list/location-list').then(m => m.LocationListComponent),
-  },
-  {
-    path: 'locations/new',
-    canActivate: [authGuard],
-    loadComponent: () =>
-      import('./features/locations/location-form/location-form').then(m => m.LocationFormComponent),
-  },
-  {
-    path: 'locations/:id/edit',
-    canActivate: [authGuard],
-    loadComponent: () =>
-      import('./features/locations/location-form/location-form').then(m => m.LocationFormComponent),
-  },
-  {
-    path: 'locations/:id',
-    canActivate: [authGuard],
-    loadComponent: () =>
-      import('./features/locations/location-detail/location-detail').then(m => m.LocationDetailComponent),
-  },
+  // {
+  //   path: 'locations',
+  //   canActivate: [authGuard],
+  //   loadComponent: () =>
+  //     import('./features/locations/location-list/location-list').then(m => m.LocationListComponent),
+  // },
+  // {
+  //   path: 'locations/new',
+  //   canActivate: [authGuard],
+  //   loadComponent: () =>
+  //     import('./features/locations/location-form/location-form').then(m => m.LocationFormComponent),
+  // },
+  // {
+  //   path: 'locations/:id/edit',
+  //   canActivate: [authGuard],
+  //   loadComponent: () =>
+  //     import('./features/locations/location-form/location-form').then(m => m.LocationFormComponent),
+  // },
+  // {
+  //   path: 'locations/:id',
+  //   canActivate: [authGuard],
+  //   loadComponent: () =>
+  //     import('./features/locations/location-detail/location-detail').then(m => m.LocationDetailComponent),
+  // },
   {
     path: 'trips/:tripId/activities',
     canActivate: [authGuard],

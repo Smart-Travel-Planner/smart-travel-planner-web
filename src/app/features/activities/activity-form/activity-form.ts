@@ -7,6 +7,7 @@ import { ActivityCategory } from '../../../core/enums/activity-category.enum';
 import { TripLocation } from '../../../core/models/location.model';
 import { MatDialog } from '@angular/material/dialog';
 import { LocationDialogComponent } from '../location-dialog/location-dialog';
+import { TripsService } from '../../../core/services/trips.service';
 
 @Component({
   selector: 'app-activity-form',
@@ -21,6 +22,7 @@ export class ActivityFormComponent implements OnInit {
   private dialog = inject(MatDialog);
   private router = inject(Router);
   private route = inject(ActivatedRoute);
+  private tripsService = inject(TripsService);
 
   categories = Object.values(ActivityCategory);
   locations = signal<TripLocation[]>([]);
@@ -30,6 +32,7 @@ export class ActivityFormComponent implements OnInit {
   activityId = signal<string | null>(null);
   tripId = signal<string>('');
   errorMessage = signal<string>('');
+  tripDestinationCoords = signal<{ lat: number; lng: number} | undefined>(undefined);
 
   filteredLocations = computed(() => {
     const search = this.locationSearch().toLowerCase();
@@ -63,8 +66,17 @@ export class ActivityFormComponent implements OnInit {
       this.isEditMode.set(true);
       this.activityId.set(id);
       this.loadActivity(id);
+      this.loadTripDestination(tripId);
     };
   };
+
+  private loadTripDestination(tripId: string): void {
+    this.tripsService.getTripById(tripId).subscribe({
+      next: trip => {
+        
+      }
+    })
+  }
 
   private loadLocations(): void {
     this.locationsService.getLocations().subscribe({
@@ -98,7 +110,11 @@ export class ActivityFormComponent implements OnInit {
   };
 
   openLocationDialog(): void {
-    const dialogRef = this.dialog.open(LocationDialogComponent, { width: '90vw', maxWidth: '500px'});
+    const dialogRef = this.dialog.open(LocationDialogComponent, {
+      width: '90vw',
+      maxWidth: '500px',
+      data: {tripDestinationCoords: this.tripDestinationCoords()},
+    });
 
     dialogRef.afterClosed().subscribe((location: TripLocation | null) => {
       if (location) {
