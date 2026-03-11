@@ -24,13 +24,17 @@ export class MapComponent implements OnInit, OnDestroy {
   };
   @Input() set locations(value: TripLocation[]) {
     this._locations.set(value);
-  }
+  };
+  @Input() set centerLocation(value: TripLocation | null) {
+    this._centerLocation.set(value);
+  };
 
   @Output() locationSelected = new EventEmitter<{ lat: number; lng: number}>;
   @Output() markerClicked = new EventEmitter<string>();
 
   private _activities = signal<Activity[]>([]);
   private _locations = signal<TripLocation[]>([]);
+  private _centerLocation = signal<TripLocation | null>(null);
   private map: L.Map | undefined;
   private activityMarkers: ActivityMarker[] = [];
   private selectionMarker: L.Marker | undefined;
@@ -44,6 +48,30 @@ export class MapComponent implements OnInit, OnDestroy {
       if (this.map && this.mode === 'view') {
         this.paintActivityMarkers(activities, locations);
       };
+    });
+    effect(() => {
+      const location = this._centerLocation();
+      if (!location) return;
+
+      if (this.map) {
+        this.mapService.createMarker(this.map, {
+          lat: location.lat,
+          lng: location.lng,
+          icon: this.mapService.createDefaultIcon(),
+          popup: location.name,
+        });
+      } else {
+        setTimeout(() => {
+          if (this.map) {
+            this.mapService.createMarker(this.map, {
+              lat: location.lat,
+              lng: location.lng,
+              icon: this.mapService.createDefaultIcon(),
+              popup: location.name,
+            });
+          }
+        }, 100)
+      }
     });
   };
 
