@@ -1,4 +1,4 @@
-import { Component, computed, inject, OnInit, signal } from '@angular/core';
+import { Component, computed, inject, OnInit, signal, viewChild } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivitiesService } from '../../../core/services/activities.service';
 import { LocationsService } from '../../../core/services/locations.service';
@@ -8,10 +8,12 @@ import { TripLocation } from '../../../core/models/location.model';
 import { MatDialog } from '@angular/material/dialog';
 import { LocationDialogComponent } from '../location-dialog/location-dialog';
 import { TripsService } from '../../../core/services/trips.service';
+import { MapComponent } from '../../../shared/components/map/map';
+import { GeocodingService } from '../../../core/services/geocoding.service';
 
 @Component({
   selector: 'app-activity-form',
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, MapComponent],
   templateUrl: './activity-form.html',
   styleUrl: './activity-form.css',
 })
@@ -23,6 +25,8 @@ export class ActivityFormComponent implements OnInit {
   private router = inject(Router);
   private route = inject(ActivatedRoute);
   private tripsService = inject(TripsService);
+  private mapComponent = viewChild<MapComponent>('mapRef');
+  private geocodingService = inject(GeocodingService);
 
   categories = Object.values(ActivityCategory);
   locations = signal<TripLocation[]>([]);
@@ -61,22 +65,35 @@ export class ActivityFormComponent implements OnInit {
 
     this.tripId.set(tripId);
     this.loadLocations();
+    this.loadTripDestination(tripId);
 
     if (id) {
       this.isEditMode.set(true);
       this.activityId.set(id);
       this.loadActivity(id);
-      this.loadTripDestination(tripId);
+      // this.loadTripDestination(tripId);
     };
   };
 
   private loadTripDestination(tripId: string): void {
     this.tripsService.getTripById(tripId).subscribe({
       next: trip => {
-        
-      }
-    })
-  }
+        if (trip.destination) {
+          this.geocodingService.getCoordsByDestination(trip.destination).subscribe({
+            next: coords => this.tripDestinationCoords.set(coords),
+            error: async () => {
+              const coords = await this.geocodingService.getUserLocationOrDefault();
+              this.tripDestinationCoords.set(coords);
+            },
+          });
+        } else {
+          this.geocodingService.getUserLocationOrDefault().then(coords => {
+            this.tripDestinationCoords.set(coords);
+          });
+        };
+      },
+    });
+  };
 
   private loadLocations(): void {
     this.locationsService.getLocations().subscribe({
@@ -98,11 +115,17 @@ export class ActivityFormComponent implements OnInit {
     });
   };
 
+  onMarkerClicked(locationId: string): void {
+    const location = this.locations().find(loc => loc.id === locationId);
+    if (location) this.setLocation(location);
+  };
+
   setLocation(location: TripLocation): void {
     this.selectedLocation.set(location);
     this.activityForm.patchValue({ location_id: location.id});
     this.locationSearch.set('');
-  };
+    this.mapComponent()?.highlightLocationMarker(location.id);
+};
 
   clearLocation(): void {
     this.selectedLocation.set(null);

@@ -31,22 +31,40 @@ export class MapComponent implements OnInit, OnDestroy {
 
   @Output() locationSelected = new EventEmitter<{ lat: number; lng: number}>;
   @Output() markerClicked = new EventEmitter<string>();
+  @Output() locationMarkerClicked = new EventEmitter<string>();
 
   private _activities = signal<Activity[]>([]);
   private _locations = signal<TripLocation[]>([]);
   private _centerLocation = signal<TripLocation | null>(null);
   private map: L.Map | undefined;
   private activityMarkers: ActivityMarker[] = [];
+  private locationMarkers: Map<string, L.Marker> = new Map();
   private selectionMarker: L.Marker | undefined;
   private userMarker: L.Marker | undefined;
   selectedActivityId = signal<string | null>(null);
+  selectedLocationId = signal<string | null>(null);
 
   constructor() {
     effect(() => {
       const activities = this._activities();
       const locations = this._locations();
-      if (this.map && this.mode === 'view') {
+      if (this.map && this.mode === 'view' && activities.length > 0) {
         this.paintActivityMarkers(activities, locations);
+      };
+    });
+    effect(() => {
+      const locations = this._locations();
+      if (locations.length === 0) return;
+      if (this._activities().length > 0) return;
+
+      if (this.map) {
+        this.paintLocationMarkers(locations);
+      } else {
+        setTimeout(() => {
+          if (this.map) {
+            this.paintLocationMarkers(locations);
+          }
+        }, 100);
       };
     });
     effect(() => {
@@ -177,6 +195,29 @@ export class MapComponent implements OnInit, OnDestroy {
     });
   };
 
+  private paintLocationMarkers(locations: TripLocation[]): void {
+    if (!this.map) return;
+
+    this.locationMarkers.forEach(marker => this.mapService.removeMarker(marker));
+    this.locationMarkers.clear();
+
+    locations.forEach(location => {
+      const marker = this.mapService.createMarker(this.map!, {
+        lat: location.lat,
+        lng: location.lng,
+        icon: this.mapService.createDefaultIcon(),
+        popup: location.name,
+      });
+
+      marker.on('click', () => {
+        this.highlightLocationMarker(location.id);
+        this.locationMarkerClicked.emit(location.id);
+      });
+
+      this.locationMarkers.set(location.id, marker);
+    });
+  }
+
   highlightActivity(activityId: string): void {
     this.selectedActivityId.set(activityId);
 
@@ -194,6 +235,24 @@ export class MapComponent implements OnInit, OnDestroy {
       };
     });
   };
+
+  highlightLocationMarker(locationId: string): void {
+    this.selectedLocationId.set(locationId);
+
+    this.locationMarkers.forEach((marker, id) => {
+      marker.setIcon(
+        id === locationId
+          ? this.mapService.createActiveIcon()
+          : this.mapService.createDefaultIcon()
+      );
+
+      if (id === locationId) {
+        marker.openPopup();
+        const latLng = marker.getLatLng();
+        this.mapService.setView(this.map!, [latLng.lat, latLng.lng], this.zoom);
+      }
+    });
+  }
 
   getUserLocation(): void {
     if (!this.map) return;

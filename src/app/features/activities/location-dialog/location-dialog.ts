@@ -23,13 +23,18 @@ export class LocationDialogComponent {
 
   // @Input() initialCoords?: { lat: number; lng: number };
   // @Input() tripDestinaionCoords?: { lat: number; lng: number };
+tripDestinationCoords = this.dialogData?.tripDestinationCoords;
 
+constructor() {
+  console.log('dialogData:', this.dialogData);
+  console.log('tripDestinationCoords:', this.tripDestinationCoords);
+}
   categories = Object.values(ActivityCategory);
   errorMessage = signal<string>('');
   selectedCoords = signal<{ lat: number; lng: number } | null>(null);
 
-  tripDestinationCoords = this.dialogData?.tripDestinationCoords;
-  
+  // tripDestinationCoords = this.dialogData?.tripDestinationCoords;
+
   locationForm = this.fb.group({
     name: ['', Validators.required],
     category: [ActivityCategory.Transporte, Validators.required],

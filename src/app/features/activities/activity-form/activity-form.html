@@ -38,8 +38,23 @@
             }
           </ul>
         }
-        <button type="button" (click)="openLocationDialog()">Crear nueva ubicación</button>
       }
+      <button type="button" (click)="openLocationDialog()">Crear nueva ubicación</button>
+      <section>
+        <button type="button" (click)="goBack()">Cancelar</button>
+        <button type="button" (click)="onSubmit()" [disabled]="activityForm.invalid">
+          {{ isEditMode() ? 'Guardar cambios' : 'Crear actividad' }}
+        </button>
+      </section>
+      <div class="activity-form-map">
+        <app-map
+          #mapRef
+          mode="view"
+          containerId="activity-form-map"
+          [locations]="locations()"
+          (locationMarkerClicked)="onMarkerClicked($event)"
+        />
+      </div>
       <!-- <label for="inputLocation">Ubicación: </label>
       <select formControlName="location_id" name="inputLocation">
         @for (location of locations(); track location.id) {
@@ -48,11 +63,5 @@
       </select> -->
     </section>
 
-    <section>
-      <button type="button" (click)="goBack()">Cancelar</button>
-      <button type="button" (click)="onSubmit()" [disabled]="activityForm.invalid">
-        {{ isEditMode() ? 'Guardar cambios' : 'Crear actividad' }}
-      </button>
-    </section>
   </form>
 </main>
