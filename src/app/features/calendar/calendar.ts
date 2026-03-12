@@ -1,23 +1,17 @@
-import { Component, OnInit, signal, inject, effect, Input } from '@angular/core';
-import { CalendarOptions, EventInput, EventClickArg, EventDropArg } from '@fullcalendar/core';
-import { CommonModule, DatePipe } from '@angular/common';
+import { Component, OnInit, signal, inject, Input } from '@angular/core';
+import { CalendarOptions, EventClickArg, EventDropArg } from '@fullcalendar/core';
+import { CommonModule } from '@angular/common';
 import { FullCalendarModule } from '@fullcalendar/angular';
-// import { EventsService } from '../../core/services/events.service';
 import dayGridPlugin from '@fullcalendar/daygrid'
-import enLocale from '@fullcalendar/core/locales/en-gb';
 import esLocale from '@fullcalendar/core/locales/es'
 import interactionPlugin from '@fullcalendar/interaction';
 import timeGridPlugin from '@fullcalendar/timegrid'
-// import { EventModel } from '../../core/modals/event-model';
 import { Router } from '@angular/router';
-// import { AuthService } from '../../core/services/auth.service';
 import { TripsService } from '../../core/services/trips.service';
 import { ActivitiesService } from '../../core/services/activities.service';
 import { Trip } from '../../core/models/trip.model';
 import { Activity } from '../../core/models/activity.model';
 import { ACTIVITY_CATEGORY_COLORS } from '../../core/enums/activity-category-colors.enum';
-
-
 
 @Component({
   selector: 'app-calendar',
@@ -30,7 +24,7 @@ export class CalendarComponent implements OnInit {
   private activitiesService = inject(ActivitiesService);
   private router = inject(Router);
 
-  @Input() trip!: Trip;
+  @Input({ required: true }) trip!: Trip;
 
   errorMessage = signal<string>('');
 
@@ -52,18 +46,10 @@ export class CalendarComponent implements OnInit {
       eventColor: '#3788d8'
     })
 
-  // constructor() {
-  //   effect(() => {
-  //     const currentEvents = this.events()
-  //     if(currentEvents.length > 0) {
-  //     this.formatEventsForCalendar(currentEvents)
-  //   }
-  //   })
-  // }
-
-
   ngOnInit(): void {
-     this.loadActivities();
+    if (this.trip?.id) {
+      this.loadActivities();
+    }
   };
 
   private loadActivities(): void {
@@ -120,7 +106,7 @@ export class CalendarComponent implements OnInit {
       end_time: end ? end.toISOString() : undefined,
     }).subscribe({
       error: () => {
-        arg.revert;
+        arg.revert();
         this.errorMessage.set('Error actualizando la actividad');
       },
     });
