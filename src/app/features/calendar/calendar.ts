@@ -43,7 +43,8 @@ export class CalendarComponent implements OnInit {
       // height: 'auto',
       editable: true,
       droppable: true,
-      eventColor: '#3788d8'
+      eventColor: '#3788d8',
+      nextDayThreshold: '09:00:00'
     })
 
   ngOnInit(): void {
@@ -62,31 +63,42 @@ export class CalendarComponent implements OnInit {
   private buildCalendarEvents(activities: Activity[]): void {
     const events: any[] = [];
 
-    events.push({
-      id: `trip-${this.trip.id}`,
-      title: this.trip.title,
-      start: this.trip.start_date,
-      end: this.trip.end_date ?? undefined,
-      display: 'background',
-      color: '#E8F4FD',
-      allDay: true,
-    });
+    if (this.trip) {
+      let adjustedEndDate: string | undefined = undefined;
 
-    activities.forEach(activity => {
+      if (this.trip.end_date) {
+        const date = new Date(this.trip.end_date);
+        date.setDate(date.getDate() + 1); // correción para fullcalendar coloree el día final
+        date.setHours(0, 0, 0, 0);
+        adjustedEndDate = date.toISOString();
+      }
       events.push({
-        id: activity.id,
-        title: activity.title,
-        start: activity.start_time,
-        end: activity.end_time ?? undefined,
-        backgroundColor: ACTIVITY_CATEGORY_COLORS[activity.category],
-        borderColor: ACTIVITY_CATEGORY_COLORS[activity.category],
-        textColor: '#ffffff',
-        extendedProps: {
-          tripId: this.trip.id,
-          category: activity.category,
-        },
+        id: `trip-${this.trip.id}`,
+        title: this.trip.title,
+        start: this.trip.start_date,
+        end: adjustedEndDate,
+        display: 'background',
+        color: '#E8F4FD',
+        allDay: true,
       });
-    });
+
+      activities.forEach(activity => {
+        events.push({
+          id: activity.id,
+          title: activity.title,
+          start: activity.start_time,
+          end: activity.end_time ?? undefined,
+          backgroundColor: ACTIVITY_CATEGORY_COLORS[activity.category],
+          borderColor: ACTIVITY_CATEGORY_COLORS[activity.category],
+          textColor: '#ffffff',
+          extendedProps: {
+            tripId: this.trip.id,
+            category: activity.category,
+          },
+        });
+      });
+    }
+
     this.calendarOptions.update(options => ({ ...options, events}));
   };
 
