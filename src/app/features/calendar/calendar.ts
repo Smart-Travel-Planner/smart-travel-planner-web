@@ -113,10 +113,23 @@ export class CalendarComponent implements OnInit {
     const { id, start, end, extendedProps } = arg.event;
     if (!start || !extendedProps['tripId']) return;
 
+    const tripStart = new Date(this.trip.start_date);
+    const tripEnd = this.trip.end_date ? new Date(this.trip.end_date) : null;
+
+    const isBeforeStart = start < tripStart;
+    const isAfterEnd = tripEnd && (end ? end > tripEnd : start > tripEnd);
+
+    if (isBeforeStart || isAfterEnd) {
+      arg.revert();
+      this.errorMessage.set('La actividad no puede estar fuera de las fechas de viaje');
+      return;
+    };
+
     this.activitiesService.updateActivity(id, {
       start_time: start.toISOString(),
       end_time: end ? end.toISOString() : undefined,
     }).subscribe({
+      next: () => this.errorMessage.set(''),
       error: () => {
         arg.revert();
         this.errorMessage.set('Error actualizando la actividad');
