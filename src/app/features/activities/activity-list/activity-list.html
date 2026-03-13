@@ -1,4 +1,4 @@
-<p>activity-list works!</p>
+
 <main>
   <section>
     <button type="button" (click)="goToCreate()">Nueva actividad</button>
@@ -32,12 +32,18 @@
     </section>
 
     <section class="activity-map">
-      <app-map #mapRef
-        mode = 'view'
-        containerId="activity-map"
-        [activities]="filteredActivities()"
-        [locations]="locations()"
-        (markerClicked)="onMarkerClicked($event)"></app-map>
+      @if (tripDestinationCoords()) {
+        <app-map #mapRef
+          mode="view"
+          containerId="activity-map"
+          [activities]="filteredActivities()"
+          [locations]="locations()"
+          [centerCoords]="[tripDestinationCoords()!.lat, tripDestinationCoords()!.lng]"
+          (markerClicked)="onMarkerClicked($event)"
+        />
+      } @else {
+        <p>Cargando mapa...</p>
+      }
     </section>
   </div>
 </main>

@@ -48,10 +48,17 @@ export class MapComponent implements OnInit, OnDestroy {
     effect(() => {
       const activities = this._activities();
       const locations = this._locations();
-      if (this.map && this.mode === 'view' && activities.length > 0) {
+  if (this.mode !== 'view' || activities.length === 0) return;
+
+  if (this.map) {
+    this.paintActivityMarkers(activities, locations);
+  } else {
+    setTimeout(() => {
+      if (this.map) {
         this.paintActivityMarkers(activities, locations);
-      };
-    });
+      }
+    }, 100);
+  }    });
     effect(() => {
       const locations = this._locations();
       if (locations.length === 0) return;

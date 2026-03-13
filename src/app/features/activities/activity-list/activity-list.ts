@@ -6,6 +6,8 @@ import { ActivityCategory } from '../../../core/enums/activity-category.enum';
 import { MapComponent } from '../../../shared/components/map/map';
 import { LocationsService } from '../../../core/services/locations.service';
 import { TripLocation } from '../../../core/models/location.model';
+import { TripsService } from '../../../core/services/trips.service';
+import { GeocodingService } from '../../../core/services/geocoding.service';
 
 @Component({
   selector: 'app-activity-list',
@@ -16,6 +18,8 @@ import { TripLocation } from '../../../core/models/location.model';
 export class ActivityListComponent implements OnInit {
   activitiesService = inject(ActivitiesService);
   locationsService = inject(LocationsService);
+  private tripsService = inject(TripsService);
+  private geocodingService = inject(GeocodingService);
   private router = inject(Router);
   private route = inject(ActivatedRoute);
 
@@ -27,6 +31,7 @@ export class ActivityListComponent implements OnInit {
   tripId = signal<string>('');
   errorMessage = signal<string>('');
   highlightedActivityId = signal<string | null>(null);
+  tripDestinationCoords = signal<{ lat: number; lng: number} | undefined>(undefined);
 
   categories = Object.values(ActivityCategory);
 
@@ -49,6 +54,7 @@ export class ActivityListComponent implements OnInit {
     this.tripId.set(tripId);
     this.loadActivities(tripId);
     this.loadLocations();
+    this.loadTripDestination(tripId);
   }
 
   private loadActivities(tripId: string): void {
@@ -62,6 +68,26 @@ export class ActivityListComponent implements OnInit {
     this.locationsService.getLocations().subscribe({
       next: locations => this.locations.set(locations),
       error: () => this.errorMessage.set('Error cargando las ubicaciones'),
+    });
+  };
+
+  private loadTripDestination(tripId: string): void {
+    this.tripsService.getTripById(tripId).subscribe({
+      next: trip => {
+        if (trip.destination) {
+          this.geocodingService.getCoordsByDestination(trip.destination).subscribe({
+            next: coords => this.tripDestinationCoords.set(coords),
+            error: async () => {
+              const coords = await this.geocodingService.getUserLocationOrDefault();
+              this.tripDestinationCoords.set(coords);
+            },
+          });
+        } else {
+          this.geocodingService.getUserLocationOrDefault().then(coords => {
+            this.tripDestinationCoords.set(coords);
+          });
+        };
+      },
     });
   };
 
