@@ -21,6 +21,7 @@
 
     <section>
       <button (click)="goBack()">Volver</button>
+      <button (click)="goToActivities()">Actividades</button>
       @if (isOwner()) {
         <button (click)="goToEdit()">Editar</button>
         <button (click)="deleteTrip()">Eliminar</button>

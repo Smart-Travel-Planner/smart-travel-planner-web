@@ -31,24 +31,28 @@ export class TripDetailComponent implements OnInit {
     if (!id) {
       this.router.navigate(['/trips']);
       return;
-    }
+    };
     this.loadTrip(id);
-  }
+  };
 
   private loadTrip(id: string): void {
     this.tripsService.getTripById(id).subscribe({
       next: trip => this.trip.set(trip),
       error: () => this.errorMessage.set('Error cargando el viaje'),
-    })
-  }
+    });
+  };
 
   goToEdit(): void {
     this.router.navigate(['/trips', this.trip()?.id, 'edit']);
-  }
+  };
+
+  goToActivities(): void {
+    this.router.navigate(['/trips', this.trip()?.id, 'activities']);
+  };
 
   goBack(): void {
     this.router.navigate(['/trips']);
-  }
+  };
 
   deleteTrip(): void {
     const id = this.trip()?.id;
