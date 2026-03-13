@@ -37,6 +37,7 @@ export class ActivityFormComponent implements OnInit {
   tripId = signal<string>('');
   errorMessage = signal<string>('');
   tripDestinationCoords = signal<{ lat: number; lng: number} | undefined>(undefined);
+  tripDateRange = signal<{ start: string; end: string | undefined } | null>(null);
 
   filteredLocations = computed(() => {
     const search = this.locationSearch().toLowerCase();
@@ -73,11 +74,18 @@ export class ActivityFormComponent implements OnInit {
       this.loadActivity(id);
       // this.loadTripDestination(tripId);
     };
+
+    this.activityForm.get('start_time')?.valueChanges.subscribe(() => this.validateActivityDates());
+    this.activityForm.get('end_time')?.valueChanges.subscribe(() => this.validateActivityDates());
   };
 
   private loadTripDestination(tripId: string): void {
     this.tripsService.getTripById(tripId).subscribe({
       next: trip => {
+        this.tripDateRange.set({
+          start: trip.start_date,
+          end: trip.end_date ?? undefined,
+        });
         if (trip.destination) {
           this.geocodingService.getCoordsByDestination(trip.destination).subscribe({
             next: coords => this.tripDestinationCoords.set(coords),
@@ -173,6 +181,44 @@ export class ActivityFormComponent implements OnInit {
         next: activity => this.router.navigate(['/trips', tripId, 'activities', activity.id]),
         error: () => this.errorMessage.set('Error creando la actividad'),
       });
+    };
+  };
+
+  private validateActivityDates(): void {
+    const range = this.tripDateRange();
+    if (!range) return;
+
+    const startTime = this.activityForm.get('start_time')?.value;
+    const endTime = this.activityForm.get('end_time')?.value;
+
+    if (startTime) {
+      const start = new Date(startTime);
+      const tripStart = new Date(range.start);
+
+      if (start < tripStart) {
+        this.activityForm.get('start_time')?.setErrors({ beforeTripStart: true });
+      };
+      if (range.end) {
+        const tripEnd = new Date(range.end);
+        if (start > tripEnd) {
+          this.activityForm.get('start_time')?.setErrors({ afterTripEnd: true });
+        };
+      };
+    };
+
+    if (endTime && startTime) {
+      const end = new Date(endTime);
+      const start = new Date(startTime);
+
+      if (end < start) {
+        this.activityForm.get('end_time')?.setErrors({ beforeStartTime: true });
+      };
+      if (range.end) {
+        const tripEnd = new Date(range.end);
+        if (end > tripEnd) {
+          this.activityForm.get('end_time')?.setErrors({ endAfterTripEnd: true });
+        };
+      };
     };
   };
 

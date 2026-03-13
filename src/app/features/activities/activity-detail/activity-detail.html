@@ -14,6 +14,11 @@
       }
     </section>
     <section>
+      <button type="button" (click)="goBack()">Volver</button>
+      <button type="button" (click)="goToEdit()">Editar</button>
+      <button type="button" (click)="deleteActivity()">Eliminar</button>
+    </section>
+    <section>
       @if (location()) {
         <p>Localización: {{ location()!.name }}</p>
         @if (location()?.address) {
@@ -33,11 +38,6 @@
       }
     </section>
 
-    <section>
-      <button type="button" (click)="goBack()">Volver</button>
-      <button type="button" (click)="goToEdit()">Editar</button>
-      <button type="button" (click)="deleteActivity()">Eliminar</button>
-    </section>
   }
 
   @if (errorMessage()) {
