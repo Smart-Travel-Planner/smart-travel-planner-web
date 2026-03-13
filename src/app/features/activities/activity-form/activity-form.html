@@ -60,13 +60,18 @@
         </button>
       </section>
       <div class="activity-form-map">
-        <app-map
-          #mapRef
-          mode="view"
-          containerId="activity-form-map"
-          [locations]="locations()"
-          (locationMarkerClicked)="onMarkerClicked($event)"
-        />
+        @if (tripDestinationCoords()) {
+          <app-map
+            #mapRef
+            mode="view"
+            containerId="activity-form-map"
+            [locations]="locations()"
+            [centerCoords]="tripDestinationCoords() ? [tripDestinationCoords()!.lat, tripDestinationCoords()!.lng] : [41.3851, 2.1734]"
+            (locationMarkerClicked)="onMarkerClicked($event)"
+          />
+        } @else {
+          <p>Cargando mapa...</p>
+        }
       </div>
     </section>
 
