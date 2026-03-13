@@ -1,0 +1,7 @@
+.activity-form-map {
+  height: 300px;
+  width: 100%;
+  margin: 8px 0;
+  position: relative;
+  z-index: 0;
+}

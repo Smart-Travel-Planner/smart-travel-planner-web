@@ -12,16 +12,32 @@
       @if (activity()!.user_notes) {
         <p>Notas: {{ activity()!.user_notes }}</p>
       }
-      @if (activity()!.location_id) {
-        <p>Localización: {{ activity()!.title }}</p>
-      }
     </section>
-
     <section>
       <button type="button" (click)="goBack()">Volver</button>
       <button type="button" (click)="goToEdit()">Editar</button>
       <button type="button" (click)="deleteActivity()">Eliminar</button>
     </section>
+    <section>
+      @if (location()) {
+        <p>Localización: {{ location()!.name }}</p>
+        @if (location()?.address) {
+          <p>Dirección: {{ location()!.address }}</p>
+        }
+        <div class="mini-map-container">
+          <app-map
+            mode="view"
+            containerId="activity-detail-map"
+            [centerCoords]="[location()!.lat, location()!.lng]"
+            [zoom]="15"
+            [centerLocation]="location()"
+            />
+            <!-- [locations]="[location()!]"
+            [activities]="[activity()!]" -->
+        </div>
+      }
+    </section>
+
   }
 
   @if (errorMessage()) {

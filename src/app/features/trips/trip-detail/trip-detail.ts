@@ -3,10 +3,11 @@ import { TripsService } from '../../../core/services/trips.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Trip } from '../../../core/models/trip.model';
 import { AuthService } from '../../../core/services/auth.service';
+import { CalendarComponent } from '../../calendar/calendar';
 
 @Component({
   selector: 'app-trip-detail',
-  imports: [],
+  imports: [CalendarComponent],
   templateUrl: './trip-detail.html',
   styleUrl: './trip-detail.css',
 })

@@ -14,11 +14,24 @@
       </select>
       <label for="inputStartTime">Inicio: </label>
       <input type="datetime-local" formControlName="start_time" placeholder="Inicio" name="inputStartTime">
-      <label for="inputEndTime">Inicio: </label>
+<p>{{activityForm.get('start_time')?.errors?.['beforeTripstart']}}</p>
+      @if (activityForm.get('start_time')?.errors?.['beforeTripStart']) {
+        <p>La fecha de inicio no puede ser anterior al inicio del viaje</p>
+      }
+      @if (activityForm.get('start_time')?.errors?.['afterTripEnd']) {
+        <p>La fecha de inicio no puede ser posterior al final del viaje</p>
+      }
+      <label for="inputEndTime">Fin: </label>
       <input type="datetime-local" formControlName="end_time" placeholder="Fin" name="inputEndTime">
-      <label for="inputCost">Inicio: </label>
+      @if (activityForm.get('end_time')?.errors?.['beforeStartTime']) {
+        <p>La fecha de fin no puede ser anterior al inicio del viaje</p>
+      }
+      @if (activityForm.get('end_time')?.errors?.['endAfterTripEnd']) {
+        <p>La fecha de fin no puede ser posterior al final del viaje</p>
+      }
+      <label for="inputCost">Coste: </label>
       <input type="number" formControlName="cost" placeholder="Coste" name="inputCost">
-      <label for="inputUserNotes">Título: </label>
+      <label for="inputUserNotes">Notas: </label>
       <textarea type="text" formControlName="user_notes" placeholder="Notas" name="inputUserNotes"></textarea>
     </section>
     <section>
@@ -38,21 +51,29 @@
             }
           </ul>
         }
-        <button type="button" (click)="openLocationDialog()">Crear nueva ubicación</button>
       }
-      <!-- <label for="inputLocation">Ubicación: </label>
-      <select formControlName="location_id" name="inputLocation">
-        @for (location of locations(); track location.id) {
-          <option [value]="location.id">{{ location.name }}</option>
+      <button type="button" (click)="openLocationDialog()">Crear nueva ubicación</button>
+      <section>
+        <button type="button" (click)="goBack()">Cancelar</button>
+        <button type="button" (click)="onSubmit()" [disabled]="activityForm.invalid">
+          {{ isEditMode() ? 'Guardar cambios' : 'Crear actividad' }}
+        </button>
+      </section>
+      <div class="activity-form-map">
+        @if (tripDestinationCoords()) {
+          <app-map
+            #mapRef
+            mode="view"
+            containerId="activity-form-map"
+            [locations]="locations()"
+            [centerCoords]="tripDestinationCoords() ? [tripDestinationCoords()!.lat, tripDestinationCoords()!.lng] : [41.3851, 2.1734]"
+            (locationMarkerClicked)="onMarkerClicked($event)"
+          />
+        } @else {
+          <p>Cargando mapa...</p>
         }
-      </select> -->
+      </div>
     </section>
 
-    <section>
-      <button type="button" (click)="goBack()">Cancelar</button>
-      <button type="button" (click)="onSubmit()" [disabled]="activityForm.invalid">
-        {{ isEditMode() ? 'Guardar cambios' : 'Crear actividad' }}
-      </button>
-    </section>
   </form>
 </main>

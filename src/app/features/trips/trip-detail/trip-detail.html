@@ -1,4 +1,4 @@
-<p>trip-detail works!</p>
+
 <main>
   @if (trip()) {
     <section>
@@ -12,6 +12,11 @@
       }
       <p>Presupuesto: {{ trip()!.total_budget }}</p>
       <p>{{ trip()!.is_public ? 'Público' : 'Privado' }}</p>
+    </section>
+
+    <section class="mt-8">
+      <h2>Calendario de Actividades</h2>
+      <app-calendar [trip]="trip()!"></app-calendar>
     </section>
 
     <section>

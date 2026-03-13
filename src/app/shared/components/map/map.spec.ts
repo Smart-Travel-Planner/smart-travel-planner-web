@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { LocationFormComponent } from './location-form';
+import { Map } from './map';
 
-describe('LocationForm', () => {
-  let component: LocationFormComponent;
-  let fixture: ComponentFixture<LocationFormComponent>;
+describe('Map', () => {
+  let component: Map;
+  let fixture: ComponentFixture<Map>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [LocationFormComponent]
+      imports: [Map]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(LocationFormComponent);
+    fixture = TestBed.createComponent(Map);
     component = fixture.componentInstance;
     await fixture.whenStable();
   });

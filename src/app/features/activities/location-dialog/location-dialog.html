@@ -1,8 +1,8 @@
 <h2 mat-dialog-title>Nueva localización</h2>
 
-<mat-dialog-content>
+<div mat-dialog-content>
   <form [formGroup]="locationForm">
-    <label for="inputName" formControlName="name" placeholder="Nombre">Nombre: </label>
+    <label for="inputName" placeholder="Nombre">Nombre: </label>
     <input type="text" formControlName="name" placeholder="Nombre" name="inputName" />
     <label for="inputCategory">Categoría: </label>
     <select name="inputCategory" formControlName="category">
@@ -10,24 +10,38 @@
         <option [value]="category">{{ category }}</option>
       }
     </select>
-    <label for="inputLat">Latitud -90 a 90: </label>
-    <input type="number" formControlName="lat" placeholder="Latitud" name="inputLat" />
-    <label for="inputLng">Longitud -180 a 180: </label>
-    <input type="number" formControlName="lng" placeholder="Longitud" name="inputLng" />
     <label for="inputAddress">Dirección: </label>
     <input type="text" formControlName="address" placeholder="Dirección" name="inputAddress" />
     <label for="inputRating">Valoración: </label>
     <input type="number" formControlName="rating" placeholder="Valoración de 0 a 5" name="inputRating" />
     <label for="inputPlaceId">Place Id: </label>
     <input type="text" formControlName="place_id" placeholder="Place ID" name="inputPlaceId" />
+    <p>Selecciona la ubicación en el mapa:</p>
+    <!-- @if (selectedCoords()) {
+      <p>Lat: {{ selectedCoords()!.lat | number:'1.4-6' }}, Lng: {{ selectedCoords()!.lng | number:'1.4-6' }}</p>
+    } -->
+    <div class="dialog-map-container">
+      <app-map
+        mode="select"
+        containerId="location-dialog-map"
+        [centerCoords]="tripDestinationCoords ? [tripDestinationCoords.lat, tripDestinationCoords.lng] : [40.4168, -3.7038]"
+        (locationSelected)="onLocationSelected($event)"></app-map>
+    </div>
+
+
+
+    <!-- <label for="inputLat">Latitud -90 a 90: </label>
+    <input type="number" formControlName="lat" placeholder="Latitud" name="inputLat" />
+    <label for="inputLng">Longitud -180 a 180: </label>
+    <input type="number" formControlName="lng" placeholder="Longitud" name="inputLng" /> -->
 
     @if (errorMessage()) {
       <p>{{ errorMessage() }}</p>
     }
   </form>
-</mat-dialog-content>
+</div>
 
-<mat-dialog-actions>
+<div mat-dialog-actions>
   <button type="button" (click)="onCancel()">Cancelar</button>
   <button type="button" (click)="onSubmit()" [disabled]="locationForm.invalid">Crear</button>
-</mat-dialog-actions>
+</div>
