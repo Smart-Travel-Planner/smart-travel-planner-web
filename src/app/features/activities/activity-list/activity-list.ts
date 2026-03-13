@@ -116,4 +116,7 @@ export class ActivityListComponent implements OnInit {
     this.router.navigate(['/trips', this.tripId(), 'activities', id]);
   };
 
-}
+  goBack(): void {
+    this.router.navigate(['/trips', this.tripId()]);
+  }
+};
