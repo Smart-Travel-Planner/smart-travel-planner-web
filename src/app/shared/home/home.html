@@ -1,23 +1,43 @@
-<div class="flex flex-col justify-center items-center text-center min-h-[calc(100vh-150px)] px-4 ">
 
-  <div class="flex flex-col gap-4 md:gap-6">
-    <h1 class="text-5xl text-indigo-700 md:text-8xl! font-bold tracking-tight">
-      Smart Travel Planner
-    </h1>
+<main class="relative h-full w-full flex flex-col items-center justify-end overflow-hidden">
 
-    <h2 class="text-base md:text-xl text-stone-900 font-semibold">
-      Planifica tus viajes
-    </h2>
+  <div class="absolute inset-0 z-0">
+    @for (slide of slides(); track $index) {
+      <div
+        class="absolute inset-0 bg-cover bg-center transition-opacity duration-1000 ease-in-out"
+        [style.backgroundImage]="'url(' + slide.url + ')'"
+        [class.opacity-100]="$index === currentIndex()"
+        [class.opacity-0]="$index !== currentIndex()">
 
-    <div class="mt-6 md:mt-4">
-      <a routerLink="/trips"
-         routerLinkActive="active"
-         class="inline-block bg-pink-300 hover:bg-pink-300 rounded-4xl shadow-lg font-semibold
-                hover:shadow-2xl hover:scale-105 transition-all duration-300
-                cursor-pointer px-6 py-3 text-sm md:text-base w-full md:w-auto">
-       Ver viajes
-      </a>
-    </div>
+        <div class="absolute inset-0 bg-linear-to-b from-black/40 via-black/50 to-black/90"></div>
+      </div>
+    }
   </div>
 
-</div>
+  <div class="relative z-10 w-full max-w-md px-8 pb-16 text-center flex flex-col items-center">
+    <div aria-hidden="true" class="mb-8 flex items-center justify-center w-20 h-20 rounded-3xl bg-white/10 backdrop-blur-xl border border-white/20 shadow-2xl">
+      <span class="material-symbols-outlined text-white text-5xl">travel_explore</span>
+    </div>
+
+    <div class="mb-12">
+      <h1 class="text-white text-4xl sm:text-5xl font-extrabold tracking-tight leading-tight mb-4">
+        Smart Travel <br/>
+        <span class="text-blue-400">Planner</span>
+      </h1>
+      <p class="text-slate-200 text-lg">Tu viaje, perfectamene planificado.</p>
+    </div>
+
+    <div class="flex gap-2 mt-8">
+      @for (slide of slides(); track $index) {
+        <button
+          (click)="goToSlide($index)"
+          class="h-2 rounded-full transition-all duration-300"
+          [class.bg-white]="$index === currentIndex()"
+          [class.w-6]="$index === currentIndex()"
+          [class.w-2]="$index !== currentIndex()"
+          [class.bg-white/40]="$index !== currentIndex()">
+        </button>
+      }
+    </div>
+  </div>
+</main>
