@@ -12,13 +12,20 @@
 
       <div class="hidden lg:flex items-center gap-4">
         <a routerLink="/trips"
-           routerLinkActive="!text-white opacity-100"
-           [routerLinkActiveOptions]="{exact: false}"
-           class="text-white/80 hover:text-white font-semibold
-                  transition-all duration-300 px-3 py-2 text-base drop-shadow-sm">
+routerLinkActive="bg-white/10 text-blue-400 !opacity-100 shadow-[inset_0_1px_1px_rgba(255,255,255,0.1)]"
+   [routerLinkActiveOptions]="{exact: true}"
+   class="text-white/70 hover:text-white font-semibold transition-all duration-300 px-4 py-2 rounded-xl text-base drop-shadow-sm flex items-center gap-2">
+
+   <span routerLinkActive="scale-100 opacity-100"
+         [routerLinkActiveOptions]="{exact: true}"
+         class="w-1.5 h-1.5 bg-blue-400 rounded-full transition-all duration-300 scale-0 opacity-0">
+   </span>
           Mis viajes
         </a>
-
+           <!-- routerLinkActive="!text-white opacity-100"
+           [routerLinkActiveOptions]="{exact: false}"
+           class="text-white/80 hover:text-white font-semibold
+                  transition-all duration-300 px-3 py-2 text-base drop-shadow-sm"> -->
         <button (click)="onLogout()"
            class="bg-white/10 backdrop-blur-md border border-white/20 text-white rounded-2xl
                   shadow-xl hover:bg-white/20 hover:scale-105
@@ -53,13 +60,17 @@
 
         <div class="flex flex-col items-center justify-center h-full gap-8 px-8">
           <a routerLink="/trips"
-             (click)="closeMenu()"
+(click)="closeMenu()"
+   routerLinkActive="!text-blue-400 font-bold scale-105"
+   [routerLinkActiveOptions]="{exact: true}"
+   class="text-white/90 hover:text-white transition-all duration-300 text-3xl block text-center">
+               Mis viajes
+          </a>
+             <!-- (click)="closeMenu()"
              routerLinkActive="text-primary-300"
              [routerLinkActiveOptions]="{exact: false}"
              class="text-white hover:text-primary-300 font-semibold
-                    transition-all duration-300 text-2xl">
-            Mis viajes
-          </a>
+                    transition-all duration-300 text-2xl"> -->
 
           <button (click)="onLogout()"
              class="bg-white/10 border border-white/20 text-white rounded-2xl
