@@ -86,7 +86,7 @@ describe('LocationsService', () => {
 
   it('should delete a location', () => {
     service.deleteLocation('1').subscribe(response => {
-      expect(response).toBeUndefined();
+      expect(response).toBeNull();
     });
 
     const req = httpMock.expectOne(req => req.url.includes('/locations/1'));

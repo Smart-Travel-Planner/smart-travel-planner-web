@@ -92,7 +92,7 @@ describe('TripsService', () => {
 
   it('should delete a trip', () => {
     service.deleteTrip('1').subscribe(response => {
-      expect(response).toBeUndefined();
+      expect(response).toBeNull();
     });
 
     const req = httpMock.expectOne(req => req.url.includes('/trips/1'));

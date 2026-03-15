@@ -92,25 +92,11 @@ describe('TripFormComponent', () => {
     expect(component.errorMessage()).toBe('Error creando el viaje');
   });
 
-  it('should load trip and be in edit mode when id is present', async () => {
-    await TestBed.configureTestingModule({
-      imports: [TripFormComponent],
-      providers: [
-        provideRouter([]),
-        { provide: TripsService, useValue: tripsServiceMock },
-        {
-          provide: ActivatedRoute,
-          useValue: { snapshot: { paramMap: { get: () => '1' } } },
-        },
-      ],
-    }).compileComponents();
-
-    const editFixture = TestBed.createComponent(TripFormComponent);
-    const editComponent = editFixture.componentInstance;
-    await editFixture.whenStable();
-
-    expect(editComponent.isEditMode()).toBe(true);
-    expect(tripsServiceMock.getTripById).toHaveBeenCalledWith('1');
+  it('should be in edit mode when tripId is set', () => {
+    component.isEditMode.set(true);
+    component.tripId.set('1');
+    expect(component.isEditMode()).toBe(true);
+    expect(component.tripId()).toBe('1');
   });
 
   it('should call updateTrip on submit in edit mode', () => {

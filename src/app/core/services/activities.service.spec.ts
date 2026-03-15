@@ -88,7 +88,7 @@ describe('ActivitiesService', () => {
 
   it('should delete an activity', () => {
     service.deleteActivity('1').subscribe(response => {
-      expect(response).toBeUndefined();
+      expect(response).toBeNull();
     });
 
     const req = httpMock.expectOne(req => req.url.includes('/activities/1'));

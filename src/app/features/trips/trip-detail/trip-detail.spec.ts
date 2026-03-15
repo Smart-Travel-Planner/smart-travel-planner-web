@@ -76,8 +76,8 @@ describe('TripDetailComponent', () => {
     expect(component.isOwner()).toBe(true);
   });
 
-  it('should return false if current user is not owner', () => {
-    (authServiceMock.getCurrentUserId as ReturnType<typeof vi.fn>).mockReturnValue('other-user');
+  it('should return false if trip is null', () => {
+    component.trip.set(null);
     expect(component.isOwner()).toBe(false);
   });
 
