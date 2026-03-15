@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { AuthErrorDialog } from './auth-error-dialog';
+import { AuthErrorDialogComponent } from './auth-error-dialog';
 
 describe('AuthErrorDialog', () => {
-  let component: AuthErrorDialog;
-  let fixture: ComponentFixture<AuthErrorDialog>;
+  let component: AuthErrorDialogComponent;
+  let fixture: ComponentFixture<AuthErrorDialogComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [AuthErrorDialog]
+      imports: [AuthErrorDialogComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(AuthErrorDialog);
+    fixture = TestBed.createComponent(AuthErrorDialogComponent);
     component = fixture.componentInstance;
     await fixture.whenStable();
   });
