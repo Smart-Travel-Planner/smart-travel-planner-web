@@ -2,17 +2,21 @@ import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { TripsService } from '../../../core/services/trips.service';
 import { Router } from '@angular/router';
 import { Trip } from '../../../core/models/trip.model';
+import { AuthService } from '../../../core/services/auth.service';
+import { MatIconModule } from '@angular/material/icon';
+import { FormatDatePipe } from '../../../shared/pipes/format-date-pipe';
 
 type TripFilter = 'all' | 'mine' | 'public';
 
 @Component({
   selector: 'app-trip-list',
-  imports: [],
+  imports: [MatIconModule, FormatDatePipe],
   templateUrl: './trip-list.html',
   styleUrl: './trip-list.css',
 })
 export class TripListComponent implements OnInit {
   tripsService = inject(TripsService);
+  private authService = inject(AuthService);
   private router = inject(Router);
 
   private myTrips = signal<Trip[]>([]);
@@ -22,6 +26,10 @@ export class TripListComponent implements OnInit {
   dateFrom = signal<string>('');
   dateTo = signal<string>('');
   errorMessage = signal<string>('');
+  dateFromValue = signal<string>('');
+  dateToValue = signal<string>('');
+
+  readonly defaultImage = 'https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=800&q=80';
 
   filteredTrips = computed(() => {
     let trips: Trip[] = [];
@@ -65,23 +73,47 @@ export class TripListComponent implements OnInit {
     });
   };
 
+  isOwner(trip: Trip): boolean {
+    return trip.user_id === this.authService.getCurrentUserId();
+  };
+
   setFilter(filter: TripFilter): void {
     this.activeFilter.set(filter);
   };
 
   setDateFrom(value: string): void {
     this.dateFrom.set(value);
+    this.dateFromValue.set(value);
   };
 
   setDateTo(value: string): void {
     this.dateTo.set(value);
+    this.dateToValue.set(value);
   };
 
   goToDetail(id: string): void {
     this.router.navigate(['/trips', id]);
-  }
+  };
 
   goToCreate(): void {
     this.router.navigate(['/trips/new']);
-  }
+  };
+
+  goToEdit(id: string): void {
+    this.router.navigate(['/trips', id, 'edit']);
+  };
+
+  deleteTrip(id: string): void {
+    this.tripsService.deleteTrip(id).subscribe({
+      next: () => this.loadTrips(),
+      error: () => this.errorMessage.set('Error eliminando el viaje'),
+    });
+  };
+
+  resetDateFilters(): void {
+    this.dateFrom.set('');
+    this.dateTo.set('');
+    this.dateFromValue.set('');
+    this.dateToValue.set('');
+  };
 }

@@ -1,51 +1,85 @@
-<main class="min-h-screen w-full bg-linear-to-b from-slate-900 via-slate-800 to-black text-white px-6 py-12 flex flex-col items-center">
+<main class="min-h-screen w-full bg-linear-to-b from-slate-900 via-slate-800 to-black text-white flex flex-col items-center">
 
-  <header class="w-full max-w-4xl flex justify-between items-end mb-12">
-    <div>
-      <h1 class="text-3xl font-extrabold tracking-tight">
-        Mis <span class="text-blue-400">Viajes</span>
-      </h1>
-      <p class="text-slate-400 mt-1 text-sm">Gestiona tus próximas aventuras</p>
-    </div>
+  <div
+    class="relative w-full min-h-72 flex flex-col items-center pt-16 px-6 overflow-hidden bg-cover bg-center"
+    style="background-image: url('https://res.cloudinary.com/dux4gqdow/image/upload/v1773662802/pietro-de-grandi-T7K4aEPoGGk-unsplash_nqzjxq.jpg')">
 
-    <button
-      (click)="goToCreate()"
-      class="flex items-center gap-2 bg-blue-600 hover:bg-blue-500 transition-colors px-5 py-2.5 rounded-xl font-medium shadow-lg shadow-blue-900/20">
-      <span class="material-symbols-outlined text-sm">add</span>
-      Nuevo viaje
-    </button>
-  </header>
+    <div class="absolute inset-0 bg-linear-to-t from-slate-950 via-slate-900/40 to-transparent"></div>
 
-  <section class="w-full max-w-4xl bg-white/5 backdrop-blur-xl border border-white/10 rounded-3xl p-6 mb-8 flex flex-wrap gap-6 items-center justify-between">
+    <div class="relative w-full max-w-4xl mx-auto pb-4 flex justify-between items-end z-10">
+      <div class="bg-black/30 backdrop-blur-sm px-4 py-2 rounded-2xl">
+        <h1 class="text-4xl font-extrabold tracking-tight drop-shadow-md">
+          Mis <span class="text-blue-400">Viajes</span>
+        </h1>
+        <p class="text-slate-200 mt-1 text-sm font-medium">Gestiona tus próximas aventuras</p>
+      </div>
 
-    <div class="flex bg-black/20 p-1 rounded-xl border border-white/5">
       <button
-        (click)="setFilter('all')"
-        class="px-4 py-2 rounded-lg text-sm transition-all"
-        >
-        Todos
+        (click)="goToCreate()"
+        class="flex items-center gap-2 bg-blue-600 hover:bg-blue-500 transition-all px-6 py-3 rounded-xl font-semibold shadow-2xl shadow-blue-900/40">
+        <span class="material-symbols-outlined text-sm">Nuevo viaje</span>
       </button>
-      <button (click)="setFilter('mine')" class="px-4 py-2 rounded-lg text-sm hover:bg-white/5 transition-all">Mis viajes</button>
-      <button (click)="setFilter('public')" class="px-4 py-2 rounded-lg text-sm hover:bg-white/5 transition-all">Públicos</button>
     </div>
 
-    <div class="flex flex-wrap gap-4 items-center">
-      <div class="flex flex-col gap-1">
-        <label class="text-[10px] uppercase tracking-wider text-slate-400 ml-1">Desde</label>
-        <input
+    <section class="w-full max-w-4xl bg-white/5 backdrop-blur-xl border border-white/10 rounded-3xl p-3 mb-8 flex flex-wrap gap-6 items-center justify-between">
+
+      <div class="flex bg-black/20 p-0.5 rounded-xl border border-white/5">
+        <button
+        (click)="setFilter('all')" class="px-4 py-2 rounded-lg text-sm transition-all">Todos</button>
+        <button (click)="setFilter('mine')" class="px-4 py-2 rounded-lg text-sm hover:bg-white/5 transition-all">Mis viajes</button>
+        <button (click)="setFilter('public')" class="px-4 py-2 rounded-lg text-sm hover:bg-white/5 transition-all">Públicos</button>
+      </div>
+
+      <div class="flex flex-col sm:flex-row flex-wrap gap-4 items-start sm:items-end">
+  @if (dateFrom() || dateTo()) {
+    <button
+      (click)="resetDateFilters()"
+      class="order-last sm:order-first px-3 py-1.5 text-sm text-slate-400 hover:text-white border border-white/10 hover:border-white/30 rounded-lg transition-all">
+      Borrar fechas
+    </button>
+  }
+  <div class="flex flex-col gap-1">
+    <label class="text-[10px] uppercase tracking-wider text-slate-400 ml-1">Desde</label>
+    <input
+      type="date"
+      [value]="dateFromValue()"
+      (change)="setDateFrom($any($event.target).value)"
+      class="bg-white/5 border border-white/10 rounded-lg px-3 py-1.5 text-sm focus:outline-hidden focus:border-blue-400 transition-colors"/>
+  </div>
+  <div class="flex flex-col gap-1">
+    <label class="text-[10px] uppercase tracking-wider text-slate-400 ml-1">Hasta</label>
+    <input
+      [value]="dateToValue()"
+      type="date"
+      (change)="setDateTo($any($event.target).value)"
+      class="bg-white/5 border border-white/10 rounded-lg px-3 py-1.5 text-sm focus:outline-hidden focus:border-blue-400 transition-colors"/>
+  </div>
+</div>
+      <!-- <div class="flex flex-wrap gap-4 items-center">
+        @if (dateFrom() || dateTo()) {
+  <button
+    (click)="resetDateFilters()"
+    class="mt-4 px-3 py-1.5 text-sm text-slate-400 hover:text-white border border-white/10 hover:border-white/30 rounded-lg transition-all">
+    Borrar fechas
+  </button>
+}
+        <div class="flex flex-col gap-1">
+          <label class="text-[10px] uppercase tracking-wider text-slate-400 ml-1">Desde</label>
+          <input
           type="date"
           (change)="setDateFrom($any($event.target).value)"
           class="bg-white/5 border border-white/10 rounded-lg px-3 py-1.5 text-sm focus:outline-hidden focus:border-blue-400 transition-colors"/>
-      </div>
-      <div class="flex flex-col gap-1">
-        <label class="text-[10px] uppercase tracking-wider text-slate-400 ml-1">Hasta</label>
-        <input
+        </div>
+        <div class="flex flex-col gap-1">
+          <label class="text-[10px] uppercase tracking-wider text-slate-400 ml-1">Hasta</label>
+          <input
           type="date"
           (change)="setDateTo($any($event.target).value)"
           class="bg-white/5 border border-white/10 rounded-lg px-3 py-1.5 text-sm focus:outline-hidden focus:border-blue-400 transition-colors"/>
-      </div>
-    </div>
-  </section>
+        </div>
+      </div> -->
+    </section>
+  </div>
 
   @if (errorMessage()) {
     <div class="w-full max-w-4xl p-4 mb-6 bg-red-500/10 border border-red-500/20 rounded-2xl text-red-400 text-center">
@@ -53,7 +87,7 @@
     </div>
   }
 
-  <section class="w-full max-w-4xl grid grid-cols-1 md:grid-cols-2 gap-4">
+  <!-- <section class="w-full max-w-4xl grid grid-cols-1 md:grid-cols-2 gap-4">
     @for (trip of filteredTrips(); track trip.id) {
       <article class="group relative overflow-hidden bg-white/5 backdrop-blur-md border border-white/10 p-5 rounded-3xl hover:border-blue-400/50 transition-all duration-300">
         <div class="flex justify-between items-start mb-4">
@@ -76,5 +110,88 @@
         </button>
       </article>
     }
-  </section>
+  </section> --><section class="w-full max-w-4xl grid grid-cols-1 md:grid-cols-2 gap-6 py-8 px-4">
+  @for (trip of filteredTrips(); track trip.id) {
+    <article class="group bg-white dark:bg-slate-900 rounded-xl overflow-hidden shadow-sm border border-slate-100 dark:border-slate-800 transition-all hover:shadow-md">
+
+      <div class="relative h-48 w-full overflow-hidden">
+        <div
+          class="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-105"
+          [style.background-image]="'url(' + (trip.image_url || defaultImage) + ')'">
+        </div>
+        <div class="absolute top-3 left-3">
+          @if (trip.is_public) {
+            <span class="bg-green-500/90 backdrop-blur px-2 py-1 rounded text-[10px] font-bold uppercase tracking-wider text-white">
+              Público
+            </span>
+          } @else {
+            <span class="bg-slate-700/90 backdrop-blur px-2 py-1 rounded text-[10px] font-bold uppercase tracking-wider text-white">
+              Privado
+            </span>
+          }
+        </div>
+      </div>
+
+      <div class="p-5">
+        <div class="flex justify-between items-start mb-2">
+          <div>
+            <h3 class="text-lg font-bold text-slate-900 dark:text-slate-100 leading-tight">
+              {{ trip.title }}
+            </h3>
+            @if (trip.destination) {
+              <div class="flex items-center gap-1 text-slate-500 dark:text-slate-400 mt-1">
+                <span class="material-symbols-outlined text-sm"><mat-icon>location_on</mat-icon></span>
+                <span class="text-sm">{{ trip.destination }}</span>
+              </div>
+            }
+          </div>
+          <div class="flex flex-col items-end gap-1 text-slate-500 dark:text-slate-400">
+            <div class="flex items-center gap-1">
+              <span class="material-symbols-outlined text-sm"><mat-icon>calendar_today</mat-icon></span>
+              <span class="text-xs font-medium">{{ trip.start_date | formatDate }}</span>
+            </div>
+            @if (trip.end_date) {
+              <div class="flex items-center gap-1">
+                <span class="material-symbols-outlined text-sm"><mat-icon>event</mat-icon></span>
+                <span class="text-xs font-medium">{{ trip.end_date | formatDate }}</span>
+              </div>
+            }
+          </div>
+        </div>
+
+        <div class="flex items-center gap-1 text-slate-500 dark:text-slate-400 mt-2">
+          <span class="material-symbols-outlined text-sm"><mat-icon>payments</mat-icon></span>
+          <span class="text-sm font-medium">{{ trip.total_budget }} €</span>
+        </div>
+
+        <div class="flex items-center justify-between mt-6 pt-4 border-t border-slate-100 dark:border-slate-800">
+          @if (isOwner(trip)) {
+            <div class="flex gap-2">
+              <button
+                (click)="goToEdit(trip.id)"
+                class="p-2 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+                title="Editar">
+                <span class="material-symbols-outlined text-xl">edit</span>
+              </button>
+              <button
+                (click)="deleteTrip(trip.id)"
+                class="p-2 rounded-lg text-red-500/80 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors"
+                title="Eliminar">
+                <span class="material-symbols-outlined text-xl">delete</span>
+              </button>
+            </div>
+          } @else {
+            <div></div>
+          }
+          <button
+            (click)="goToDetail(trip.id)"
+            class="bg-primary/10 text-primary px-5 py-2 rounded-lg text-sm font-bold hover:bg-primary hover:text-white transition-all">
+            Ver Detalle
+          </button>
+        </div>
+      </div>
+
+    </article>
+  }
+</section>
 </main>
