@@ -10,11 +10,12 @@
 </div> -->
 
 <div class="relative h-screen w-full"> <!-- se le ha quitado el  overflow-hidden-->
-  <app-navbar class="absolute top-0 left-0 w-full z-50" />
+  <app-navbar class="fixed top-0 left-0 w-full z-50" />
 
   <main class="h-full w-full">
+  <!-- <main class="flex-1 mt-16 mb-16"> -->
     <router-outlet></router-outlet>
   </main>
 
-  <app-footer class="absolute bottom-0 left-0 w-full z-50" />
+  <app-footer class="fixed bottom-0 left-0 w-full z-50" />
 </div>
