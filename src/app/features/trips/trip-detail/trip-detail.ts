@@ -9,10 +9,11 @@ import { ActivitiesService } from '../../../core/services/activities.service';
 import { UsersService } from '../../../core/services/user.service';
 import { Activity } from '../../../core/models/activity.model';
 import { LocationsService } from '../../../core/services/locations.service';
+import { FormatDatePipe } from '../../../shared/pipes/format-date-pipe';
 
 @Component({
   selector: 'app-trip-detail',
-  imports: [CalendarComponent, MatIconModule],
+  imports: [CalendarComponent, MatIconModule, FormatDatePipe],
   templateUrl: './trip-detail.html',
   styleUrl: './trip-detail.css',
 })

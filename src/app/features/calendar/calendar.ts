@@ -44,7 +44,27 @@ export class CalendarComponent implements OnInit {
       editable: true,
       droppable: true,
       eventColor: '#3788d8',
-      nextDayThreshold: '09:00:00'
+      nextDayThreshold: '09:00:00',
+      eventContent: (arg) => {
+        const time = arg.timeText;
+        const title = arg.event.title;
+        const color = arg.event.backgroundColor;
+        const dot = `<span class="fc-custom-dot" style="background-color: ${color}"></span>`;
+
+        if (time) {
+          return {
+            html: `<div class="fc-custom-event">
+                    <span class="fc-custom-time">${dot}${time}</span>
+                    <span class="fc-custom-title">${title}</span>
+                  </div>`
+          };
+        }
+        return {
+          html: `<div class="fc-custom-event">
+                  <span class="fc-custom-title">${dot}${title}</span>
+                </div>`
+        };
+      },
     })
 
   ngOnInit(): void {
