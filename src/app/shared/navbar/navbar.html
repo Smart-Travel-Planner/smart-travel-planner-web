@@ -1,5 +1,6 @@
 
-<nav class="px-4 md:px-6 py-4 md:py-6 bg-linear-to-b from-black/50 to-transparent">
+<!-- <nav class="px-4 md:px-6 py-4 bg-linear-to-b from-black/50 to-transparent"> -->
+<!-- <nav class="px-4 md:px-6 py-4 bg-slate-600">
   <div class="flex flex-row justify-between items-center">
 
     <a routerLink="/" class="flex items-center gap-2 md:gap-3 group z-50">
@@ -15,20 +16,16 @@
 
       <div class="hidden lg:flex items-center gap-4">
         <a routerLink="/trips"
-routerLinkActive="bg-white/10 text-blue-400 !opacity-100 shadow-[inset_0_1px_1px_rgba(255,255,255,0.1)]"
-   [routerLinkActiveOptions]="{exact: true}"
-   class="text-white/70 hover:text-white font-semibold transition-all duration-300 px-4 py-2 rounded-xl text-base drop-shadow-sm flex items-center gap-2">
+          routerLinkActive="bg-white/10 text-blue-400 !opacity-100 shadow-[inset_0_1px_1px_rgba(255,255,255,0.1)]"
+          [routerLinkActiveOptions]="{exact: true}"
+          class="text-white hover:text-white/70 font-semibold transition-all duration-300 px-4 py-2 rounded-xl text-base drop-shadow-sm flex items-center gap-2">
 
-   <span routerLinkActive="scale-100 opacity-100"
-         [routerLinkActiveOptions]="{exact: true}"
-         class="w-1.5 h-1.5 bg-blue-400 rounded-full transition-all duration-300 scale-0 opacity-0">
-   </span>
-          Mis viajes
+          <span routerLinkActive="scale-100 opacity-100"
+                [routerLinkActiveOptions]="{exact: true}"
+                class="w-1.5 h-1.5 bg-blue-400 rounded-full transition-all duration-300 scale-0 opacity-0">
+          </span>
+            Mis viajes
         </a>
-           <!-- routerLinkActive="!text-white opacity-100"
-           [routerLinkActiveOptions]="{exact: false}"
-           class="text-white/80 hover:text-white font-semibold
-                  transition-all duration-300 px-3 py-2 text-base drop-shadow-sm"> -->
         <button (click)="onLogout()"
            class="bg-white/10 backdrop-blur-md border border-white/20 text-white rounded-2xl
                   shadow-xl hover:bg-white/20 hover:scale-105
@@ -63,18 +60,12 @@ routerLinkActive="bg-white/10 text-blue-400 !opacity-100 shadow-[inset_0_1px_1px
 
         <div class="flex flex-col items-center justify-center h-full gap-8 px-8">
           <a routerLink="/trips"
-(click)="closeMenu()"
-   routerLinkActive="!text-blue-400 font-bold scale-105"
-   [routerLinkActiveOptions]="{exact: true}"
-   class="text-white/90 hover:text-white transition-all duration-300 text-3xl block text-center">
+            (click)="closeMenu()"
+            routerLinkActive="!text-blue-400 font-bold scale-105"
+            [routerLinkActiveOptions]="{exact: true}"
+            class="text-white/90 hover:text-white transition-all duration-300 text-3xl block text-center">
                Mis viajes
           </a>
-             <!-- (click)="closeMenu()"
-             routerLinkActive="text-primary-300"
-             [routerLinkActiveOptions]="{exact: false}"
-             class="text-white hover:text-primary-300 font-semibold
-                    transition-all duration-300 text-2xl"> -->
-
           <button (click)="onLogout()"
              class="bg-white/10 border border-white/20 text-white rounded-2xl
                     shadow-lg hover:bg-white/20 transition-all duration-300 px-8 py-3
@@ -93,6 +84,89 @@ routerLinkActive="bg-white/10 text-blue-400 !opacity-100 shadow-[inset_0_1px_1px
         Iniciar sesión
       </a>
     }
+  </div>
+</nav> -->
 
+
+<nav class="px-4 md:px-6 py-2 bg-white/90">
+  <div class="flex flex-row justify-between items-center">
+
+    <a routerLink="/" class="flex items-center gap-2 md:gap-3 group z-50">
+      <img src="https://res.cloudinary.com/dux4gqdow/image/upload/v1773657193/logo_stp1-removebg-preview_bhurv2.png"
+        alt="Logo Smart Travel Planner"
+        class="h-8 md:h-10 w-auto">
+      <p class="text-l md:text-2xl font-bold text-blue-950 group-hover:text-primary-300 transition-colors duration-300 drop-shadow-md">
+        Smart Travel <span class="text-primary-300">Planner</span>
+      </p>
+    </a>
+
+    @if (authService.isLoggedIn()) {
+
+      <div class="hidden lg:flex items-center gap-4">
+        <a routerLink="/trips"
+          routerLinkActive="underline"
+          [routerLinkActiveOptions]="{exact: true}"
+          class="text-blue-950 hover:underline transition-all duration-300 px-4 py-2 text-base flex items-center gap-2">
+            Mis viajes
+        </a>
+        <a (click)="onLogout()"
+           class="text-blue-950 hover:underline transition-all duration-300 px-4 py-2 text-base cursor-pointer">
+          Cerrar sesión
+        </a>
+      </div>
+
+
+      <button
+        (click)="toggleMenu()"
+        class="lg:hidden p-2 rounded-lg hover:bg-black/5 transition-colors duration-300"
+        [class.invisible]="isMenuOpen()"
+        [attr.aria-label]="'Open menu'"
+        [attr.aria-expanded]="isMenuOpen()">
+        <div class="w-6 h-5 flex flex-col justify-between">
+          <span class="block h-0.5 w-full bg-blue-950"></span>
+          <span class="block h-0.5 w-full bg-blue-950"></span>
+          <span class="block h-0.5 w-full bg-blue-950"></span>
+        </div>
+      </button>
+
+
+      <div
+        class="fixed inset-0 bg-background-dark/95 backdrop-blur-xl z-40 lg:hidden transition-all duration-300 ease-in-out"
+        [class.opacity-0]="!isMenuOpen()"
+        [class.pointer-events-none]="!isMenuOpen()"
+        [class.opacity-100]="isMenuOpen()">
+
+
+        <button
+          (click)="toggleMenu()"
+          class="absolute top-4 right-4 p-2 rounded-lg hover:bg-black/5 transition-colors duration-300"
+          aria-label="Close menu">
+          <div class="w-6 h-6 flex items-center justify-center">
+            <span class="block absolute h-0.5 w-6 bg-blue-950 rotate-45"></span>
+            <span class="block absolute h-0.5 w-6 bg-blue-950 -rotate-45"></span>
+          </div>
+        </button>
+
+        <div class="flex flex-col items-center justify-center h-full gap-8 px-8">
+          <a routerLink="/trips"
+             (click)="closeMenu()"
+             routerLinkActive="underline font-bold"
+             [routerLinkActiveOptions]="{exact: true}"
+             class="text-blue-950 hover:underline transition-all duration-300 text-xl block text-center">
+               Mis viajes
+          </a>
+          <a (click)="onLogout()"
+             class="text-blue-950 hover:underline transition-all duration-300 text-xl mt-4 cursor-pointer">
+            Cerrar sesión
+          </a>
+        </div>
+      </div>
+
+    } @else {
+      <a routerLink="/login"
+         class="text-blue-950 hover:underline transition-all duration-300 px-4 py-2 text-sm md:text-base z-50">
+        Iniciar sesión
+      </a>
+    }
   </div>
 </nav>

@@ -4,7 +4,7 @@ import { Slide } from '../../core/models/carrusel.model';
 
 @Component({
   selector: 'app-home',
-  imports: [RouterLink, RouterLinkActive],
+  imports: [],
   templateUrl: './home.html',
   styleUrl: './home.css',
 })
