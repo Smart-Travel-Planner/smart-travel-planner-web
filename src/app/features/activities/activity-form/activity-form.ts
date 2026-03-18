@@ -229,7 +229,7 @@ export class ActivityFormComponent implements OnInit {
     if (id) {
       this.router.navigate(['/trips', tripId, 'activities', id]);
     } else {
-      this.router.navigate(['/trips', tripId, 'activities']);
+      this.router.navigate(['/trips', tripId]);
     };
   };
 };

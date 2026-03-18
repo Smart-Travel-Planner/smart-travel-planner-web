@@ -1,5 +1,5 @@
 
-<main>
+<!-- <main>
   <h1>{{ isEditMode() ? 'Editar actividad' : 'Nueva actividad' }}</h1>
 
   <form [formGroup]="activityForm" (ngSubmit)="onSubmit()">
@@ -76,4 +76,203 @@
     </section>
 
   </form>
+</main> -->
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Pacifico&display=swap');
+</style>
+
+<main class="min-h-screen w-full bg-linear-to-b from-slate-900 via-slate-800 to-blue-600 text-white flex flex-col items-center pb-16">
+
+  <!-- CABECERA -->
+  <div
+    class="relative w-full min-h-64 flex flex-col items-center pt-16 px-6 overflow-hidden bg-cover bg-center"
+    style="background-image: url('https://res.cloudinary.com/dux4gqdow/image/upload/v1773662802/pietro-de-grandi-T7K4aEPoGGk-unsplash_nqzjxq.jpg')">
+
+    <div class="absolute inset-0 bg-linear-to-t from-slate-950 via-slate-900/40 to-transparent"></div>
+
+    <div class="relative w-full max-w-4xl mx-auto pb-4 flex justify-between items-end z-10">
+      <div class="bg-black/30 backdrop-blur-sm px-4 py-2 rounded-2xl">
+        <h1 class="text-xl md:text-3xl font-extrabold tracking-tight drop-shadow-md">
+          {{ isEditMode() ? 'Editar' : 'Nueva' }} <span class="text-blue-400">Actividad</span>
+        </h1>
+        <p class="text-slate-200 mt-3 text-sm font-medium">
+          {{ isEditMode() ? 'Modifica los datos de la actividad' : 'Añade una nueva actividad al viaje' }}
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- FORMULARIO -->
+  <form
+    [formGroup]="activityForm"
+    (ngSubmit)="onSubmit()"
+    class="w-full max-w-4xl px-4 mt-8 flex flex-col gap-6">
+
+    <!-- DATOS PRINCIPALES -->
+    <section class="bg-white dark:bg-slate-900 rounded-xl border border-slate-100 dark:border-slate-800 p-6 flex flex-col gap-5">
+
+      <!-- Título -->
+      <div class="flex flex-col gap-1">
+        <label class="text-[10px] uppercase tracking-wider text-slate-500 dark:text-slate-400">Título</label>
+        <input
+          type="text"
+          formControlName="title"
+          placeholder="Título"
+          class="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-900 dark:text-slate-100 focus:outline-none focus:border-blue-400 transition-colors"/>
+      </div>
+
+      <!-- Categoría -->
+      <div class="flex flex-col gap-1">
+        <label class="text-[10px] uppercase tracking-wider text-slate-500 dark:text-slate-400">Categoría</label>
+        <select
+          formControlName="category"
+          class="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-900 dark:text-slate-100 focus:outline-none focus:border-blue-400 transition-colors">
+          @for (category of categories; track category) {
+            <option [value]="category">{{ category }}</option>
+          }
+        </select>
+      </div>
+
+      <!-- Fechas -->
+      <div class="flex flex-col sm:flex-row gap-4">
+        <div class="flex flex-col gap-1 flex-1">
+          <label class="text-[10px] uppercase tracking-wider text-slate-500 dark:text-slate-400">Inicio</label>
+          <input
+            type="datetime-local"
+            formControlName="start_time"
+            class="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-900 dark:text-slate-100 focus:outline-none focus:border-blue-400 transition-colors"/>
+          @if (activityForm.get('start_time')?.errors?.['beforeTripStart']) {
+            <p class="text-xs text-red-500 mt-1">La fecha de inicio no puede ser anterior al inicio del viaje</p>
+          }
+          @if (activityForm.get('start_time')?.errors?.['afterTripEnd']) {
+            <p class="text-xs text-red-500 mt-1">La fecha de inicio no puede ser posterior al final del viaje</p>
+          }
+        </div>
+        <div class="flex flex-col gap-1 flex-1">
+          <label class="text-[10px] uppercase tracking-wider text-slate-500 dark:text-slate-400">Fin</label>
+          <input
+            type="datetime-local"
+            formControlName="end_time"
+            class="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-900 dark:text-slate-100 focus:outline-none focus:border-blue-400 transition-colors"/>
+          @if (activityForm.get('end_time')?.errors?.['beforeStartTime']) {
+            <p class="text-xs text-red-500 mt-1">La fecha de fin no puede ser anterior al inicio de la actividad</p>
+          }
+          @if (activityForm.get('end_time')?.errors?.['endAfterTripEnd']) {
+            <p class="text-xs text-red-500 mt-1">La fecha de fin no puede ser posterior al final del viaje</p>
+          }
+        </div>
+      </div>
+
+      <!-- Coste -->
+      <div class="flex flex-col gap-1">
+        <label class="text-[10px] uppercase tracking-wider text-slate-500 dark:text-slate-400">Coste (€)</label>
+        <input
+          type="number"
+          formControlName="cost"
+          placeholder="0"
+          class="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-900 dark:text-slate-100 focus:outline-none focus:border-blue-400 transition-colors"/>
+      </div>
+
+      <!-- Notas -->
+      <div class="flex flex-col gap-1">
+        <label class="text-[10px] uppercase tracking-wider text-slate-500 dark:text-slate-400">Notas</label>
+        <textarea
+          formControlName="user_notes"
+          placeholder="Notas"
+          rows="3"
+          class="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-900 dark:text-slate-100 focus:outline-none focus:border-blue-400 transition-colors resize-none">
+        </textarea>
+      </div>
+
+    </section>
+
+    <!-- UBICACIÓN Y MAPA -->
+    <section class="bg-white dark:bg-slate-900 rounded-xl border border-slate-100 dark:border-slate-800 p-6 flex flex-col gap-5">
+
+      <p class="text-[10px] uppercase tracking-wider text-slate-500 dark:text-slate-400">Ubicación</p>
+
+      @if (selectedLocation()) {
+        <div class="flex items-center justify-between bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg px-3 py-2">
+          <span class="text-sm font-medium text-slate-900 dark:text-slate-100">{{ selectedLocation()!.name }}</span>
+          <button
+            type="button"
+            (click)="clearLocation()"
+            class="text-xs text-red-500 hover:text-red-700 transition-colors">
+            Quitar
+          </button>
+        </div>
+      } @else {
+        <div class="flex flex-col gap-1">
+          <input
+            type="text"
+            [value]="locationSearch()"
+            (input)="locationSearch.set($any($event.target).value)"
+            placeholder="Buscar ubicación..."
+            class="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-900 dark:text-slate-100 focus:outline-none focus:border-blue-400 transition-colors"/>
+          @if (locationSearch()) {
+            <ul class="mt-1 border border-slate-200 dark:border-slate-700 rounded-lg overflow-hidden">
+              @for (location of filteredLocations(); track location.id) {
+                <li
+                  (click)="setLocation(location)"
+                  class="px-3 py-2 text-sm text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 cursor-pointer transition-colors">
+                  {{ location.name }}
+                </li>
+              }
+              @if (filteredLocations().length === 0) {
+                <li class="px-3 py-2 text-sm text-slate-400">No se encontraron resultados</li>
+              }
+            </ul>
+          }
+        </div>
+      }
+
+      <button
+        type="button"
+        (click)="openLocationDialog()"
+        class="self-start px-3 py-1.5 rounded-lg text-sm border border-slate-300 dark:border-slate-600 text-slate-600 dark:text-slate-400
+               hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
+        + Crear nueva ubicación
+      </button>
+
+      <!-- Mapa -->
+      <div class="rounded-lg overflow-hidden h-64 border border-slate-200 dark:border-slate-700">
+        @if (tripDestinationCoords()) {
+          <app-map
+            #mapRef
+            mode="view"
+            containerId="activity-form-map"
+            [locations]="locations()"
+            [centerCoords]="tripDestinationCoords() ? [tripDestinationCoords()!.lat, tripDestinationCoords()!.lng] : [41.3851, 2.1734]"
+            (locationMarkerClicked)="onMarkerClicked($event)"
+          />
+        } @else {
+          <div class="h-full flex items-center justify-center text-sm text-slate-400">Cargando mapa...</div>
+        }
+      </div>
+
+    </section>
+
+    <!-- Acciones -->
+    <section class="flex items-center justify-between gap-3 mb-4">
+      <button
+        type="button"
+        (click)="goBack()"
+        class="px-3 py-1.5 rounded-lg text-sm border border-slate-300 text-slate-300
+               hover:bg-white/10 transition-colors">
+        Cancelar
+      </button>
+      <button
+        type="button"
+        (click)="onSubmit()"
+        [disabled]="activityForm.invalid"
+        class="px-5 py-1.5 rounded-lg text-sm font-semibold border border-blue-400 text-blue-400
+               hover:bg-blue-400 hover:text-white transition-colors
+               disabled:opacity-40 disabled:cursor-not-allowed">
+        {{ isEditMode() ? 'Guardar cambios' : 'Crear actividad' }}
+      </button>
+    </section>
+
+  </form>
+
 </main>
