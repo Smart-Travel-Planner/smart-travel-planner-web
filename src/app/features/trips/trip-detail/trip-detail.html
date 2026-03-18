@@ -1,5 +1,7 @@
 
-<main class="min-h-screen w-full bg-linear-to-b from-slate-900 via-slate-800 to-black text-white flex flex-col items-center">
+<main class="min-h-screen w-full bg-linear-to-b from-[#b0e8f1] via-[#EAE0CF] to-[#c7e8ed] text-white flex flex-col items-center pb-16">
+<!-- <main class="min-h-screen w-full bg-linear-to-b from-[#B5926D] via-[#EAE0CF] to-[#D5C3A5] text-white flex flex-col items-center pb-16"> -->
+<!-- <main class="min-h-screen w-full bg-linear-to-b from-slate-900 via-slate-800 to-black text-white flex flex-col items-center pb-16"> -->
 
   @if (trip()) {
 
@@ -66,31 +68,34 @@
 
       <!-- Calendario -->
       <div class="flex-1 flex flex-col">
-        <h2 class="text-lg font-bold text-slate-100 mb-4">Calendario de actividades</h2>
-        <div class="bg-white dark:bg-slate-900 rounded-xl border border-slate-100 dark:border-slate-800 overflow-hidden p-4 min-h-96 flex-1">
+        <h2 class="text-lg font-bold text-slate-950 mb-4">Calendario de actividades</h2>
+        <div class="bg-white rounded-xl border border-slate-100 overflow-hidden p-4 min-h-96 flex-1">
+        <!-- <div class="bg-white dark:bg-slate-900 rounded-xl border border-slate-100 dark:border-slate-800 overflow-hidden p-4 min-h-96 flex-1"> -->
           <app-calendar [trip]="trip()!"></app-calendar>
         </div>
       </div>
 
       <!-- Listado de actividades -->
       <div class="w-full lg:w-80 flex flex-col">
-        <h2 class="text-lg font-bold text-slate-100 mb-4">Actividades</h2>
-        <div class="bg-white dark:bg-slate-900 rounded-xl border border-slate-100 dark:border-slate-800 overflow-hidden flex-1">
+        <h2 class="text-lg font-bold text-slate-950 mb-4">Actividades</h2>
+        <div class="bg-white rounded-xl border border-slate-100 dark:border-slate-800 overflow-hidden flex-1">
+        <!-- <div class="bg-white dark:bg-slate-900 rounded-xl border border-slate-100 dark:border-slate-800 overflow-hidden flex-1"> -->
           @if (activities().length === 0) {
-            <p class="text-slate-400 text-sm text-center p-6">No hay actividades registradas</p>
+            <p class="text-slate-900 text-sm text-center p-6">No hay actividades registradas</p>
           } @else {
             <ul class="divide-y divide-slate-100 dark:divide-slate-800">
               @for (activity of activities(); track activity.id) {
                 <li class="p-4 flex flex-col gap-2">
-                  <p class="text-sm font-semibold text-slate-900 dark:text-slate-100">{{ activity.title }}</p>
+                  <p class="text-sm font-semibold text-slate-900 0">{{ activity.title }}</p>
                   <div class="flex flex-wrap items-center gap-2">
                     @if (activity.location_id) {
-                      <span class="flex items-center gap-1 text-xs text-slate-500 dark:text-slate-400">
+                      <span class="flex items-center gap-1 text-xs text-slate-500 ">
                         <mat-icon class="text-xs">location_on</mat-icon>
                         {{ getLocationName(activity.location_id) }}
                       </span>
                     }
-                    <span class="px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400">
+                    <span class="px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider text-black"
+                      [style.background-color]="categoryColors[activity.category]">
                       {{ activity.category }}
                     </span>
                   </div>
@@ -108,15 +113,14 @@
       <div class="flex gap-2">
         <button
           (click)="goBack()"
-          class="px-3 py-1.5 rounded-lg text-sm border border-slate-300 text-slate-600
-                 hover:bg-slate-100 dark:border-slate-600 dark:text-slate-400 dark:hover:bg-slate-800
-                 transition-colors">
+          class="px-3 py-1.5 rounded-lg text-sm border border-slate-950 text-slate-950
+                  hover:bg-slate-700 hover:text-slate-100 transition-colors">
           Volver
         </button>
         <button
           (click)="goToActivities()"
-          class="px-3 py-1.5 rounded-lg text-sm border border-primary text-primary
-                 hover:bg-primary hover:text-white transition-colors">
+          class="px-3 py-1.5 rounded-lg text-sm border border-slate-950 text-slate-950
+                 hover:bg-slate-700 hover:text-slate-100 transition-colors">
           Actividades
         </button>
       </div>
@@ -125,9 +129,8 @@
         <div class="flex gap-2">
           <button
             (click)="goToEdit()"
-            class="px-3 py-1.5 rounded-lg text-sm border border-slate-300 text-slate-600
-                   hover:bg-slate-100 dark:border-slate-600 dark:text-slate-400 dark:hover:bg-slate-800
-                   transition-colors">
+            class="px-3 py-1.5 rounded-lg text-sm border border-slate-950 text-slate-950
+                   hover:bg-slate-700 hover:text-slate-100 transition-colors">
             Editar
           </button>
           <button

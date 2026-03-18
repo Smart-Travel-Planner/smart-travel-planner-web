@@ -10,6 +10,7 @@ import { UsersService } from '../../../core/services/user.service';
 import { Activity } from '../../../core/models/activity.model';
 import { LocationsService } from '../../../core/services/locations.service';
 import { FormatDatePipe } from '../../../shared/pipes/format-date-pipe';
+import { ACTIVITY_CATEGORY_COLORS } from '../../../core/enums/activity-category-colors.enum';
 
 @Component({
   selector: 'app-trip-detail',
@@ -33,6 +34,7 @@ export class TripDetailComponent implements OnInit {
   errorMessage = signal<string>('');
 
   readonly defaultImage = 'https://res.cloudinary.com/dux4gqdow/image/upload/v1773662802/pietro-de-grandi-T7K4aEPoGGk-unsplash_nqzjxq.jpg';
+  readonly categoryColors = ACTIVITY_CATEGORY_COLORS;
 
   isOwner = computed(() => {
     const trip = this.trip();

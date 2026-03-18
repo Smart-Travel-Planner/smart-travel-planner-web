@@ -40,12 +40,17 @@ export class CalendarComponent implements OnInit {
       events: [],
       eventClick: (arg: EventClickArg) => this.onEventClick(arg),
       eventDrop: (arg: EventDropArg) => this.onEventDrop(arg),
-      // height: 'auto',
+      height: 'auto',
       editable: true,
       droppable: true,
       eventColor: '#3788d8',
       nextDayThreshold: '09:00:00',
       eventContent: (arg) => {
+        if (arg.event.classNames.includes('trip-title-event')) {
+          return {
+            html: `<div class="fc-custom-trip-title">${arg.event.title}</div>`
+          };
+        }
         const time = arg.timeText;
         const title = arg.event.title;
         const color = arg.event.backgroundColor;
@@ -92,14 +97,34 @@ export class CalendarComponent implements OnInit {
         date.setHours(0, 0, 0, 0);
         adjustedEndDate = date.toISOString();
       }
+      // events.push({
+      //   id: `trip-${this.trip.id}`,
+      //   title: this.trip.title,
+      //   start: this.trip.start_date,
+      //   end: adjustedEndDate,
+      //   display: 'background',
+      //   color: '#E8F4FD',
+      //   allDay: true,
+      // });
+// Evento de fondo (color, sin título)
       events.push({
-        id: `trip-${this.trip.id}`,
-        title: this.trip.title,
+        id: `trip-bg-${this.trip.id}`,
         start: this.trip.start_date,
         end: adjustedEndDate,
         display: 'background',
         color: '#E8F4FD',
         allDay: true,
+      });
+
+      // Evento de título del viaje
+      events.push({
+        id: `trip-title-${this.trip.id}`,
+        title: this.trip.title,
+        start: this.trip.start_date,
+        end: adjustedEndDate,
+        allDay: true,
+        classNames: ['trip-title-event'],
+        editable: false,
       });
 
       activities.forEach(activity => {
