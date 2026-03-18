@@ -1,6 +1,8 @@
-import { Component, computed, OnInit, signal } from '@angular/core';
+import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { Slide } from '../../core/models/carrusel.model';
+import { environment } from '../../environments/environment';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-home',
@@ -9,6 +11,8 @@ import { Slide } from '../../core/models/carrusel.model';
   styleUrl: './home.css',
 })
 export class HomeComponent implements OnInit {
+  private http = inject(HttpClient);
+
   slides = signal<Slide[]>([
     { url: 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&q=80', alt: 'Montañas majestuosas' },
     { url: 'https://res.cloudinary.com/dux4gqdow/image/upload/v1773654004/cosas-que-ver-en-segovia-espana_d16fi3.jpg', alt: 'Alcázar de Segovia' },
@@ -24,12 +28,19 @@ export class HomeComponent implements OnInit {
   transformOffset = computed(() => `translateX(-${(this.currentIndex() * 100) / this.slides().length}%)`);
 
   ngOnInit(): void {
+    this.warmUpServer();
     this.startAutoPlay();
   };
 
   ngDestroy(): void {
     this.stopAutoPlay();
   };
+
+  private warmUpServer(): void {
+    this.http.get(`${environment.apiUrl}/health`).subscribe({
+      error: () => {} // silencioso — no importa si falla
+    });
+  }
 
   startAutoPlay(): void {
     this.intervalId = setInterval(() => {
