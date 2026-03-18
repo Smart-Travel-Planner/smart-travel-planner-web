@@ -2,16 +2,18 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../../core/services/auth.service';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-register',
   standalone: true,
-  imports: [ReactiveFormsModule, RouterLink],
+  imports: [ReactiveFormsModule, RouterLink, MatIconModule],
   templateUrl: './register.html',
 })
 export class RegisterComponent {
   registerForm: FormGroup;
   errorMessage = '';
+  isLoading = false;
 
   constructor(
     private fb: FormBuilder,
@@ -28,9 +30,15 @@ export class RegisterComponent {
   onSubmit(): void {
     if (this.registerForm.invalid) return;
 
+    this.isLoading = true;
+    this.errorMessage = '';
+
     this.authService.register(this.registerForm.value).subscribe({
       next: () => this.router.navigate(['/login']),
-      error: () => this.errorMessage = 'Error al registrarse. Inténtalo de nuevo.',
+      error: () => {
+        this.isLoading = false;
+        this.errorMessage = 'Error al registrarse. Inténtalo de nuevo.'
+      },
     });
   }
 }

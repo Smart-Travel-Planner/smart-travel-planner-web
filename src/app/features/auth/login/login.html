@@ -5,7 +5,7 @@
 
     <div class="text-center mb-10">
       <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-blue-500/10 border border-blue-500/20 mb-4">
-        <span class="material-symbols-outlined text-blue-400 text-3xl">lock_open</span>
+        <span class="material-symbols-outlined text-blue-400 text-3xl"><mat-icon>lock_open</mat-icon></span>
       </div>
       <h2 class="text-white text-3xl font-bold tracking-tight">Bienvenido</h2>
       <p class="text-slate-400 mt-2">Accede a tu Smart Travel Planner</p>
@@ -14,7 +14,7 @@
     <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="flex flex-col gap-5">
 
       <div class="relative">
-        <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 text-xl">mail</span>
+        <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 text-xl"><mat-icon>mail</mat-icon></span>
         <input
           formControlName="email"
           type="email"
@@ -24,7 +24,7 @@
       </div>
 
       <div class="relative">
-        <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 text-xl">key</span>
+        <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 text-xl"><mat-icon>key</mat-icon></span>
         <input
           formControlName="password"
           type="password"
@@ -43,7 +43,14 @@
         type="submit"
         [disabled]="loginForm.invalid"
         class="w-full mt-4 bg-blue-600 hover:bg-blue-500 disabled:opacity-50 disabled:hover:bg-blue-600 text-white font-bold py-4 rounded-xl shadow-lg shadow-blue-900/20 transition-all active:scale-[0.98]">
+        @if (isLoading) {
+          <span class="flex items-center justify-center gap-2">
+            <span class="material-symbols-outlined animate-spin text-xl"><mat-icon>progress_activity</mat-icon></span>
+            Conectando con el servidor...
+          </span>
+        } @else {
         Entrar
+        }
       </button>
     </form>
 

@@ -5,7 +5,7 @@
 
     <div class="text-center mb-8">
       <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-blue-500/10 border border-blue-500/20 mb-4">
-        <span class="material-symbols-outlined text-blue-400 text-3xl">person_add</span>
+        <span class="material-symbols-outlined text-blue-400 text-3xl"><mat-icon>person_add</mat-icon></span>
       </div>
       <h2 class="text-white text-3xl font-bold tracking-tight">Crea tu cuenta</h2>
       <p class="text-slate-400 mt-2">Empieza a planificar tu próxima aventura</p>
@@ -14,7 +14,7 @@
     <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="flex flex-col gap-4">
 
       <div class="relative">
-        <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 text-xl">badge</span>
+        <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 text-xl"><mat-icon>badge</mat-icon></span>
         <input
           formControlName="name"
           type="text"
@@ -24,7 +24,7 @@
       </div>
 
       <div class="relative">
-        <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 text-xl">mail</span>
+        <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 text-xl"><mat-icon>mail</mat-icon></span>
         <input
           formControlName="email"
           type="email"
@@ -34,7 +34,7 @@
       </div>
 
       <div class="relative">
-        <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 text-xl">lock</span>
+        <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 text-xl"><mat-icon>lock</mat-icon></span>
         <input
           formControlName="password"
           type="password"
@@ -53,7 +53,14 @@
         type="submit"
         [disabled]="registerForm.invalid"
         class="w-full mt-4 bg-blue-600 hover:bg-blue-500 disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold py-4 rounded-xl shadow-lg shadow-blue-900/20 transition-all active:scale-[0.98]">
-        Registrarse
+        @if (isLoading) {
+          <span class="flex items-center justify-center gap-2">
+            <span class="material-symbols-outlined animate-spin text-xl"><mat-icon>progress_activity</mat-icon></span>
+            Conectando con el servidor...
+          </span>
+        } @else {
+          Registrarse
+        }
       </button>
     </form>
 

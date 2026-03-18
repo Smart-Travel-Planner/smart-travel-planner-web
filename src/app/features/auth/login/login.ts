@@ -2,16 +2,18 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../../core/services/auth.service';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [ReactiveFormsModule, RouterLink],
+  imports: [ReactiveFormsModule, RouterLink, MatIconModule],
   templateUrl: './login.html',
 })
 export class LoginComponent {
   loginForm: FormGroup;
   errorMessage = '';
+  isLoading = false;
 
   constructor(
     private fb: FormBuilder,
@@ -27,9 +29,15 @@ export class LoginComponent {
   onSubmit(): void {
     if (this.loginForm.invalid) return;
 
+    this.isLoading = true;
+    this.errorMessage = '';
+
     this.authService.login(this.loginForm.value).subscribe({
       next: () => this.router.navigate(['/trips']),
-      error: () => this.errorMessage = 'Credenciales incorrectas',
+      error: () => {
+        this.isLoading = false;
+        this.errorMessage = 'Credenciales incorrectas'
+      },
     });
   }
 }
