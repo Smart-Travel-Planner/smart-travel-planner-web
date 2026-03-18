@@ -102,6 +102,10 @@ export class TripDetailComponent implements OnInit {
     this.router.navigate(['/trips', this.trip()?.id, 'activities']);
   };
 
+  goToNewActivity(): void {
+    this.router.navigate(['/trips', this.trip()?.id, 'activities', 'new']);
+  };
+
   goBack(): void {
     this.router.navigate(['/trips']);
   };
