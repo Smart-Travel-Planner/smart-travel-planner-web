@@ -88,7 +88,7 @@
 </nav> -->
 
 
-<nav class="px-4 md:px-6 py-2 bg-white/90">
+<!-- <nav class="px-4 md:px-6 py-2 bg-white/90">
   <div class="flex flex-row justify-between items-center">
 
     <a routerLink="/" class="flex items-center gap-2 md:gap-3 group z-50">
@@ -168,5 +168,90 @@
         Iniciar sesión
       </a>
     }
+  </div>
+</nav> -->
+
+<nav class="px-4 md:px-6 py-2 bg-white/90">
+  <div class="flex flex-row justify-between items-center">
+
+    <a routerLink="/" class="flex items-center gap-2 md:gap-3 group z-50">
+      <img src="https://res.cloudinary.com/dux4gqdow/image/upload/v1773657193/logo_stp1-removebg-preview_bhurv2.png"
+        alt="Logo Smart Travel Planner"
+        class="h-8 md:h-10 w-auto">
+      <p class="text-l md:text-2xl font-bold text-blue-950 group-hover:text-blue-700 transition-colors duration-300">
+        Smart Travel <span class="text-blue-600">Planner</span>
+      </p>
+    </a>
+
+    @if (authService.isLoggedIn()) {
+
+      <!-- Desktop menu -->
+      <div class="hidden lg:flex items-center gap-2">
+        <a routerLink="/trips"
+          routerLinkActive="bg-blue-50 text-blue-700"
+          [routerLinkActiveOptions]="{exact: false}"
+          class="flex items-center gap-1 text-slate-600 hover:text-blue-700 hover:bg-blue-50 transition-all duration-200 px-3 py-1 rounded-lg text-sm font-medium">
+          <mat-icon class="text-xl">luggage</mat-icon>
+          Mis viajes
+        </a>
+
+        <button
+          (click)="onLogout()"
+          class="flex items-center gap-1 text-slate-600 hover:text-red-600 hover:bg-red-50 transition-all duration-200 px-3 py-1 rounded-lg text-sm font-medium">
+          <mat-icon class="text-xl">logout</mat-icon>
+          Cerrar sesión
+        </button>
+      </div>
+
+      <!-- Mobile hamburger -->
+      <button
+        (click)="toggleMenu()"
+        class="lg:hidden p-1 rounded-lg hover:bg-slate-100 transition-colors duration-200"
+        [class.invisible]="isMenuOpen()"
+        aria-label="Abrir menú">
+        <mat-icon class="text-blue-950">menu</mat-icon>
+      </button>
+
+      <!-- Mobile menu overlay -->
+      <div
+        class="fixed inset-0 bg-white z-40 lg:hidden transition-all duration-300 ease-in-out"
+        [class.opacity-0]="!isMenuOpen()"
+        [class.pointer-events-none]="!isMenuOpen()"
+        [class.opacity-100]="isMenuOpen()">
+
+        <button
+          (click)="toggleMenu()"
+          class="absolute top-4 right-4 p-1 rounded-lg hover:bg-slate-100 transition-colors"
+          aria-label="Cerrar menú">
+          <mat-icon class="text-blue-950">close</mat-icon>
+        </button>
+
+        <div class="flex flex-col items-center justify-center h-full gap-6 px-8">
+          <a routerLink="/trips"
+             (click)="closeMenu()"
+             routerLinkActive="text-blue-700 font-bold"
+             [routerLinkActiveOptions]="{exact: false}"
+             class="flex items-center gap-3 text-slate-700 hover:text-blue-700 transition-all duration-200 text-xl">
+            <mat-icon>luggage</mat-icon>
+            Mis viajes
+          </a>
+
+          <button
+            (click)="onLogout()"
+            class="flex items-center gap-3 text-slate-700 hover:text-red-600 transition-all duration-200 text-xl mt-4">
+            <mat-icon>logout</mat-icon>
+            Cerrar sesión
+          </button>
+        </div>
+      </div>
+
+    } @else {
+      <a routerLink="/login"
+         class="flex items-center gap-1 bg-blue-600 hover:bg-blue-700 text-white transition-all duration-200 px-3 py-1 rounded-lg text-sm font-medium">
+        <mat-icon class="text-xl">login</mat-icon>
+        Iniciar sesión
+      </a>
+    }
+
   </div>
 </nav>
