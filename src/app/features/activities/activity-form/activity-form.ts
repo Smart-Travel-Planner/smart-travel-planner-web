@@ -10,6 +10,7 @@ import { LocationDialogComponent } from '../location-dialog/location-dialog';
 import { TripsService } from '../../../core/services/trips.service';
 import { MapComponent } from '../../../shared/components/map/map';
 import { GeocodingService } from '../../../core/services/geocoding.service';
+import { toDateTimeInput } from '../../../core/utils/date.utils';
 
 @Component({
   selector: 'app-activity-form',
@@ -113,7 +114,11 @@ export class ActivityFormComponent implements OnInit {
   private loadActivity(id: string): void {
     this.activitiesService.getActivityById(id).subscribe({
       next: activity => {
-        this.activityForm.patchValue(activity);
+        this.activityForm.patchValue({
+          ...activity,
+          start_time: toDateTimeInput(activity.start_time),
+          end_time: toDateTimeInput(activity.end_time),
+        });
         if (activity.location_id) {
           const location = this.locations().find(loc => loc.id === activity.location_id);
           if (location) this.selectedLocation.set(location);

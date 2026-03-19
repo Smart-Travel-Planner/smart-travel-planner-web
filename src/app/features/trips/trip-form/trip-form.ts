@@ -2,6 +2,7 @@ import { Component, inject, OnInit, signal } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { TripsService } from '../../../core/services/trips.service';
 import { ActivatedRoute, Router } from '@angular/router';
+import { toDateInput, toDateTimeInput } from '../../../core/utils/date.utils';
 
 @Component({
   selector: 'app-trip-form',
@@ -40,7 +41,13 @@ export class TripFormComponent implements OnInit {
 
   private loadTrip(id: string): void  {
     this.tripsService.getTripById(id).subscribe({
-      next: trip => this.tripForm.patchValue(trip),
+      next: trip => {
+        this.tripForm.patchValue({
+        ...trip,
+        start_date: toDateTimeInput(trip.start_date),
+        end_date: toDateTimeInput(trip.end_date),
+        });
+      },
       error: () => this.errorMessage.set('Error cargando el viaje'),
     })
   };
