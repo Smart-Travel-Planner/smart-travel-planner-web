@@ -19,11 +19,12 @@
         <p class="text-slate-200 mt-3 text-sm font-medium">Gestiona tus próximas aventuras</p>
       </div>
 
-      <button
-        (click)="goToCreate()"
-        class="flex items-center gap-2 bg-blue-500 hover:bg-blue-600 transition-all px-6 py-3 rounded-xl shadow-2xl shadow-blue-900/40">
-        <span class="material-symbols-outlined text-xs md:text-sm">Nuevo viaje</span>
-      </button>
+<button
+  (click)="goToCreate()"
+  class="flex items-center gap-2 bg-blue-500 hover:bg-blue-600 transition-all px-4 py-2 rounded-xl shadow-2xl shadow-blue-900/40 text-sm font-medium">
+  <mat-icon>add</mat-icon>
+  Nuevo viaje
+</button>
     </div>
 
     <section class="w-full max-w-4xl bg-white backdrop-blur-xl border border-slate-200 rounded-2xl p-2 mb-8 flex flex-wrap gap-6 items-center justify-between">
@@ -37,11 +38,12 @@
 
       <div class="flex flex-col sm:flex-row flex-wrap gap-3 items-start sm:items-end">
         @if (dateFrom() || dateTo()) {
-          <button
-            (click)="resetDateFilters()"
-            class="order-last sm:order-first px-3 py-1.5 text-sm bg-black/50 hover:bg-slate-500 border border-slate-300 hover:border-slate-500 rounded-lg transition-all">
-            Borrar fechas
-          </button>
+<button
+  (click)="resetDateFilters()"
+  class="order-last sm:order-first flex items-center gap-1 px-3 py-1 text-sm bg-black/50 hover:bg-slate-500 border border-slate-300 hover:border-slate-500 rounded-lg transition-all">
+  <mat-icon class="text-base">close</mat-icon>
+  Borrar fechas
+</button>
         }
         <div class="flex flex-col">
           <label class="text-[10px] uppercase tracking-wider text-slate-600 ml-1">Desde</label>
@@ -76,6 +78,7 @@
         <div class="relative h-36 w-full overflow-hidden">
           <div
             class="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-105"
+            (click)="goToDetail(trip.id)"
             [style.background-image]="'url(' + (trip.image_url || defaultImage) + ')'">
           </div>
           <div class="absolute top-3 left-3">
@@ -98,61 +101,63 @@
                 {{ trip.title }}
               </h3>
               @if (trip.destination) {
-                <div class="flex items-center gap-1 text-slate-500 dark:text-slate-400 mt-1">
-                  <span class="material-symbols-outlined text-sm"><mat-icon>location_on</mat-icon></span>
-                  <span class="text-sm">{{ trip.destination }}</span>
-                </div>
+<div class="flex items-center gap-1 text-slate-500 dark:text-slate-400 mt-1">
+  <mat-icon class="text-sm">location_on</mat-icon>
+  <span class="text-sm">{{ trip.destination }}</span>
+</div>
               }
             </div>
             <div class="flex flex-col items-end gap-1 text-slate-500 dark:text-slate-400">
-              <div class="flex items-center gap-1">
-                <span class="material-symbols-outlined text-sm"><mat-icon>calendar_today</mat-icon></span>
-                <span class="text-xs font-medium">{{ trip.start_date | formatDate }}</span>
-              </div>
-              @if (trip.end_date) {
-                <div class="flex items-center gap-1">
-                  <span class="material-symbols-outlined text-sm"><mat-icon>event</mat-icon></span>
-                  <span class="text-xs font-medium">{{ trip.end_date | formatDate }}</span>
-                </div>
-              }
+<div class="flex items-center gap-1">
+  <mat-icon class="text-sm">calendar_today</mat-icon>
+  <span class="text-xs font-medium">{{ trip.start_date | formatDate }}</span>
+</div>
+@if (trip.end_date) {
+  <div class="flex items-center gap-1">
+    <mat-icon class="text-sm">event</mat-icon>
+    <span class="text-xs font-medium">{{ trip.end_date | formatDate }}</span>
+  </div>
+}
             </div>
           </div>
 
-          <div class="flex items-center gap-1 text-slate-500 dark:text-slate-400 mt-1">
-            <span class="material-symbols-outlined text-sm"><mat-icon>payments</mat-icon></span>
-            <span class="text-sm font-medium">{{ trip.total_budget }} €</span>
-          </div>
+<div class="flex items-center gap-1 text-slate-500 dark:text-slate-400 mt-1">
+  <mat-icon class="text-sm">payments</mat-icon>
+  <span class="text-sm font-medium">{{ trip.total_budget }} €</span>
+</div>
 
-          <div class="flex items-center justify-between mt-4 pt-3 border-t border-slate-100 dark:border-slate-800">
-            @if (isOwner(trip)) {
-              <div class="flex gap-2">
-                <button
-                  (click)="goToEdit(trip.id)"
-                  class="px-3 py-1.5 rounded-lg text-sm border border-slate-300 text-slate-600
-                        hover:bg-slate-100 dark:border-slate-600 dark:text-slate-400 dark:hover:bg-slate-800
-                        transition-colors"
-                  title="Editar">
-                  Editar
-                </button>
-                <button
-                  (click)="deleteTrip(trip.id)"
-                  class="px-3 py-1.5 rounded-lg text-sm font-semibold border border-red-300 text-red-500
-                        hover:bg-red-500 hover:text-white hover:border-red-500
-                        transition-colors"
-                  title="Eliminar">
-                  Borrar
-                </button>
-              </div>
-            } @else {
-              <div></div>
-            }
-            <button
-              (click)="goToDetail(trip.id)"
-              class="px-3 py-1.5 rounded-lg text-sm border border-primary text-primary hover:text-slate-800 hover:bg-white
-                    transition-colors">
-              Ver detalle
-            </button>
-          </div>
+<div class="flex items-center justify-between mt-4 pt-3 border-t border-slate-100 dark:border-slate-800">
+  @if (isOwner(trip)) {
+    <div class="flex gap-2">
+      <button
+        (click)="goToEdit(trip.id)"
+        class="flex items-center gap-1 px-3 py-1.5 rounded-lg text-sm border border-slate-300 text-slate-600
+              hover:bg-slate-100 dark:border-slate-600 dark:text-slate-400 dark:hover:bg-slate-800
+              transition-colors"
+        title="Editar">
+        <mat-icon class="text-base">edit</mat-icon>
+        <!-- Editar -->
+      </button>
+      <button
+        (click)="deleteTrip(trip.id)"
+        class="flex items-center gap-1 px-3 py-1.5 rounded-lg text-sm font-semibold border border-red-300 text-red-300
+              hover:bg-red-300 hover:text-slate-800 hover:border-red-300
+              transition-colors"
+        title="Eliminar">
+        <mat-icon class="text-base">delete</mat-icon>
+        <!-- Borrar -->
+      </button>
+    </div>
+  } @else {
+    <!-- <div></div> -->
+  }
+  <button
+    (click)="goToDetail(trip.id)"
+    class="flex items-center gap-1 px-3 py-1.5 rounded-lg text-sm border border-primary text-primary hover:text-slate-800 hover:bg-white transition-colors">
+    <mat-icon class="text-base">visibility</mat-icon>
+    <!-- Ver detalle -->
+  </button>
+</div>
         </div>
 
       </article>
