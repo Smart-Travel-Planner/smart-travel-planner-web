@@ -1,166 +1,154 @@
 
-<!-- <main>
-  <h1>{{ isEditMode() ? 'Editar viaje' : 'Nuevo viaje' }}</h1>
+<main class="relative min-h-screen w-full text-white flex flex-col items-center overflow-x-hidden">
 
-  <form [formGroup]="tripForm" (ngSubmit)="onSubmit()">
-    <section>
-      <label for="inputTitle">Título:</label>
-      <input type="text" formControlName="title" placeholder="Viaje a Japón" name="inputTitle" />
-      <label for="inputDestination">Destino:</label>
-      <input type="text" formControlName="destination" placeholder="Tokio" name="inputDestination" />
-      <label for="inputStartDate">Fecha de inicio:</label>
-      <input type="datetime-local" formControlName="start_date" name="inputStartDate" />
-      <label for="inputEndDate">Fecha final:</label>
-      <input type="datetime-local" formControlName="end_date" name="inputEndDate" />
-      <label for="inputTotalBudget">Presupouesto total:</label>
-      <input type="number" formControlName="total_budget" placeholder="5000" name="inputTotalBudget" />
-      <label for="inputImageUrl">URL imagen:</label>
-      <input type="text" formControlName="image_url" placeholder="URL de la imagen" name="inputImageUrl" />
-      <label for="inputIsPublic">
-        <input type="checkbox" formControlName="is_public" name="inputIsPublic"/>Viaje público
-      </label>
-    </section>
-
-    @if (errorMessage()) {
-      <p>{{ errorMessage() }}</p>
-    }
-
-    <section>
-      <button type="button" (click)="goBack()">Cancelar</button>
-      <button type="submit" [disabled]="tripForm.invalid">{{ isEditMode() ? 'Guardar cambios' : 'Crear viaje' }}</button>
-    </section>
-  </form>
-</main> -->
-
-
-<style>
-  @import url('https://fonts.googleapis.com/css2?family=Pacifico&display=swap');
-</style>
-
-<main class="min-h-screen w-full bg-linear-to-b from-slate-900 via-slate-800 to-blue-600 text-white flex flex-col items-center pb-16">
-
-  <!-- CABECERA -->
   <div
-    class="relative w-full min-h-64 flex flex-col items-center pt-16 px-6 overflow-hidden bg-cover bg-center"
+    class="fixed inset-0 z-0 w-full h-full bg-cover bg-center bg-no-repeat"
     style="background-image: url('https://res.cloudinary.com/dux4gqdow/image/upload/v1773662802/pietro-de-grandi-T7K4aEPoGGk-unsplash_nqzjxq.jpg')">
+    <div class="absolute inset-0 bg-linear-to-b from-slate-950/80 via-slate-900/60 to-slate-950/90"></div>
+  </div>
 
-    <div class="absolute inset-0 bg-linear-to-t from-slate-950 via-slate-900/40 to-transparent"></div>
+  <app-back-button (backClick)="goBack()" label="Cancelar"></app-back-button>
 
-    <div class="relative w-full max-w-4xl mx-auto pb-4 flex justify-between items-end z-10">
-      <div class="bg-black/30 backdrop-blur-sm px-4 py-2 rounded-2xl">
-        <h1 class="text-xl md:text-3xl font-extrabold tracking-tight drop-shadow-md" style="font-family: 'Pacifico', cursive;">
+  <div class="relative z-10 w-full flex flex-col items-center pt-24 pb-16 px-4 md:px-6">
+    <div class="w-full max-w-4xl mx-auto mb-10 flex flex-col items-center text-center">
+      <div class="bg-black/40 backdrop-blur-md px-6 py-3 rounded-2xl border border-white/10 shadow-2xl">
+        <h1 class="text-2xl md:text-4xl font-extrabold tracking-tight drop-shadow-lg">
           {{ isEditMode() ? 'Editar' : 'Nuevo' }} <span class="text-blue-400">Viaje</span>
         </h1>
-        <p class="text-slate-200 mt-3 text-sm font-medium">
-          {{ isEditMode() ? 'Modifica los datos de tu viaje' : 'Planifica tu próxima aventura' }}
+        <p class="text-slate-100 mt-3 text-base font-medium max-w-lg">
+          {{ isEditMode() ? 'Modifica los datos de tu viaje para mantenerlo actualizado.' : 'Comienza a planificar tu próxima gran aventura rellenando los detalles.' }}
         </p>
       </div>
     </div>
+
+    <form [formGroup]="tripForm" (ngSubmit)="onSubmit()" class="w-full max-w-4xl flex flex-col gap-8">
+      <section class="bg-sky-50 rounded-3xl border border-slate-100 p-8 flex flex-col gap-6 shadow-2xl">
+        <div class="flex flex-col gap-1.5">
+          <label class="text-xs uppercase tracking-wider text-slate-600 font-bold ml-1">Título *</label>
+          <input
+            type="text"
+            formControlName="title"
+            placeholder="Ej: Verano en Japón con amigos"
+            class="w-full bg-slate-50 border rounded-xl px-4 py-3 text-sm text-slate-950 focus:outline-none transition-all shadow-inner"
+            [class.border-red-500]="isInvalid('title')"
+            [class.bg-red-50]="isInvalid('title')"
+            [class.border-slate-200]="!isInvalid('title')"
+            [class.focus:border-blue-500]="!isInvalid('title')"
+            [class.focus:border-red-600]="isInvalid('title')"
+          />
+          @if (isInvalid('title')) {
+            <div class="flex flex-col mt-1 ml-1 gap-0.5">
+              @if (tripForm.get('title')?.hasError('required')) {
+                <span class="text-[11px] text-red-600 font-medium">El título es obligatorio.</span>
+              }
+              @if (tripForm.get('title')?.hasError('minlength')) {
+                <span class="text-[11px] text-red-600 font-medium">
+                  Debe tener al menos 3 caracteres (llevas {{ tripForm.get('title')?.errors?.['minlength'].actualLength }}).
+                </span>
+              }
+            </div>
+          }
+        </div>
+
+        <div class="flex flex-col gap-1.5">
+          <label class="text-xs uppercase tracking-wider text-slate-600 font-bold ml-1">Destino</label>
+          <input
+            type="text"
+            formControlName="destination"
+            placeholder="Ej: Tokio, Kyoto, Osaka"
+            class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm text-slate-950 focus:outline-none focus:border-blue-500 transition-all shadow-inner"/>
+        </div>
+
+        <div class="flex flex-col sm:flex-row gap-6">
+          <div class="flex flex-col gap-1.5 flex-1">
+            <label class="text-xs uppercase tracking-wider text-slate-600 font-bold ml-1">Fecha de inicio *</label>
+            <input
+              type="datetime-local"
+              formControlName="start_date"
+              class="w-full bg-slate-50 border rounded-xl px-4 py-3 text-sm text-slate-950 focus:outline-none transition-all shadow-inner"
+              [class.border-red-500]="isInvalid('start_date')"
+              [class.bg-red-50]="isInvalid('start_date')"
+              [class.border-slate-200]="!isInvalid('start_date')"
+              [class.focus:border-blue-500]="!isInvalid('start_date')"
+            />
+            @if (isInvalid('start_date')) {
+              <span class="text-[11px] text-red-600 font-medium ml-1 mt-1">La fecha de inicio es necesaria.</span>
+            }
+          </div>
+          <div class="flex flex-col gap-1.5 flex-1">
+            <label class="text-xs uppercase tracking-wider text-slate-600 font-bold ml-1">Fecha final</label>
+            <input
+              type="datetime-local"
+              formControlName="end_date"
+              class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm text-slate-950 focus:outline-none focus:border-blue-500 transition-all shadow-inner"/>
+          </div>
+        </div>
+
+        <div class="flex flex-col gap-1.5">
+          <label class="text-xs uppercase tracking-wider text-slate-600 font-bold ml-1">Presupuesto total (€) *</label>
+          <input
+            type="number"
+            formControlName="total_budget"
+            placeholder="Ej: 3500"
+            class="w-full bg-slate-50 border rounded-xl px-4 py-3 text-sm text-slate-950 focus:outline-none transition-all shadow-inner"
+            [class.border-red-500]="isInvalid('total_budget')"
+            [class.bg-red-50]="isInvalid('total_budget')"
+            [class.border-slate-200]="!isInvalid('total_budget')"
+            [class.focus:border-blue-500]="!isInvalid('total_budget')"
+          />
+          @if (isInvalid('total_budget')) {
+            <div class="flex flex-col mt-1 ml-1 gap-0.5">
+              @if (tripForm.get('total_budget')?.hasError('required')) {
+                <span class="text-[11px] text-red-600 font-medium">El presupuesto es obligatorio.</span>
+              }
+              @if (tripForm.get('total_budget')?.hasError('min')) {
+                <span class="text-[11px] text-red-600 font-medium">El presupuesto no puede ser negativo.</span>
+              }
+            </div>
+          }
+        </div>
+
+        <div class="flex flex-col gap-1.5">
+          <label class="text-xs uppercase tracking-wider text-slate-600 font-bold ml-1">URL de imagen de portada</label>
+          <input
+            type="text"
+            formControlName="image_url"
+            placeholder="https://ejemplo.com/imagen.jpg"
+            class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm text-slate-950 focus:outline-none focus:border-blue-500 transition-all shadow-inner"/>
+        </div>
+
+        <div class="flex flex-col gap-3 pt-2">
+          <label class="flex items-center gap-3.5 cursor-pointer group">
+            <input
+              type="checkbox"
+              formControlName="is_public"
+              class="w-5 h-5 rounded border-slate-300 text-blue-600 focus:ring-blue-500 focus:ring-2 transition-all"/>
+            <span class="text-sm text-slate-800 font-semibold group-hover:text-blue-700">Hacer este viaje público</span>
+          </label>
+          <p class="text-[11px] text-slate-500 italic ml-8">
+            Los campos marcados con <span class="text-red-500 font-bold">*</span> son obligatorios para poder guardar.
+          </p>
+        </div>
+      </section>
+
+      @if (errorMessage()) {
+        <div class="p-5 bg-red-600/15 border border-red-600/30 rounded-2xl text-red-200 text-center text-sm font-medium shadow-lg animate-pulse">
+          ⚠️ {{ errorMessage() }}
+        </div>
+      }
+
+      <section class="flex items-center justify-center sm:justify-end gap-4 mb-6">
+        <button
+          type="submit"
+          [disabled]="tripForm.invalid"
+          [title]="tripForm.invalid ? 'Por favor, rellena todos los campos obligatorios (*)' : (isEditMode() ? 'Guardar cambios' : 'Crear viaje')"
+          class="flex items-center gap-2.5 px-8 py-3 rounded-xl text-base font-bold transition-all shadow-lg
+                 bg-blue-600 text-white hover:bg-blue-700 hover:scale-105
+                 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 disabled:bg-slate-500">
+          <mat-icon class="text-lg">save</mat-icon>
+          {{ isEditMode() ? 'Guardar cambios' : 'Crear viaje' }}
+        </button>
+      </section>
+    </form>
   </div>
-
-  <!-- FORMULARIO -->
-  <form
-    [formGroup]="tripForm"
-    (ngSubmit)="onSubmit()"
-    class="w-full max-w-4xl px-4 mt-8 flex flex-col gap-6">
-
-    <section class="bg-white dark:bg-slate-900 rounded-xl border border-slate-100 dark:border-slate-800 p-6 flex flex-col gap-5">
-
-      <!-- Título -->
-      <div class="flex flex-col gap-1">
-        <label class="text-[10px] uppercase tracking-wider text-slate-500 dark:text-slate-400">Título</label>
-        <input
-          type="text"
-          formControlName="title"
-          placeholder="Viaje a Japón"
-          class="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-900 dark:text-slate-100 focus:outline-none focus:border-blue-400 transition-colors"/>
-      </div>
-
-      <!-- Destino -->
-      <div class="flex flex-col gap-1">
-        <label class="text-[10px] uppercase tracking-wider text-slate-500 dark:text-slate-400">Destino</label>
-        <input
-          type="text"
-          formControlName="destination"
-          placeholder="Tokio"
-          class="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-900 dark:text-slate-100 focus:outline-none focus:border-blue-400 transition-colors"/>
-      </div>
-
-      <!-- Fechas -->
-      <div class="flex flex-col sm:flex-row gap-4">
-        <div class="flex flex-col gap-1 flex-1">
-          <label class="text-[10px] uppercase tracking-wider text-slate-500 dark:text-slate-400">Fecha de inicio</label>
-          <input
-            type="datetime-local"
-            formControlName="start_date"
-            class="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-900 dark:text-slate-100 focus:outline-none focus:border-blue-400 transition-colors"/>
-        </div>
-        <div class="flex flex-col gap-1 flex-1">
-          <label class="text-[10px] uppercase tracking-wider text-slate-500 dark:text-slate-400">Fecha final</label>
-          <input
-            type="datetime-local"
-            formControlName="end_date"
-            class="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-900 dark:text-slate-100 focus:outline-none focus:border-blue-400 transition-colors"/>
-        </div>
-      </div>
-
-      <!-- Presupuesto -->
-      <div class="flex flex-col gap-1">
-        <label class="text-[10px] uppercase tracking-wider text-slate-500 dark:text-slate-400">Presupuesto total (€)</label>
-        <input
-          type="number"
-          formControlName="total_budget"
-          placeholder="5000"
-          class="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-900 dark:text-slate-100 focus:outline-none focus:border-blue-400 transition-colors"/>
-      </div>
-
-      <!-- URL imagen -->
-      <div class="flex flex-col gap-1">
-        <label class="text-[10px] uppercase tracking-wider text-slate-500 dark:text-slate-400">URL imagen</label>
-        <input
-          type="text"
-          formControlName="image_url"
-          placeholder="URL de la imagen"
-          class="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-900 dark:text-slate-100 focus:outline-none focus:border-blue-400 transition-colors"/>
-      </div>
-
-      <!-- Viaje público -->
-      <label class="flex items-center gap-3 cursor-pointer">
-        <input
-          type="checkbox"
-          formControlName="is_public"
-          class="w-4 h-4 rounded border-slate-300 text-blue-500 focus:ring-blue-400"/>
-        <span class="text-sm text-slate-700 dark:text-slate-300">Viaje público</span>
-      </label>
-
-    </section>
-
-    <!-- Error -->
-    @if (errorMessage()) {
-      <div class="p-4 bg-red-500/10 border border-red-500/20 rounded-2xl text-red-400 text-center text-sm">
-        {{ errorMessage() }}
-      </div>
-    }
-
-    <!-- Acciones -->
-    <section class="flex items-center justify-between gap-3 mb-4">
-      <button
-        type="button"
-        (click)="goBack()"
-        class="px-3 py-1.5 rounded-lg text-sm border border-slate-300 text-slate-300
-               hover:bg-white/10 transition-colors">
-        Cancelar
-      </button>
-      <button
-        type="submit"
-        [disabled]="tripForm.invalid"
-        class="px-5 py-1.5 rounded-lg text-sm font-semibold border border-blue-400 text-blue-400
-               hover:bg-blue-400 hover:text-white transition-colors
-               disabled:opacity-40 disabled:cursor-not-allowed">
-        {{ isEditMode() ? 'Guardar cambios' : 'Crear viaje' }}
-      </button>
-    </section>
-
-  </form>
-
 </main>

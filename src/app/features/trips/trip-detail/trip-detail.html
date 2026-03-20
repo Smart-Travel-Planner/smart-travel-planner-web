@@ -1,11 +1,7 @@
 
 <main class="min-h-screen w-full  text-white flex flex-col items-center pb-16">
   @if (trip()) {
-    <button
-      (click)="goBack()"
-      class="fixed top-16 left-4 z-20 flex items-center justify-center w-9 h-9 rounded-full bg-black/40 backdrop-blur-sm border border-white/20 text-white hover:bg-black/60 transition-colors" title="Volver">
-      <mat-icon class="text-base">arrow_back</mat-icon>
-    </button>
+    <app-back-button (backClick)="goBack()"></app-back-button>
     <div
       class="fixed inset-0 bg-cover bg-center -z-10"
       [style.background-image]="'url(' + (trip()!.image_url || defaultImage) + ')'">
@@ -61,8 +57,8 @@
           </div>
         </div>
       </div>
-
     </div>
+    
     <section class="w-full max-w-7xl px-4 mt-8 flex flex-col lg:flex-row gap-6">
       <div class="flex-1 min-w-0 flex flex-col">
         <div class="bg-black/30 backdrop-blur-sm px-4 rounded-xl">

@@ -4,10 +4,12 @@ import { TripsService } from '../../../core/services/trips.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { toDateInput, toDateTimeInput } from '../../../core/utils/date.utils';
 import { NavigationService } from '../../../core/services/navigation.service';
+import { MatIconModule } from '@angular/material/icon';
+import { BackButtonComponent } from '../../../shared/components/back-button/back-button';
 
 @Component({
   selector: 'app-trip-form',
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, MatIconModule, BackButtonComponent],
   templateUrl: './trip-form.html',
   styleUrl: './trip-form.css',
 })
@@ -19,11 +21,11 @@ export class TripFormComponent implements OnInit {
   private navigationService = inject(NavigationService);
 
   tripForm: FormGroup = this.fb.group({
-    title: ['', Validators.required],
+    title: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(50)]],
     destination: [''],
     start_date: ['', Validators.required],
     end_date: [''],
-    total_budget: [0, [Validators.required, Validators.min(0)]],
+    total_budget: [0, [Validators.required, Validators.min(1)]],
     is_public: [false, Validators.required],
     image_url: [''],
   });
@@ -81,16 +83,13 @@ export class TripFormComponent implements OnInit {
     }
   };
 
-  // goBack(): void {
-  //   const id = this.tripId();
-  //   if (id) {
-  //     this.router.navigate(['/trips', id]);
-  //   } else {
-  //     this.router.navigate(['/trips']);
-  //   }
-  // }
+  isInvalid(controlName: string): boolean {
+    const control = this.tripForm.get(controlName);
+    return !!(control?.invalid && control?.touched);
+  };
+
   goBack(): void {
     const id = this.tripId();
     this.router.navigate([this.navigationService.getPreviousUrl()]);
-  }
+  };
 };

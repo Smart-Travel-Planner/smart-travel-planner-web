@@ -14,10 +14,11 @@ import { ACTIVITY_CATEGORY_COLORS } from '../../../core/enums/activity-category-
 import { NavigationService } from '../../../core/services/navigation.service';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialogComponent } from '../../../shared/components/confirm-dialog/confirm-dialog';
+import { BackButtonComponent } from '../../../shared/components/back-button/back-button';
 
 @Component({
   selector: 'app-trip-detail',
-  imports: [CalendarComponent, MatIconModule, FormatDatePipe],
+  imports: [CalendarComponent, MatIconModule, FormatDatePipe, BackButtonComponent],
   templateUrl: './trip-detail.html',
   styleUrl: './trip-detail.css',
 })
