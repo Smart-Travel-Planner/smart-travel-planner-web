@@ -12,6 +12,8 @@ import { LocationsService } from '../../../core/services/locations.service';
 import { FormatDatePipe } from '../../../shared/pipes/format-date-pipe';
 import { ACTIVITY_CATEGORY_COLORS } from '../../../core/enums/activity-category-colors.enum';
 import { NavigationService } from '../../../core/services/navigation.service';
+import { MatDialog } from '@angular/material/dialog';
+import { ConfirmDialogComponent } from '../../../shared/components/confirm-dialog/confirm-dialog';
 
 @Component({
   selector: 'app-trip-detail',
@@ -28,6 +30,7 @@ export class TripDetailComponent implements OnInit {
   private route = inject(ActivatedRoute);
   private authService = inject(AuthService);
   private navigationService = inject(NavigationService);
+  private dialog = inject(MatDialog);
 
   trip = signal<Trip | null>(null);
   activities = signal<Activity[]>([]);
@@ -114,12 +117,24 @@ export class TripDetailComponent implements OnInit {
   };
 
   deleteTrip(): void {
-    const id = this.trip()?.id;
-    if (!id) return;
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      width: '90vw',
+      maxWidth: '400px',
+      data: {
+        title: 'Eliminar viaje',
+        message: `¿Estás seguro de que quieres eliminar "${this.trip()?.title}"? Esta acción no se puede deshacer.`,
+      },
+    });
 
-    this.tripsService.deleteTrip(id).subscribe({
-      next: () => this.router.navigate(['/trips']),
-      error: () => this.errorMessage.set('Error eliminando el viaje'),
+    dialogRef.afterClosed().subscribe(confirmed => {
+      if (!confirmed) return;
+      const id = this.trip()?.id;
+      if (!id) return;
+
+      this.tripsService.deleteTrip(id).subscribe({
+        next: () => this.router.navigate(['/trips']),
+        error: () => this.errorMessage.set('Error eliminando el viaje'),
+      });
     });
   };
 };

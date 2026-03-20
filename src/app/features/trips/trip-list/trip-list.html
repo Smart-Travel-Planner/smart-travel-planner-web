@@ -1,10 +1,8 @@
-<!-- <main class="min-h-screen w-full bg-linear-to-b from-slate-900 via-slate-800 to-black text-white flex flex-col items-center pb-16"> -->
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Pacifico&display=swap');
 </style>
 
-  <main class="min-h-screen w-full bg-linear-to-b from-slate-900 via-slate-800 to-blue-600 text-white flex flex-col items-center pb-16">
-
+<main class="min-h-screen w-full bg-linear-to-b from-slate-900 via-slate-800 to-blue-600 text-white flex flex-col items-center pb-16">
   <div
     class="relative w-full min-h-64 flex flex-col items-center pt-16 px-6 overflow-hidden bg-cover bg-center"
     style="background-image: url('https://res.cloudinary.com/dux4gqdow/image/upload/v1773662802/pietro-de-grandi-T7K4aEPoGGk-unsplash_nqzjxq.jpg')">
@@ -19,31 +17,48 @@
         <p class="text-slate-200 mt-3 text-sm font-medium">Gestiona tus próximas aventuras</p>
       </div>
 
-<button
-  (click)="goToCreate()"
-  class="flex items-center gap-2 bg-blue-500 hover:bg-blue-600 transition-all px-4 py-2 rounded-xl shadow-2xl shadow-blue-900/40 text-sm font-medium">
-  <mat-icon>add</mat-icon>
-  Nuevo viaje
-</button>
+      <button
+        (click)="goToCreate()"
+        class="flex items-center gap-2 bg-blue-500 hover:bg-blue-600 transition-all px-4 py-2 rounded-xl shadow-2xl shadow-blue-900/40 text-sm font-medium" title="Nuevo viaje">
+        <mat-icon>add</mat-icon>
+      </button>
     </div>
 
     <section class="w-full max-w-4xl bg-white backdrop-blur-xl border border-slate-200 rounded-2xl p-2 mb-8 flex flex-wrap gap-6 items-center justify-between">
-
       <div class="flex bg-black/50 p-0.5 rounded-xl border border-white/5">
         <button
-        (click)="setFilter('all')" class="px-4 py-2 hover:bg-slate-500 rounded-lg text-sm transition-all">Todos</button>
-        <button (click)="setFilter('mine')" class="px-4 py-2 hover:bg-slate-500 rounded-lg text-sm transition-all">Mis viajes</button>
-        <button (click)="setFilter('public')" class="px-4 py-2 hover:bg-slate-500 rounded-lg text-sm transition-all">Públicos</button>
+          (click)="setFilter('all')"
+          class="px-4 py-2 rounded-lg text-sm transition-all"
+          [class.bg-white]="activeFilter() === 'all'"
+          [class.text-slate-900]="activeFilter() === 'all'"
+          [class.hover:bg-slate-600]="activeFilter() !== 'all'">
+          Todos
+        </button>
+        <button
+          (click)="setFilter('mine')"
+          class="px-4 py-2 rounded-lg text-sm transition-all"
+          [class.bg-white]="activeFilter() === 'mine'"
+          [class.text-slate-900]="activeFilter() === 'mine'"
+          [class.hover:bg-slate-600]="activeFilter() !== 'mine'">
+          Mis viajes
+        </button>
+        <button
+          (click)="setFilter('public')"
+          class="px-4 py-2 rounded-lg text-sm transition-all"
+          [class.bg-white]="activeFilter() === 'public'"
+          [class.text-slate-900]="activeFilter() === 'public'"
+          [class.hover:bg-slate-600]="activeFilter() !== 'public'">
+          Públicos
+        </button>
       </div>
-
       <div class="flex flex-col sm:flex-row flex-wrap gap-3 items-start sm:items-end">
         @if (dateFrom() || dateTo()) {
-<button
-  (click)="resetDateFilters()"
-  class="order-last sm:order-first flex items-center gap-1 px-3 py-1 text-sm bg-black/50 hover:bg-slate-500 border border-slate-300 hover:border-slate-500 rounded-lg transition-all">
-  <mat-icon class="text-base">close</mat-icon>
-  Borrar fechas
-</button>
+          <button
+            (click)="resetDateFilters()"
+            class="order-last sm:order-first flex items-center gap-1 px-3 py-1 text-sm bg-black/50 hover:bg-slate-600 border border-slate-300 hover:border-slate-600 rounded-lg transition-all" title="Borrar fechas">
+            <mat-icon class="text-base">close</mat-icon>
+            <!-- Borrar fechas -->
+          </button>
         }
         <div class="flex flex-col">
           <label class="text-[10px] uppercase tracking-wider text-slate-600 ml-1">Desde</label>
@@ -71,97 +86,117 @@
     </div>
   }
 
-  <section class="w-full max-w-7xl grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 py-8 px-4">
-    @for (trip of filteredTrips(); track trip.id) {
-      <article class="group bg-white dark:bg-slate-900 rounded-xl overflow-hidden shadow-sm border border-slate-100 dark:border-slate-800 transition-all hover:shadow-md">
+  @if (hasTrips()) {
+    <section class="w-full max-w-7xl grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 py-8 px-4">
+      @for (trip of filteredTrips(); track trip.id) {
+        <article class="group bg-white dark:bg-slate-900 rounded-xl overflow-hidden shadow-sm border border-slate-100 dark:border-slate-800 transition-all hover:shadow-md">
 
-        <div class="relative h-36 w-full overflow-hidden">
-          <div
-            class="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-105"
-            (click)="goToDetail(trip.id)"
-            [style.background-image]="'url(' + (trip.image_url || defaultImage) + ')'">
-          </div>
-          <div class="absolute top-3 left-3">
-            @if (trip.is_public) {
-              <span class="bg-green-500/90 backdrop-blur px-2 py-1 rounded text-[10px] font-bold uppercase tracking-wider text-white">
-                Público
-              </span>
-            } @else {
-              <span class="bg-slate-700/90 backdrop-blur px-2 py-1 rounded text-[10px] font-bold uppercase tracking-wider text-white">
-                Privado
-              </span>
-            }
-          </div>
-        </div>
-
-        <div class="p-4">
-          <div class="flex justify-between items-start mb-2">
-            <div>
-              <h3 class="text-base font-bold text-slate-900 dark:text-slate-100 leading-tight">
-                {{ trip.title }}
-              </h3>
-              @if (trip.destination) {
-<div class="flex items-center gap-1 text-slate-500 dark:text-slate-400 mt-1">
-  <mat-icon class="text-sm">location_on</mat-icon>
-  <span class="text-sm">{{ trip.destination }}</span>
-</div>
+          <div class="relative h-36 w-full overflow-hidden">
+            <div
+              class="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-105"
+              (click)="goToDetail(trip.id)"
+              [style.background-image]="'url(' + (trip.image_url || defaultImage) + ')'">
+            </div>
+            <div class="absolute top-3 left-3">
+              @if (trip.is_public) {
+                <span class="bg-green-500/90 backdrop-blur px-2 py-1 rounded text-[10px] font-bold uppercase tracking-wider text-white">
+                  Público
+                </span>
+              } @else {
+                <span class="bg-slate-700/90 backdrop-blur px-2 py-1 rounded text-[10px] font-bold uppercase tracking-wider text-white">
+                  Privado
+                </span>
               }
             </div>
-            <div class="flex flex-col items-end gap-1 text-slate-500 dark:text-slate-400">
-<div class="flex items-center gap-1">
-  <mat-icon class="text-sm">calendar_today</mat-icon>
-  <span class="text-xs font-medium">{{ trip.start_date | formatDate }}</span>
-</div>
-@if (trip.end_date) {
-  <div class="flex items-center gap-1">
-    <mat-icon class="text-sm">event</mat-icon>
-    <span class="text-xs font-medium">{{ trip.end_date | formatDate }}</span>
-  </div>
-}
-            </div>
           </div>
 
-<div class="flex items-center gap-1 text-slate-500 dark:text-slate-400 mt-1">
-  <mat-icon class="text-sm">payments</mat-icon>
-  <span class="text-sm font-medium">{{ trip.total_budget }} €</span>
-</div>
-
-<div class="flex items-center justify-between mt-4 pt-3 border-t border-slate-100 dark:border-slate-800">
-  @if (isOwner(trip)) {
-    <div class="flex gap-2">
+          <div class="p-4">
+            <div class="flex justify-between items-start mb-2">
+              <div>
+                <h3 class="text-base font-bold text-slate-900 dark:text-slate-100 leading-tight">
+                  {{ trip.title }}
+                </h3>
+                @if (trip.destination) {
+                  <div class="flex items-center gap-1 text-slate-500 dark:text-slate-400 mt-1">
+                    <mat-icon class="text-sm">location_on</mat-icon>
+                    <span class="text-sm">{{ trip.destination }}</span>
+                  </div>
+                }
+              </div>
+              <div class="flex flex-col items-end gap-1 text-slate-500 dark:text-slate-400">
+                <div class="flex items-center gap-1">
+                  <mat-icon class="text-sm">calendar_today</mat-icon>
+                  <span class="text-xs font-medium">{{ trip.start_date | formatDate }}</span>
+                </div>
+                @if (trip.end_date) {
+                  <div class="flex items-center gap-1">
+                    <mat-icon class="text-sm">event</mat-icon>
+                    <span class="text-xs font-medium">{{ trip.end_date | formatDate }}</span>
+                  </div>
+                }
+              </div>
+            </div>
+            <div class="flex items-center gap-1 text-slate-500 dark:text-slate-400 mt-1">
+              <mat-icon class="text-sm">payments</mat-icon>
+              <span class="text-sm font-medium">{{ trip.total_budget }} €</span>
+            </div>
+            <div class="flex items-cen  ter justify-between mt-4 pt-3 border-t border-slate-100 dark:border-slate-800">
+              @if (isOwner(trip)) {
+                <div class="flex gap-2">
+                  <button
+                    (click)="goToEdit(trip.id)"
+                    class="flex items-center gap-1 px-3 py-1.5 rounded-lg text-sm border border-slate-300 text-slate-600
+                          hover:bg-slate-100 dark:border-slate-600 dark:text-slate-400 dark:hover:bg-slate-800
+                          transition-colors" title="Editar viaje">
+                    <mat-icon class="text-base">edit</mat-icon>
+                    <!-- Editar -->
+                  </button>
+                  <button
+                    (click)="deleteTrip(trip.id, trip.title)"
+                    class="flex items-center gap-1 px-3 py-1.5 rounded-lg text-sm font-semibold border border-red-300 text-red-300
+                          hover:bg-red-300 hover:text-slate-800 hover:border-red-300
+                          transition-colors" title="Eliminar viaje">
+                    <mat-icon class="text-base">delete</mat-icon>
+                    <!-- Borrar -->
+                  </button>
+                </div>
+              } @else {
+                <div></div>
+              }
+              <button
+                (click)="goToDetail(trip.id)"
+                class="flex items-center gap-1 px-3 py-1.5 rounded-lg text-sm border border-primary text-primary hover:text-slate-800 hover:bg-white transition-colors" title="Detalles del viaje">
+                <mat-icon class="text-base">visibility</mat-icon>
+                <!-- Ver detalle -->
+              </button>
+            </div>
+          </div>
+        </article>
+      }
+    </section>
+  } @else if (hasDateFilter()) {
+    <div class="w-full max-w-4xl flex flex-col items-center justify-center py-16 px-4 text-center">
+      <mat-icon class="text-slate-400 text-5xl mb-4">calendar_today</mat-icon>
+      <p class="text-slate-300 text-lg font-semibold">No hay viajes en ese período</p>
+      <p class="text-slate-400 text-sm mt-2">Prueba con otras fechas o elimina los filtros.</p>
       <button
-        (click)="goToEdit(trip.id)"
-        class="flex items-center gap-1 px-3 py-1.5 rounded-lg text-sm border border-slate-300 text-slate-600
-              hover:bg-slate-100 dark:border-slate-600 dark:text-slate-400 dark:hover:bg-slate-800
-              transition-colors"
-        title="Editar">
-        <mat-icon class="text-base">edit</mat-icon>
-        <!-- Editar -->
-      </button>
-      <button
-        (click)="deleteTrip(trip.id)"
-        class="flex items-center gap-1 px-3 py-1.5 rounded-lg text-sm font-semibold border border-red-300 text-red-300
-              hover:bg-red-300 hover:text-slate-800 hover:border-red-300
-              transition-colors"
-        title="Eliminar">
-        <mat-icon class="text-base">delete</mat-icon>
-        <!-- Borrar -->
+        (click)="resetDateFilters()"
+        class="mt-6 flex items-center gap-2 px-4 py-2 rounded-lg border border-slate-400 text-slate-300 hover:bg-slate-700 transition-colors text-sm" title="Borrar filtros">
+        <mat-icon class="text-base">close</mat-icon>
+        Borrar filtros
       </button>
     </div>
   } @else {
-    <!-- <div></div> -->
+    <div class="w-full max-w-4xl flex flex-col items-center justify-center py-16 px-4 text-center">
+      <mat-icon class="text-slate-400 text-5xl mb-4">luggage</mat-icon>
+      <p class="text-slate-300 text-lg font-semibold">¡Todavía no tienes viajes!</p>
+      <p class="text-slate-400 text-sm mt-2">Crea tu primer viaje y empieza a planificar tu próxima aventura.</p>
+      <button
+        (click)="goToCreate()"
+        class="mt-6 flex items-center gap-2 bg-blue-500 hover:bg-blue-600 transition-all px-6 py-3 rounded-xl text-sm font-medium shadow-lg" title="Nuevo viaje">
+        <mat-icon class="text-base">add</mat-icon>
+        Crear mi primer viaje
+      </button>
+    </div>
   }
-  <button
-    (click)="goToDetail(trip.id)"
-    class="flex items-center gap-1 px-3 py-1.5 rounded-lg text-sm border border-primary text-primary hover:text-slate-800 hover:bg-white transition-colors">
-    <mat-icon class="text-base">visibility</mat-icon>
-    <!-- Ver detalle -->
-  </button>
-</div>
-        </div>
-
-      </article>
-    }
-  </section>
-
 </main>

@@ -1,0 +1,21 @@
+<h2 mat-dialog-title class="flex items-center gap-2">
+  <mat-icon class="text-red-500">warning</mat-icon>
+  {{ data.title }}
+</h2>
+
+<div mat-dialog-content>
+  <p class="text-slate-600">{{ data.message }}</p>
+</div>
+
+<div mat-dialog-actions class="flex justify-end gap-2">
+  <button
+    (click)="cancel()"
+    class="px-4 py-2 rounded-lg text-sm border border-slate-300 text-slate-600 hover:bg-slate-100 transition-colors">
+    {{ data.cancelText || 'Cancelar' }}
+  </button>
+  <button
+    (click)="confirm()"
+    class="px-4 py-2 rounded-lg text-sm font-semibold border border-red-300 text-red-500 hover:bg-red-400 hover:text-white hover:border-red-400 transition-colors">
+    {{ data.confirmText || 'Eliminar' }}
+  </button>
+</div>

@@ -6,6 +6,8 @@ import { AuthService } from '../../../core/services/auth.service';
 import { MatIconModule } from '@angular/material/icon';
 import { FormatDatePipe } from '../../../shared/pipes/format-date-pipe';
 import { NavigationService } from '../../../core/services/navigation.service';
+import { MatDialog } from '@angular/material/dialog';
+import { ConfirmDialogComponent } from '../../../shared/components/confirm-dialog/confirm-dialog';
 
 type TripFilter = 'all' | 'mine' | 'public';
 
@@ -20,6 +22,7 @@ export class TripListComponent implements OnInit {
   private authService = inject(AuthService);
   private router = inject(Router);
   private navigationService = inject(NavigationService);
+  private dialog = inject(MatDialog);
 
   private myTrips = signal<Trip[]>([]);
   private publicTrips = signal<Trip[]>([]);
@@ -58,6 +61,9 @@ export class TripListComponent implements OnInit {
 
     return trips;
   });
+
+  hasDateFilter = computed(() => !!this.dateFrom() || !!this.dateTo());
+  hasTrips = computed(() => this.filteredTrips().length > 0);
 
   ngOnInit(): void {
     this.loadTrips();
@@ -106,10 +112,22 @@ export class TripListComponent implements OnInit {
     this.router.navigate(['/trips', id, 'edit']);
   };
 
-  deleteTrip(id: string): void {
-    this.tripsService.deleteTrip(id).subscribe({
-      next: () => this.loadTrips(),
-      error: () => this.errorMessage.set('Error eliminando el viaje'),
+  deleteTrip(id: string, title: string): void {
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      width: '90vw',
+      maxWidth: '400px',
+      data: {
+        title: 'Eliminar viaje',
+        message: `¿Estás seguro de que quieres eliminar "${title}"? Esta acción no se puede deshacer.`,
+      },
+    });
+
+    dialogRef.afterClosed().subscribe(confirmed => {
+      if (!confirmed) return;
+      this.tripsService.deleteTrip(id).subscribe({
+        next: () => this.loadTrips(),
+        error: () => this.errorMessage.set('Error eliminando el viaje'),
+      });
     });
   };
 
