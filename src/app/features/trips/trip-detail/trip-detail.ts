@@ -11,6 +11,7 @@ import { Activity } from '../../../core/models/activity.model';
 import { LocationsService } from '../../../core/services/locations.service';
 import { FormatDatePipe } from '../../../shared/pipes/format-date-pipe';
 import { ACTIVITY_CATEGORY_COLORS } from '../../../core/enums/activity-category-colors.enum';
+import { NavigationService } from '../../../core/services/navigation.service';
 
 @Component({
   selector: 'app-trip-detail',
@@ -26,6 +27,7 @@ export class TripDetailComponent implements OnInit {
   private router = inject(Router);
   private route = inject(ActivatedRoute);
   private authService = inject(AuthService);
+  private navigationService = inject(NavigationService);
 
   trip = signal<Trip | null>(null);
   activities = signal<Activity[]>([]);
@@ -95,6 +97,7 @@ export class TripDetailComponent implements OnInit {
   }
 
   goToEdit(): void {
+    this.navigationService.setPreviousUrl(`/trips/${this.trip()?.id}`);
     this.router.navigate(['/trips', this.trip()?.id, 'edit']);
   };
 

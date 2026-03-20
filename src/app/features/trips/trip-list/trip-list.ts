@@ -5,6 +5,7 @@ import { Trip } from '../../../core/models/trip.model';
 import { AuthService } from '../../../core/services/auth.service';
 import { MatIconModule } from '@angular/material/icon';
 import { FormatDatePipe } from '../../../shared/pipes/format-date-pipe';
+import { NavigationService } from '../../../core/services/navigation.service';
 
 type TripFilter = 'all' | 'mine' | 'public';
 
@@ -18,6 +19,7 @@ export class TripListComponent implements OnInit {
   tripsService = inject(TripsService);
   private authService = inject(AuthService);
   private router = inject(Router);
+  private navigationService = inject(NavigationService);
 
   private myTrips = signal<Trip[]>([]);
   private publicTrips = signal<Trip[]>([]);
@@ -100,6 +102,7 @@ export class TripListComponent implements OnInit {
   };
 
   goToEdit(id: string): void {
+    this.navigationService.setPreviousUrl(`/trips`);
     this.router.navigate(['/trips', id, 'edit']);
   };
 

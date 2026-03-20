@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { TripsService } from '../../../core/services/trips.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { toDateInput, toDateTimeInput } from '../../../core/utils/date.utils';
+import { NavigationService } from '../../../core/services/navigation.service';
 
 @Component({
   selector: 'app-trip-form',
@@ -15,6 +16,7 @@ export class TripFormComponent implements OnInit {
   private tripsService = inject(TripsService);
   private router = inject(Router);
   private route = inject(ActivatedRoute);
+  private navigationService = inject(NavigationService);
 
   tripForm: FormGroup = this.fb.group({
     title: ['', Validators.required],
@@ -79,12 +81,16 @@ export class TripFormComponent implements OnInit {
     }
   };
 
+  // goBack(): void {
+  //   const id = this.tripId();
+  //   if (id) {
+  //     this.router.navigate(['/trips', id]);
+  //   } else {
+  //     this.router.navigate(['/trips']);
+  //   }
+  // }
   goBack(): void {
     const id = this.tripId();
-    if (id) {
-      this.router.navigate(['/trips', id]);
-    } else {
-      this.router.navigate(['/trips']);
-    }
+    this.router.navigate([this.navigationService.getPreviousUrl()]);
   }
 };
