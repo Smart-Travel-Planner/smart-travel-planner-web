@@ -1,47 +1,119 @@
-<h2 mat-dialog-title>Nueva localización</h2>
 
-<div mat-dialog-content>
-  <form [formGroup]="locationForm">
-    <label for="inputName" placeholder="Nombre">Nombre: </label>
-    <input type="text" formControlName="name" placeholder="Nombre" name="inputName" />
-    <label for="inputCategory">Categoría: </label>
-    <select name="inputCategory" formControlName="category">
-      @for (category of categories; track category) {
-        <option [value]="category">{{ category }}</option>
+<h2 mat-dialog-title class="text-lg font-semibold text-slate-900 tracking-tight pb-0">
+  Nueva <span class="text-blue-500">localización</span>
+</h2>
+
+<div mat-dialog-content class="px-0 pt-4">
+  <form [formGroup]="locationForm" class="flex flex-col gap-4">
+
+    <div class="flex flex-col gap-1.5">
+      <label class="text-xs uppercase tracking-wider text-slate-600 font-bold ml-1">Nombre *</label>
+      <input
+        type="text"
+        formControlName="name"
+        placeholder="Ej: Museo del Prado"
+        class="w-full bg-slate-50 border rounded-xl px-4 py-2.5 text-sm text-slate-950 focus:outline-none transition-all shadow-inner"
+        [class.border-red-500]="isInvalid('name')"
+        [class.bg-red-50]="isInvalid('name')"
+        [class.border-slate-200]="!isInvalid('name')"
+        [class.focus:border-blue-500]="!isInvalid('name')"
+        [class.focus:border-red-600]="isInvalid('name')"/>
+      @if (isInvalid('name')) {
+        <div class="flex flex-col mt-1 ml-1 gap-0.5">
+          @if (locationForm.get('name')?.hasError('required')) {
+            <span class="text-[11px] text-red-600 font-medium">El nombre es obligatorio.</span>
+          }
+          @if (locationForm.get('name')?.hasError('minlength')) {
+            <span class="text-[11px] text-red-600 font-medium">
+              Debe tener al menos 3 caracteres (llevas {{ locationForm.get('name')?.errors?.['minlength'].actualLength }}).
+            </span>
+          }
+          @if (locationForm.get('name')?.hasError('maxlength')) {
+            <span class="text-[11px] text-red-600 font-medium">Máximo 50 caracteres.</span>
+          }
+        </div>
       }
-    </select>
-    <label for="inputAddress">Dirección: </label>
-    <input type="text" formControlName="address" placeholder="Dirección" name="inputAddress" />
-    <label for="inputRating">Valoración: </label>
-    <input type="number" formControlName="rating" placeholder="Valoración de 0 a 5" name="inputRating" />
-    <label for="inputPlaceId">Place Id: </label>
-    <input type="text" formControlName="place_id" placeholder="Place ID" name="inputPlaceId" />
-    <p>Selecciona la ubicación en el mapa:</p>
-    <!-- @if (selectedCoords()) {
-      <p>Lat: {{ selectedCoords()!.lat | number:'1.4-6' }}, Lng: {{ selectedCoords()!.lng | number:'1.4-6' }}</p>
-    } -->
-    <div class="dialog-map-container">
-      <app-map
-        mode="select"
-        containerId="location-dialog-map"
-        [centerCoords]="tripDestinationCoords ? [tripDestinationCoords.lat, tripDestinationCoords.lng] : [40.4168, -3.7038]"
-        (locationSelected)="onLocationSelected($event)"></app-map>
     </div>
 
+    <div class="flex flex-col gap-1.5">
+      <label class="text-xs uppercase tracking-wider text-slate-600 font-bold ml-1">Dirección</label>
+      <input
+        type="text"
+        formControlName="address"
+        placeholder="Ej: Calle Ruiz de Alarcón 23, Madrid"
+        class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-950 focus:outline-none focus:border-blue-500 transition-all shadow-inner"/>
+    </div>
 
+    <div class="flex flex-col sm:flex-row gap-4">
+      <div class="flex flex-col gap-1.5 flex-1">
+        <label class="text-xs uppercase tracking-wider text-slate-600 font-bold ml-1">Valoración</label>
+        <input
+          type="number"
+          formControlName="rating"
+          placeholder="0 – 5"
+          class="w-full bg-slate-50 border rounded-xl px-4 py-2.5 text-sm text-slate-950 focus:outline-none transition-all shadow-inner"
+          [class.border-red-500]="isInvalid('rating')"
+          [class.bg-red-50]="isInvalid('rating')"
+          [class.border-slate-200]="!isInvalid('rating')"
+          [class.focus:border-blue-500]="!isInvalid('rating')"
+          [class.focus:border-red-600]="isInvalid('rating')"/>
+        @if (isInvalid('rating')) {
+          <span class="text-[11px] text-red-600 font-medium ml-1 mt-1">La valoración debe estar entre 0 y 5.</span>
+        }
+      </div>
+      <div class="flex flex-col gap-1.5 flex-1">
+        <label class="text-xs uppercase tracking-wider text-slate-600 font-bold ml-1">Place ID</label>
+        <input
+          type="text"
+          formControlName="place_id"
+          placeholder="Google Place ID"
+          class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-950 focus:outline-none focus:border-blue-500 transition-all shadow-inner"/>
+      </div>
+    </div>
 
-    <!-- <label for="inputLat">Latitud -90 a 90: </label>
-    <input type="number" formControlName="lat" placeholder="Latitud" name="inputLat" />
-    <label for="inputLng">Longitud -180 a 180: </label>
-    <input type="number" formControlName="lng" placeholder="Longitud" name="inputLng" /> -->
+    <div class="flex flex-col gap-1.5">
+      <label class="text-xs uppercase tracking-wider text-slate-600 font-bold ml-1">Ubicación en el mapa *</label>
+      <div class="dialog-map-container rounded-xl overflow-hidden border shadow-inner transition-colors"
+        [class.border-slate-200]="selectedCoords()"
+        [class.border-red-400]="!selectedCoords()">
+        <app-map
+          mode="select"
+          containerId="location-dialog-map"
+          [centerCoords]="tripDestinationCoords ? [tripDestinationCoords.lat, tripDestinationCoords.lng] : [40.4168, -3.7038]"
+          (locationSelected)="onLocationSelected($event)">
+        </app-map>
+      </div>
+      @if (!selectedCoords()) {
+        <span class="text-[11px] text-red-600 font-medium ml-1 mt-1">Selecciona un punto en el mapa.</span>
+      }
+    </div>
 
     @if (errorMessage()) {
-      <p>{{ errorMessage() }}</p>
+      <div class="p-3 bg-red-500/10 border border-red-500/20 rounded-xl text-red-600 text-xs text-center">
+        {{ errorMessage() }}
+      </div>
     }
+
   </form>
 </div>
 
-<div mat-dialog-actions>
-  <button type="button" (click)="onCancel()">Cancelar</button>
-  <button type="button" (click)="onSubmit()" [disabled]="locationForm.invalid">Crear</button>
+<div mat-dialog-actions class="px-1 pt-4 pb-1 flex justify-end gap-3">
+  <button
+    type="button"
+    (click)="onCancel()"
+    class="flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-bold border border-slate-300 text-slate-600
+           hover:bg-slate-100 hover:scale-105 transition-all shadow-sm">
+    <mat-icon class="text-base">close</mat-icon>
+    <!-- Cancelar -->
+  </button>
+  <button
+    type="button"
+    (click)="onSubmit()"
+    [disabled]="locationForm.invalid || !selectedCoords()"
+    class="flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-bold transition-all shadow-lg
+           bg-blue-600 text-white hover:bg-blue-700 hover:scale-105
+           disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 disabled:bg-slate-500">
+    <mat-icon class="text-base">save</mat-icon>
+    Crear
+  </button>
 </div>

@@ -28,32 +28,19 @@
     </div>
   </div>
 
-  <!-- <section class="w-full max-w-7xl px-4 mb-6">
-    <div class="bg-black/30 backdrop-blur-sm border border-white/10 rounded-2xl px-3 py-2 flex items-center gap-3">
+  <section class="w-full max-w-4xl px-4 mb-6">
+    <div class="bg-white backdrop-blur-xl border border-slate-200 rounded-2xl px-3 py-2 flex items-center gap-3">
       <button
         (click)="setCategory('all')"
         title="Todas"
-        class="px-3 py-1 rounded-lg text-xs font-semibold transition-all"
-        [class.bg-white]="activeCategory() === 'all'"
-        [class.text-slate-900]="activeCategory() === 'all'"
-        [class.text-slate-300]="activeCategory() !== 'all'"
-        [class.hover:bg-white/10]="activeCategory() !== 'all'">
+        class="px-4 py-2 rounded-lg text-sm transition-all"
+        [class.bg-black]="activeCategory() === 'all'"
+        [class.text-white]="activeCategory() === 'all'"
+        [class.text-slate-600]="activeCategory() !== 'all'"
+        [class.hover:bg-slate-100]="activeCategory() !== 'all'">
         Todas
       </button>
-      <div class="w-px h-5 bg-white/20"></div> -->
-<section class="w-full max-w-4xl px-4 mb-6">
-  <div class="bg-white backdrop-blur-xl border border-slate-200 rounded-2xl px-3 py-2 flex items-center gap-3">
-    <button
-      (click)="setCategory('all')"
-      title="Todas"
-      class="px-4 py-2 rounded-lg text-sm transition-all"
-      [class.bg-black]="activeCategory() === 'all'"
-      [class.text-white]="activeCategory() === 'all'"
-      [class.text-slate-600]="activeCategory() !== 'all'"
-      [class.hover:bg-slate-100]="activeCategory() !== 'all'">
-      Todas
-    </button>
-    <div class="w-px h-5 bg-slate-200"></div>
+      <div class="w-px h-5 bg-slate-200"></div>
       @for (category of categories; track category) {
         <button
           (click)="setCategory(category)"
@@ -209,10 +196,17 @@
                   }
                 </div>
               </div>
+              @if (loc.place_id) {
+                <div class="rounded-xl overflow-hidden border border-slate-100 dark:border-slate-700 shadow-sm">
+                  <img
+                    [src]="loc.place_id"
+                    [alt]="loc.name"
+                    class="w-full h-40 object-cover"/>
+                </div>
+              }
             }
           }
         </div>
-
         @if (selectedActivity()!.user_notes) {
           <div class="bg-slate-50 dark:bg-slate-800 rounded-xl p-3 border border-slate-100 dark:border-slate-700">
             <p class="text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">Notas</p>

@@ -15,6 +15,7 @@ import { BackButtonComponent } from '../../../shared/components/back-button/back
 import { FormatDatePipe } from '../../../shared/pipes/format-date-pipe';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialogComponent } from '../../../shared/components/confirm-dialog/confirm-dialog';
+import { NavigationService } from '../../../core/services/navigation.service';
 
 @Component({
   selector: 'app-activity-list',
@@ -30,7 +31,7 @@ export class ActivityListComponent implements OnInit {
   private router = inject(Router);
   private route = inject(ActivatedRoute);
   private dialog = inject(MatDialog);
-
+  private navigationService = inject(NavigationService);
   private mapComponent = viewChild<MapComponent>('mapRef');
 
   private activities = signal<Activity[]>([]);
@@ -140,6 +141,7 @@ getActivityLocation(locationId: string): TripLocation | undefined {
 }
 
 goToEditActivity(id: string): void {
+  this.navigationService.setPreviousUrl(`/trips/${this.tripId()}/activities`);
   this.router.navigate(['/trips', this.tripId(), 'activities', id, 'edit']);
 }
 

@@ -1,3 +1,4 @@
+import { MatIconModule } from '@angular/material/icon';
 import { Component, inject, Input, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatDialogRef, MatDialogTitle, MatDialogContent, MatDialogActions, MAT_DIALOG_DATA } from '@angular/material/dialog';
@@ -11,7 +12,7 @@ interface LocationDialogData {
 }
 @Component({
   selector: 'app-location-dialog',
-  imports: [ReactiveFormsModule, MatDialogTitle, MatDialogContent, MatDialogActions, MapComponent],
+  imports: [ReactiveFormsModule, MatDialogTitle, MatDialogContent, MatDialogActions, MapComponent, MatIconModule],
   templateUrl: './location-dialog.html',
   styleUrl: './location-dialog.css',
 })
@@ -21,9 +22,7 @@ export class LocationDialogComponent {
   private dialogRef = inject(MatDialogRef<LocationDialogComponent>);
   private dialogData = inject<LocationDialogData>(MAT_DIALOG_DATA);
 
-  // @Input() initialCoords?: { lat: number; lng: number };
-  // @Input() tripDestinaionCoords?: { lat: number; lng: number };
-tripDestinationCoords = this.dialogData?.tripDestinationCoords;
+  tripDestinationCoords = this.dialogData?.tripDestinationCoords;
 
 constructor() {
   console.log('dialogData:', this.dialogData);
@@ -33,10 +32,8 @@ constructor() {
   errorMessage = signal<string>('');
   selectedCoords = signal<{ lat: number; lng: number } | null>(null);
 
-  // tripDestinationCoords = this.dialogData?.tripDestinationCoords;
-
   locationForm = this.fb.group({
-    name: ['', Validators.required],
+    name: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(50)]],
     category: [ActivityCategory.Transporte, Validators.required],
     lat: [0, [Validators.required, Validators.min(-90), Validators.max(90)]],
     lng: [0, [Validators.required, Validators.min(-180), Validators.max(180)]],
@@ -69,6 +66,11 @@ constructor() {
       next: (location: TripLocation) => this.dialogRef.close(location),
       error: () => this.errorMessage.set('Error creando la ubicación'),
     });
+  };
+
+  isInvalid(controlName: string): boolean {
+    const control = this.locationForm.get(controlName);
+    return !!(control?.invalid && control?.touched);
   };
 
   onCancel(): void {

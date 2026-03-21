@@ -11,10 +11,13 @@ import { TripsService } from '../../../core/services/trips.service';
 import { MapComponent } from '../../../shared/components/map/map';
 import { GeocodingService } from '../../../core/services/geocoding.service';
 import { toDateTimeInput } from '../../../core/utils/date.utils';
+import { BackButtonComponent } from '../../../shared/components/back-button/back-button';
+import { MatIconModule } from '@angular/material/icon';
+import { NavigationService } from '../../../core/services/navigation.service';
 
 @Component({
   selector: 'app-activity-form',
-  imports: [ReactiveFormsModule, MapComponent],
+  imports: [ReactiveFormsModule, MapComponent, BackButtonComponent, MatIconModule],
   templateUrl: './activity-form.html',
   styleUrl: './activity-form.css',
 })
@@ -28,6 +31,7 @@ export class ActivityFormComponent implements OnInit {
   private tripsService = inject(TripsService);
   private mapComponent = viewChild<MapComponent>('mapRef');
   private geocodingService = inject(GeocodingService);
+  private navigationService = inject(NavigationService);
 
   categories = Object.values(ActivityCategory);
   locations = signal<TripLocation[]>([]);
@@ -39,6 +43,7 @@ export class ActivityFormComponent implements OnInit {
   errorMessage = signal<string>('');
   tripDestinationCoords = signal<{ lat: number; lng: number} | undefined>(undefined);
   tripDateRange = signal<{ start: string; end: string | undefined } | null>(null);
+  readonly defaultImage = 'https://res.cloudinary.com/dux4gqdow/image/upload/v1773662802/pietro-de-grandi-T7K4aEPoGGk-unsplash_nqzjxq.jpg';
 
   filteredLocations = computed(() => {
     const search = this.locationSearch().toLowerCase();
@@ -47,7 +52,7 @@ export class ActivityFormComponent implements OnInit {
   })
 
   activityForm: FormGroup = this.fb.group({
-    title: ['', Validators.required],
+    title: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(80)]],
     category: [ActivityCategory.Transporte, Validators.required],
     start_time: ['', Validators.required],
     end_time: [''],
@@ -55,6 +60,7 @@ export class ActivityFormComponent implements OnInit {
     user_notes: [''],
     location_id: [''],
   });
+
 
   ngOnInit(): void {
     const tripId = this.route.snapshot.paramMap.get('tripId');
@@ -178,12 +184,12 @@ export class ActivityFormComponent implements OnInit {
 
     if (this.isEditMode() && id) {
       this.activitiesService.updateActivity(id, payload).subscribe({
-        next: () => this.router.navigate(['/trips', tripId, 'activities', id]),
+        next: () => this.router.navigate(['/trips', tripId, 'activities']),
         error: () => this.errorMessage.set('Error actualizando la actividad'),
       });
     } else {
       this.activitiesService.createActivity(payload).subscribe({
-        next: activity => this.router.navigate(['/trips', tripId, 'activities', activity.id]),
+        next: () => this.router.navigate(['/trips', tripId, 'activities']),
         error: () => this.errorMessage.set('Error creando la actividad'),
       });
     };
@@ -227,14 +233,13 @@ export class ActivityFormComponent implements OnInit {
     };
   };
 
-  goBack(): void {
-    const id = this.activityId();
-    const tripId = this.tripId();
+  isInvalid(controlName: string): boolean {
+    const control = this.activityForm.get(controlName);
+    return !!(control?.invalid && control?.touched);
+  };
 
-    if (id) {
-      this.router.navigate(['/trips', tripId, 'activities', id]);
-    } else {
-      this.router.navigate(['/trips', tripId]);
-    };
+  goBack(): void {
+    const id = this.tripId();
+    this.router.navigate([this.navigationService.getPreviousUrl()]);
   };
 };
