@@ -58,7 +58,7 @@
         </div>
       </div>
     </div>
-    
+
     <section class="w-full max-w-7xl px-4 mt-8 flex flex-col lg:flex-row gap-6">
       <div class="flex-1 min-w-0 flex flex-col">
         <div class="bg-black/30 backdrop-blur-sm px-4 rounded-xl">
@@ -71,8 +71,8 @@
 
       <div class="w-full lg:w-64 flex flex-col shrink-0">
         <div class="bg-black/30 backdrop-blur-sm px-4 rounded-xl">
-          <div class="flex items-center justify-between py-1">
-            <h2 class="text-lg font-bold text-slate-100">Actividades</h2>
+          <div class="flex items-center justify-between py-1" (click)="goToActivities()">
+            <h2 class="text-lg font-bold text-slate-100 hover:scale-x-103">Actividades</h2>
             <!-- TODO: mostrar también a colaboradores cuando se implemente -->
             @if (isOwner()) {
               <button

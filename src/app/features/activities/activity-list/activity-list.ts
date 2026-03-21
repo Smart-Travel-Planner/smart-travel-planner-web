@@ -18,7 +18,7 @@ import { ConfirmDialogComponent } from '../../../shared/components/confirm-dialo
 
 @Component({
   selector: 'app-activity-list',
-  imports: [MapComponent, MatIconModule, BackButtonComponent, FormatDatePipe, ConfirmDialogComponent],
+  imports: [MapComponent, MatIconModule, BackButtonComponent, FormatDatePipe],
   templateUrl: './activity-list.html',
   styleUrl: './activity-list.css',
 })
