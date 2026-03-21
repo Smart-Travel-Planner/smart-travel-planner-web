@@ -9,13 +9,21 @@
   <app-footer />
 </div> -->
 
-<div class="relative h-screen w-full"> <!-- se le ha quitado el  overflow-hidden-->
+<!-- <div class="relative h-screen w-full"> <!-- se le ha quitado el  overflow-hidden--
   <app-navbar class="fixed top-0 left-0 w-full z-50" />
 
   <main class="h-full w-full">
-  <!-- <main class="flex-1 mt-16 mb-16"> -->
+  <!-- <main class="flex-1 mt-16 mb-16"> --
     <router-outlet></router-outlet>
   </main>
 
-  <app-footer class="fixed bottom-0 left-0 w-full z-50" />
+  <app-footer class="lg:fixed lg:bottom-0 lg:left-0 w-full z-50" />
+</div> -->
+
+<div class="relative min-h-screen w-full flex flex-col">
+  <app-navbar class="fixed top-0 left-0 w-full z-50" />
+  <main class="flex-1 w-full">
+    <router-outlet></router-outlet>
+  </main>
+  <app-footer class="w-full z-50 lg:fixed lg:bottom-0 lg:left-0" />
 </div>
