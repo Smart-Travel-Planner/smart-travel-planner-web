@@ -11,18 +11,22 @@
   <div class="w-full lg:w-64 flex flex-col shrink-0">
     <div class="bg-black/30 backdrop-blur-sm px-4 rounded-xl">
       <div class="flex items-center justify-between py-1">
-        <h2
-          class="text-lg font-bold text-slate-100 cursor-pointer hover:text-blue-300 transition-colors"
-          (click)="goToActivities()"
-          title="Ver mapa y lista completa">
-          Actividades
-        </h2>
-        <button
-          (click)="goToNewActivity()"
-          class="flex items-center gap-1 px-3 py-1.5 rounded-lg text-sm font-semibold bg-blue-500/20 border border-blue-400 text-blue-300 hover:bg-blue-500 hover:text-white transition-colors"
-          title="Nueva actividad">
-          <mat-icon class="text-base">add</mat-icon>
-        </button>
+        <h2 class="text-lg font-bold text-slate-100">Actividades</h2>
+        <div class="flex items-center gap-2">
+          <button
+            (click)="goToActivities()"
+            class="hidden lg:flex items-center gap-1 px-3 py-1.5 rounded-lg text-sm font-semibold bg-blue-500/20 border border-blue-400 text-blue-300 hover:bg-blue-500 hover:text-white transition-colors"
+            title="Ver mapa y actividades">
+            <mat-icon class="text-base">map</mat-icon>
+          </button>
+
+          <button
+            (click)="goToNewActivity()"
+            class="flex items-center gap-1 px-3 py-1.5 rounded-lg text-sm font-semibold bg-blue-500/20 border border-blue-400 text-blue-300 hover:bg-blue-500 hover:text-white transition-colors"
+            title="Nueva actividad">
+            <mat-icon class="text-base">add</mat-icon>
+          </button>
+        </div>
       </div>
     <button
   (click)="goToActivities()"
