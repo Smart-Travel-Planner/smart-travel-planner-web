@@ -50,9 +50,9 @@
           <div class="px-4 py-3 flex items-center justify-between gap-3">
             <div class="flex flex-col min-w-0">
               <h3 class="text-sm font-bold text-slate-900 truncate">{{ activity.title }}</h3>
-              <div class="flex items-center gap-1 text-xs text-slate-500 mt-0.5">
+              <div class="flex items-center gap-1 text-xs text-slate-600 mt-0.5">
                 <mat-icon class="text-xs">schedule</mat-icon>
-                <span>{{ activity.start_time }}</span>
+                <span>{{ activity.start_time | formatDate }}</span>
               </div>
             </div>
             <div class="flex items-center gap-2 shrink-0">
@@ -107,9 +107,9 @@
       <div class="flex flex-col gap-2">
         <div class="flex items-center gap-2 text-sm text-slate-600">
           <mat-icon class="text-base text-slate-400">schedule</mat-icon>
-          <span>{{ selectedActivity()!.start_time }}
+          <span>{{ selectedActivity()!.start_time | formatDate}}
             @if (selectedActivity()!.end_time) {
-              <span class="text-slate-400"> → {{ selectedActivity()!.end_time }}</span>
+              <span class="text-slate-600"> → {{ selectedActivity()!.end_time | formatDate }}</span>
             }
           </span>
         </div>

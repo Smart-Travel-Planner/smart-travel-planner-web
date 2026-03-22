@@ -7,10 +7,11 @@ import { MatIconModule } from '@angular/material/icon';
 import { ACTIVITY_CATEGORY_COLORS } from '../../../core/enums/activity-category-colors.enum';
 import { GeocodingService } from '../../../core/services/geocoding.service';
 import { inject, OnInit } from '@angular/core';
+import { FormatDatePipe } from '../../../shared/pipes/format-date-pipe';
 
 @Component({
   selector: 'app-trip-explorer',
-  imports: [MapComponent, MatIconModule],
+  imports: [MapComponent, MatIconModule, FormatDatePipe],
   templateUrl: './trip-explorer.html',
   styleUrl: './trip-explorer.css',
 })
