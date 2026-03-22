@@ -24,6 +24,12 @@
           <mat-icon class="text-base">add</mat-icon>
         </button>
       </div>
+    <button
+  (click)="goToActivities()"
+  class="lg:hidden w-full mt-2 mb-1 flex items-center justify-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold border border-blue-400 text-blue-300 hover:bg-blue-500 hover:text-white transition-colors">
+  <mat-icon class="text-base">map</mat-icon>
+  Ver mapa y actividades
+</button>
     </div>
     <div class="bg-white rounded-xl border border-slate-100 overflow-hidden flex-1">
       @if (activities().length === 0) {

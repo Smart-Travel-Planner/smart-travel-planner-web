@@ -115,63 +115,61 @@ export class ActivityListComponent implements OnInit {
     this.activeCategory.set(category);
   };
 
-onMarkerClicked(activityId: string): void {
-  const activity = this.filteredActivities().find(a => a.id === activityId);
-  if (activity) {
-    this.selectedActivity.set(activity);
-    this.highlightedActivityId.set(activityId);
-  }
-  const element = document.getElementById(`activity-${activityId}`);
-  if (element) element.scrollIntoView({ behavior: 'smooth', block: 'center' });
-}
-
-onActivityClicked(activity: Activity): void {
-  this.selectedActivity.set(activity);
-  this.highlightedActivityId.set(activity.id);
-  this.mapComponent()?.highlightActivity(activity.id);
-}
-
-closeDrawer(): void {
-  this.selectedActivity.set(null);
-  this.highlightedActivityId.set(null);
-}
-
-getActivityLocation(locationId: string): TripLocation | undefined {
-  return this.locations().find(l => l.id === locationId);
-}
-
-goToEditActivity(id: string): void {
-  this.navigationService.setPreviousUrl(`/trips/${this.tripId()}/activities`);
-  this.router.navigate(['/trips', this.tripId(), 'activities', id, 'edit']);
-}
-
-deleteActivity(activity: Activity): void {
-  const dialogRef = this.dialog.open(ConfirmDialogComponent, {
-    width: '90vw',
-    maxWidth: '400px',
-    data: {
-      title: 'Eliminar actividad',
-      message: `¿Estás seguro de que quieres eliminar "${activity.title}"? Esta acción no se puede deshacer.`,
-    },
-  });
-  dialogRef.afterClosed().subscribe(confirmed => {
-    if (!confirmed) return;
-    this.activitiesService.deleteActivity(activity.id).subscribe({
-      next: () => {
-        this.closeDrawer();
-        this.loadActivities(this.tripId());
-      },
-      error: () => this.errorMessage.set('Error eliminando la actividad'),
-    });
-  });
-}
-  goToCreate(): void {
-    this.router.navigate(['/trips', this.tripId(), 'activities', 'new']);
+  onMarkerClicked(activityId: string): void {
+    const activity = this.filteredActivities().find(a => a.id === activityId);
+    if (activity) {
+      this.selectedActivity.set(activity);
+      this.highlightedActivityId.set(activityId);
+    }
+    const element = document.getElementById(`activity-${activityId}`);
+    if (element) element.scrollIntoView({ behavior: 'smooth', block: 'center' });
   };
 
-  // goToDetail(id: string): void {
-  //   this.router.navigate(['/trips', this.tripId(), 'activities', id]);
-  // };
+  onActivityClicked(activity: Activity): void {
+    this.selectedActivity.set(activity);
+    this.highlightedActivityId.set(activity.id);
+    this.mapComponent()?.highlightActivity(activity.id);
+  };
+
+  closeDrawer(): void {
+    this.selectedActivity.set(null);
+    this.highlightedActivityId.set(null);
+  };
+
+  getActivityLocation(locationId: string): TripLocation | undefined {
+    return this.locations().find(l => l.id === locationId);
+  };
+
+  goToEditActivity(id: string): void {
+    this.navigationService.setPreviousUrl(`/trips/${this.tripId()}/activities`);
+    this.router.navigate(['/trips', this.tripId(), 'activities', id, 'edit']);
+  };
+
+  deleteActivity(activity: Activity): void {
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      width: '90vw',
+      maxWidth: '400px',
+      data: {
+        title: 'Eliminar actividad',
+        message: `¿Estás seguro de que quieres eliminar "${activity.title}"? Esta acción no se puede deshacer.`,
+      },
+    });
+    dialogRef.afterClosed().subscribe(confirmed => {
+      if (!confirmed) return;
+      this.activitiesService.deleteActivity(activity.id).subscribe({
+        next: () => {
+          this.closeDrawer();
+          this.loadActivities(this.tripId());
+        },
+        error: () => this.errorMessage.set('Error eliminando la actividad'),
+      });
+    });
+  };
+
+  goToCreate(): void {
+    this.navigationService.setPreviousUrl(`/trips/${this.tripId()}/activities`);
+    this.router.navigate(['/trips', this.tripId(), 'activities', 'new']);
+  };
 
   goBack(): void {
     this.router.navigate(['/trips', this.tripId()]);

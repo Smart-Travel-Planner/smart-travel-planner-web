@@ -5,21 +5,8 @@ import { LoginComponent } from './features/auth/login/login';
 
 export const routes: Routes = [
 
-  // Opción carga inmediata (eager loading)
   { path: '', component: HomeComponent },
   { path: 'login', component: LoginComponent },
-
-  // Opción Lazy loading
-  // {
-  //   path: '',
-  //   loadComponent: () =>
-  //     import('./shared/home/home').then(m => m.HomeComponent),
-  // },
-  // {
-  //   path: 'login',
-  //   loadComponent: () =>
-  //     import('./features/auth/login/login').then(m => m.LoginComponent),
-  // },
 
   {
     path: 'register',
@@ -50,30 +37,6 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./features/trips/trip-form/trip-form').then(m => m.TripFormComponent),
   },
-  // {
-  //   path: 'locations',
-  //   canActivate: [authGuard],
-  //   loadComponent: () =>
-  //     import('./features/locations/location-list/location-list').then(m => m.LocationListComponent),
-  // },
-  // {
-  //   path: 'locations/new',
-  //   canActivate: [authGuard],
-  //   loadComponent: () =>
-  //     import('./features/locations/location-form/location-form').then(m => m.LocationFormComponent),
-  // },
-  // {
-  //   path: 'locations/:id/edit',
-  //   canActivate: [authGuard],
-  //   loadComponent: () =>
-  //     import('./features/locations/location-form/location-form').then(m => m.LocationFormComponent),
-  // },
-  // {
-  //   path: 'locations/:id',
-  //   canActivate: [authGuard],
-  //   loadComponent: () =>
-  //     import('./features/locations/location-detail/location-detail').then(m => m.LocationDetailComponent),
-  // },
   {
     path: 'trips/:tripId/activities',
     canActivate: [authGuard],
@@ -92,18 +55,6 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./features/activities/activity-form/activity-form').then(m => m.ActivityFormComponent),
   },
-  {
-    path: 'trips/:tripId/activities/:id',
-    canActivate: [authGuard],
-    loadComponent: () =>
-      import('./features/activities/activity-detail/activity-detail').then(m => m.ActivityDetailComponent),
-  },
-  // {
-  //   path: 'map',
-  //   canActivate: [authGuard],
-  //   loadComponent: () =>
-  //     import('./features/map/mapa').then(m => m.MapComponent),
-  // },
   {
     path: '**',
     redirectTo: '',
