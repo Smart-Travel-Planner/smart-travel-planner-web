@@ -1,0 +1,55 @@
+<section class="w-full max-w-7xl px-4 mt-8 flex flex-col lg:flex-row gap-6">
+  <div class="flex-1 min-w-0 flex flex-col">
+    <div class="bg-black/30 backdrop-blur-sm px-4 rounded-xl">
+      <h2 class="text-lg font-bold text-white py-2">Calendario de actividades</h2>
+    </div>
+    <div class="bg-white rounded-xl border border-slate-100 overflow-hidden p-4 min-h-96 flex-1">
+      <app-calendar [trip]="trip()"></app-calendar>
+    </div>
+  </div>
+
+  <div class="w-full lg:w-64 flex flex-col shrink-0">
+    <div class="bg-black/30 backdrop-blur-sm px-4 rounded-xl">
+      <div class="flex items-center justify-between py-1">
+        <h2
+          class="text-lg font-bold text-slate-100 cursor-pointer hover:text-blue-300 transition-colors"
+          (click)="goToActivities()"
+          title="Ver mapa y lista completa">
+          Actividades
+        </h2>
+        <button
+          (click)="goToNewActivity()"
+          class="flex items-center gap-1 px-3 py-1.5 rounded-lg text-sm font-semibold bg-blue-500/20 border border-blue-400 text-blue-300 hover:bg-blue-500 hover:text-white transition-colors"
+          title="Nueva actividad">
+          <mat-icon class="text-base">add</mat-icon>
+        </button>
+      </div>
+    </div>
+    <div class="bg-white rounded-xl border border-slate-100 overflow-hidden flex-1">
+      @if (activities().length === 0) {
+        <p class="text-slate-900 text-sm text-center p-6">No hay actividades registradas</p>
+      } @else {
+        <ul class="divide-y divide-slate-100">
+          @for (activity of activities(); track activity.id) {
+            <li class="p-4 flex flex-col gap-2">
+              <p class="text-sm font-semibold text-slate-900">{{ activity.title }}</p>
+              <div class="flex flex-wrap items-center gap-2">
+                @if (activity.location_id) {
+                  <span class="flex items-center gap-1 text-xs text-slate-600">
+                    <mat-icon class="text-xs">location_on</mat-icon>
+                    {{ getLocationName(activity.location_id) }}
+                  </span>
+                }
+                <span
+                  class="px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider text-black"
+                  [style.background-color]="categoryColors[activity.category]">
+                  {{ activity.category }}
+                </span>
+              </div>
+            </li>
+          }
+        </ul>
+      }
+    </div>
+  </div>
+</section>

@@ -47,32 +47,6 @@ export class MapService {
     return marker;
   }
 
-  // createEventMarkers(map: L.Map, events: any[]): L.Marker[] {
-  //   const markers: L.Marker[] = [];
-
-  //   events.forEach((event) => {
-  //     if (!event.lat || !event.lng || (event.lat === 0 && event.lng === 0)) {
-  //       console.warn('Evento sin coordenadas válidas:', event.title);
-  //       return;
-  //     }
-
-  //     try {
-  //       const marker = this.createMarker(map, {
-  //         lat: event.lat,
-  //         lng: event.lng,
-  //         icon: this.createEventIcon(),
-  //         popup: this.createEventPopupContent(event),
-  //       });
-
-  //       markers.push(marker);
-  //     } catch (error) {
-  //       console.error('❌ Error creando marcador:', error, event);
-  //     }
-  //   });
-
-  //   return markers;
-  // }
-
   removeMarker(marker: L.Marker): void {
     marker.remove();
   }
@@ -162,39 +136,8 @@ export class MapService {
     });
   }
 
-  // private createEventPopupContent(event: any): string {
-  //   const hobbyText = Array.isArray(event.hobby)
-  //     ? event.hobby.join(', ')
-  //     : event.hobby;
-
-  //   return `
-  //     <div style="min-width: 250px; font-family: system-ui;">
-  //       <h4 style="margin: 0 0 8px 0; font-size: 16px; color: #333; font-weight: 600;">
-  //         ${event.title}
-  //       </h4>
-  //       <p style="margin: 8px 0; font-size: 13px; color: #666; line-height: 1.4;">
-  //         ${event.description}
-  //       </p>
-  //       <button
-  //         onclick="window.navigateToEvent('${event._id}')"
-  //         style="
-  //           width: 100%;
-  //           margin-top: 12px;
-  //           padding: 8px 16px;
-  //           background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  //           color: white;
-  //           border: none;
-  //           border-radius: 6px;
-  //           font-size: 13px;
-  //           font-weight: 600;
-  //           cursor: pointer;
-  //           transition: transform 0.2s;
-  //         "
-  //         onmouseover="this.style.transform='scale(1.05)'"
-  //         onmouseout="this.style.transform='scale(1)'">
-  //         👁️ Ver detalles completos
-  //       </button>
-  //     </div>
-  //   `;
-  // }
+  invalidateSize(containerId: string): void {
+    const map = this.maps.get(containerId);
+    if (map) map.invalidateSize();
+  }
 }

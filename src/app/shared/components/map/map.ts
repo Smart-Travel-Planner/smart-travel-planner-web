@@ -103,7 +103,13 @@ export class MapComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     setTimeout(() => {
       this.initMap();
-
+  console.log('map initialized, tiles:', document.querySelectorAll('.leaflet-tile').length);
+  console.log('map size:', this.map?.getSize());
+  setTimeout(() => {
+    this.mapService.invalidateSize(this.containerId);
+    console.log('after invalidate, tiles:', document.querySelectorAll('.leaflet-tile').length);
+    console.log('after invalidate, size:', this.map?.getSize());
+  }, 100);
       if (this.mode === 'select') {
         this.setupSelectionMode();
       };

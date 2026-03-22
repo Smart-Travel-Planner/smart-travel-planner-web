@@ -1,5 +1,5 @@
 
-<main class="min-h-screen w-full  text-white flex flex-col items-center pb-16">
+<!-- <main class="min-h-screen w-full  text-white flex flex-col items-center pb-16">
   @if (trip()) {
     <app-back-button (backClick)="goBack()"></app-back-button>
     <div
@@ -72,7 +72,7 @@
       <div class="w-full lg:w-64 flex flex-col shrink-0">
         <div class="bg-black/30 backdrop-blur-sm px-4 rounded-xl">
           <div class="flex items-center justify-between py-1">
-            <!-- TODO: mostrar también a colaboradores cuando se implemente -->
+            <!-- TODO: mostrar también a colaboradores cuando se implemente --
             @if (isOwner()) {
               <h2 class="text-lg font-bold text-slate-100 hover:scale-x-103" (click)="goToActivities()">Actividades</h2>
               <button
@@ -141,6 +141,111 @@
         }
       </div>
     </section>
+  }
+
+  @if (errorMessage()) {
+    <div class="w-full max-w-4xl px-4 mt-6 p-4 bg-red-500/10 border border-red-500/20 rounded-2xl text-red-400 text-center">
+      {{ errorMessage() }}
+    </div>
+  }
+</main> -->
+
+
+<main class="min-h-screen w-full text-white flex flex-col items-center pb-16">
+  @if (trip()) {
+    <app-back-button (backClick)="goBack()"></app-back-button>
+
+    <div
+      class="fixed inset-0 bg-cover bg-center -z-10"
+      [style.background-image]="'url(' + (trip()!.image_url || defaultImage) + ')'">
+      <div class="absolute inset-0 bg-linear-to-t from-slate-950 via-slate-900/40 to-transparent"></div>
+    </div>
+
+    <!-- Cabecera -->
+    <div class="relative w-full min-h-64 flex flex-col items-end justify-between pt-16 px-6 pb-6 overflow-hidden">
+      <div class="relative w-full max-w-4xl mx-auto flex justify-between items-start z-10 pt-4">
+        <div class="bg-black/30 backdrop-blur-sm px-4 py-2 rounded-2xl">
+          <h1 class="text-xl md:text-3xl font-extrabold tracking-tight drop-shadow-md">
+            {{ trip()!.title }}
+          </h1>
+          @if (trip()!.destination) {
+            <p class="text-slate-200 mt-1 text-sm font-medium flex items-center gap-1">
+              <mat-icon class="text-sm">location_on</mat-icon>
+              {{ trip()!.destination }}
+            </p>
+          }
+          @if (creatorName()) {
+            <p class="text-slate-300 mt-1 text-xs flex items-center gap-1">
+              <mat-icon class="text-xs">person</mat-icon>
+              Creado por {{ creatorName() }}
+            </p>
+          }
+        </div>
+        <span class="px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider"
+          [class]="trip()!.is_public ? 'bg-green-500/90 text-white' : 'bg-slate-700/90 text-white'">
+          {{ trip()!.is_public ? 'Público' : 'Privado' }}
+        </span>
+      </div>
+
+      <div class="relative w-full max-w-4xl mx-auto flex flex-wrap gap-3 z-10 mt-4">
+        <div class="bg-black/30 backdrop-blur-sm px-3 py-2 rounded-xl flex items-center gap-2">
+          <mat-icon class="text-slate-300 text-sm">calendar_today</mat-icon>
+          <div>
+            <p class="text-[10px] uppercase tracking-wider text-slate-200">Inicio</p>
+            <p class="text-sm font-semibold text-white">{{ trip()!.start_date | formatDate }}</p>
+          </div>
+        </div>
+        @if (trip()!.end_date) {
+          <div class="bg-black/30 backdrop-blur-sm px-3 py-2 rounded-xl flex items-center gap-2">
+            <mat-icon class="text-slate-300 text-sm">event</mat-icon>
+            <div>
+              <p class="text-[10px] uppercase tracking-wider text-slate-200">Fin</p>
+              <p class="text-sm font-semibold text-white">{{ trip()!.end_date | formatDate }}</p>
+            </div>
+          </div>
+        }
+        <div class="bg-black/30 backdrop-blur-sm px-3 py-2 rounded-xl flex items-center gap-2">
+          <mat-icon class="text-slate-300 text-sm">payments</mat-icon>
+          <div>
+            <p class="text-[10px] uppercase tracking-wider text-slate-200">Presupuesto</p>
+            <p class="text-sm font-semibold text-white">{{ trip()!.total_budget }} €</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Layout condicional -->
+    @if (isOwner()) {
+      <app-trip-planner
+        [trip]="trip()!"
+        [activities]="activities()"
+        [locationMap]="locationMap()">
+      </app-trip-planner>
+    } @else {
+      <app-trip-explorer
+        [trip]="trip()!"
+        [activities]="activities()"
+        [locations]="locations()">
+      </app-trip-explorer>
+    }
+
+    <!-- Botones de gestión (solo owner) -->
+    @if (isOwner()) {
+      <section class="w-full max-w-7xl px-4 mt-8 mb-12 flex gap-2">
+        <button
+          (click)="goToEdit()"
+          class="flex items-center gap-1 px-3 py-1.5 rounded-lg text-sm border border-slate-950 text-slate-950 bg-slate-100
+                hover:bg-slate-700 hover:text-slate-100 transition-colors" title="Editar viaje">
+          <mat-icon class="text-base">edit</mat-icon>
+        </button>
+        <button
+          (click)="deleteTrip()"
+          class="flex items-center gap-1 px-3 py-1.5 rounded-lg text-sm font-semibold border border-red-300 text-red-500 bg-slate-100
+                hover:bg-red-400 hover:text-white hover:border-red-400 transition-colors" title="Eliminar viaje">
+          <mat-icon class="text-base">delete</mat-icon>
+        </button>
+      </section>
+    }
   }
 
   @if (errorMessage()) {

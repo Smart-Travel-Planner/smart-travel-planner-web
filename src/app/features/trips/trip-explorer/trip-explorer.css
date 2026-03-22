@@ -1,0 +1,20 @@
+.activity-drawer {
+  transform: translateY(100%);
+  transition: transform 0.3s ease-in-out;
+}
+.activity-drawer.open {
+  transform: translateY(0);
+}
+@media (min-width: 1024px) {
+  .activity-drawer {
+    transform: translateX(100%);
+  }
+  .activity-drawer.open {
+    transform: translateX(0);
+  }
+}
+
+:host {
+  display: block;
+  width: 100%;
+}
