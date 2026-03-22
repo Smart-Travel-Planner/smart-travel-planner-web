@@ -71,15 +71,17 @@
 
       <div class="w-full lg:w-64 flex flex-col shrink-0">
         <div class="bg-black/30 backdrop-blur-sm px-4 rounded-xl">
-          <div class="flex items-center justify-between py-1" (click)="goToActivities()">
-            <h2 class="text-lg font-bold text-slate-100 hover:scale-x-103">Actividades</h2>
+          <div class="flex items-center justify-between py-1">
             <!-- TODO: mostrar también a colaboradores cuando se implemente -->
             @if (isOwner()) {
+              <h2 class="text-lg font-bold text-slate-100 hover:scale-x-103" (click)="goToActivities()">Actividades</h2>
               <button
-                (click)="goToNewActivity()"
-                class="flex items-center gap-1 px-3 py-1.5 rounded-lg text-sm font-semibold bg-blue-500/20 border border-blue-400 text-blue-300 hover:bg-blue-500 hover:text-white transition-colors" title="Nueva actividad">
-                <mat-icon class="text-base">add</mat-icon>
-              </button>
+              (click)="goToNewActivity()"
+              class="flex items-center gap-1 px-3 py-1.5 rounded-lg text-sm font-semibold bg-blue-500/20 border border-blue-400 text-blue-300 hover:bg-blue-500 hover:text-white transition-colors" title="Nueva actividad">
+              <mat-icon class="text-base">add</mat-icon>
+            </button>
+          } @else {
+            <h2 class="text-lg font-bold text-slate-100">Actividades</h2>
             }
           </div>
         </div>
@@ -129,12 +131,14 @@
         </div>
       }
       <div class="flex gap-2">
-        <button
-          (click)="goToActivities()"
-          class="flex items-center gap-1 px-3 py-1.5 rounded-lg text-sm border border-slate-950 text-slate-950 bg-slate-100
-                hover:bg-slate-700 hover:text-slate-100 transition-colors" title="Ver actividades">
-          <mat-icon class="text-base">event</mat-icon>
-        </button>
+        @if (isOwner()) {
+          <button
+            (click)="goToActivities()"
+            class="flex items-center gap-1 px-3 py-1.5 rounded-lg text-sm border border-slate-950 text-slate-950 bg-slate-100
+                  hover:bg-slate-700 hover:text-slate-100 transition-colors" title="Ver actividades">
+            <mat-icon class="text-base">event</mat-icon>
+          </button>
+        }
       </div>
     </section>
   }
