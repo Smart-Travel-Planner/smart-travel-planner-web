@@ -1,6 +1,5 @@
 <div class="w-full max-w-7xl px-4 mt-8 flex flex-col gap-6 mx-auto">
 
-  <!-- Filtro compacto de categorías -->
   <section class="w-full max-w-4xl">
     <div class="bg-white backdrop-blur-xl border border-slate-200 rounded-2xl px-3 py-2 flex items-center gap-3">
       <span class="text-xs font-semibold text-slate-600 uppercase tracking-wider">Actividades</span>
@@ -10,9 +9,8 @@
   </section>
 
   <div class="w-full flex flex-col lg:flex-row gap-6 items-start">
-
-    <!-- Mapa -->
-<section class="w-full rounded-2xl overflow-hidden border border-white/10 shadow-xl lg:sticky lg:top-6" style="height: 480px; min-width: 0;">      @if (tripDestinationCoords()) {
+    <section class="w-full rounded-2xl overflow-hidden border border-white/10 shadow-xl lg:sticky lg:top-6" style="height: 480px; min-width: 0;">
+      @if (tripDestinationCoords()) {
         <app-map #mapRef
           mode="view"
           containerId="explorer-map"
@@ -31,7 +29,6 @@
       }
     </section>
 
-    <!-- Lista de actividades -->
     <section class="w-full lg:w-96 flex flex-col gap-3 pb-4 shrink-0">
       @if (activities().length === 0) {
         <div class="w-full flex flex-col items-center justify-center py-16 text-center bg-black/30 backdrop-blur-sm rounded-2xl border border-white/10">
@@ -69,13 +66,11 @@
     </section>
   </div>
 
-  <!-- Backdrop móvil -->
 </div>
 @if (isDrawerOpen()) {
   <div class="fixed inset-0 z-40 bg-black/40 lg:hidden" (click)="closeDrawer()"></div>
 }
 
-<!-- Drawer solo lectura -->
 <div
   class="activity-drawer fixed z-50 bg-white shadow-2xl overflow-y-auto
          bottom-0 left-0 right-0 max-h-[85vh] rounded-t-2xl
