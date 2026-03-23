@@ -22,7 +22,7 @@ import { TravelRequirementsDialogComponent } from '../trip-requirements-dialog/t
 
 @Component({
   selector: 'app-trip-detail',
-  imports: [MatIconModule, FormatDatePipe, BackButtonComponent, TripPlannerComponent, TripExplorerComponent, TravelRequirementsDialogComponent],
+  imports: [MatIconModule, FormatDatePipe, BackButtonComponent, TripPlannerComponent, TripExplorerComponent],
   templateUrl: './trip-detail.html',
   styleUrl: './trip-detail.css',
 })

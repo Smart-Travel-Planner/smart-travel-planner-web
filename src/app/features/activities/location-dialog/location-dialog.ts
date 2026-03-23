@@ -6,6 +6,7 @@ import { LocationsService } from '../../../core/services/locations.service';
 import { ActivityCategory } from '../../../core/enums/activity-category.enum';
 import { TripLocation } from '../../../core/models/location.model';
 import { MapComponent } from '../../../shared/components/map/map';
+import { HttpClient } from '@angular/common/http';
 
 interface LocationDialogData {
   tripDestinationCoords?: { lat: number; lng: number };
@@ -21,6 +22,8 @@ export class LocationDialogComponent {
   private locationsService = inject(LocationsService);
   private dialogRef = inject(MatDialogRef<LocationDialogComponent>);
   private dialogData = inject<LocationDialogData>(MAT_DIALOG_DATA);
+private http = inject(HttpClient);
+isLoadingAddress = signal<boolean>(false);
 
   tripDestinationCoords = this.dialogData?.tripDestinationCoords;
 
@@ -42,11 +45,26 @@ constructor() {
     place_id: [''],
   });
 
-  onLocationSelected(coords: { lat: number; lng: number }): void {
-    this.selectedCoords.set(coords);
-    this.locationForm.patchValue({ lat: coords.lat, lng: coords.lng });
-  }
+  // onLocationSelected(coords: { lat: number; lng: number }): void {
+  //   this.selectedCoords.set(coords);
+  //   this.locationForm.patchValue({ lat: coords.lat, lng: coords.lng });
+  // }
+onLocationSelected(coords: { lat: number; lng: number }): void {
+  this.selectedCoords.set(coords);
+  this.locationForm.patchValue({ lat: coords.lat, lng: coords.lng });
 
+  this.isLoadingAddress.set(true);
+  this.http.get<any>(
+    `https://nominatim.openstreetmap.org/reverse?lat=${coords.lat}&lon=${coords.lng}&format=json`,
+    { headers: { 'Accept-Language': 'es' } }
+  ).subscribe({
+    next: (result) => {
+      this.locationForm.patchValue({ address: result.display_name });
+      this.isLoadingAddress.set(false);
+    },
+    error: () => this.isLoadingAddress.set(false),
+  });
+}
   onSubmit(): void {
     if (this.locationForm.invalid) return;
 
