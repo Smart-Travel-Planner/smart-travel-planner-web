@@ -97,16 +97,7 @@ export class CalendarComponent implements OnInit {
         date.setHours(0, 0, 0, 0);
         adjustedEndDate = date.toISOString();
       }
-      // events.push({
-      //   id: `trip-${this.trip.id}`,
-      //   title: this.trip.title,
-      //   start: this.trip.start_date,
-      //   end: adjustedEndDate,
-      //   display: 'background',
-      //   color: '#E8F4FD',
-      //   allDay: true,
-      // });
-// Evento de fondo (color, sin título)
+
       events.push({
         id: `trip-bg-${this.trip.id}`,
         start: this.trip.start_date,
@@ -116,7 +107,6 @@ export class CalendarComponent implements OnInit {
         allDay: true,
       });
 
-      // Evento de título del viaje
       events.push({
         id: `trip-title-${this.trip.id}`,
         title: this.trip.title,

@@ -48,17 +48,18 @@ export class MapComponent implements OnInit, OnDestroy {
     effect(() => {
       const activities = this._activities();
       const locations = this._locations();
-  if (this.mode !== 'view' || activities.length === 0) return;
+      if (this.mode !== 'view' || activities.length === 0) return;
 
-  if (this.map) {
-    this.paintActivityMarkers(activities, locations);
-  } else {
-    setTimeout(() => {
       if (this.map) {
         this.paintActivityMarkers(activities, locations);
-      }
-    }, 100);
-  }    });
+      } else {
+        setTimeout(() => {
+          if (this.map) {
+            this.paintActivityMarkers(activities, locations);
+          }
+        }, 100);
+      };
+    });
     effect(() => {
       const locations = this._locations();
       if (locations.length === 0) return;
@@ -103,13 +104,11 @@ export class MapComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     setTimeout(() => {
       this.initMap();
-  console.log('map initialized, tiles:', document.querySelectorAll('.leaflet-tile').length);
-  console.log('map size:', this.map?.getSize());
-  setTimeout(() => {
-    this.mapService.invalidateSize(this.containerId);
-    console.log('after invalidate, tiles:', document.querySelectorAll('.leaflet-tile').length);
-    console.log('after invalidate, size:', this.map?.getSize());
-  }, 100);
+      setTimeout(() => {
+        this.mapService.invalidateSize(this.containerId);
+        console.log('after invalidate, tiles:', document.querySelectorAll('.leaflet-tile').length);
+        console.log('after invalidate, size:', this.map?.getSize());
+      }, 100);
       if (this.mode === 'select') {
         this.setupSelectionMode();
       };
@@ -133,7 +132,7 @@ export class MapComponent implements OnInit, OnDestroy {
       center = [this.initialCoords.lat, this.initialCoords.lng];
     } else {
       center = this.centerCoords;
-    }
+    };
 
     this.map = this.mapService.initMap({
       containerId: this.containerId,
@@ -229,7 +228,7 @@ export class MapComponent implements OnInit, OnDestroy {
 
       this.locationMarkers.set(location.id, marker);
     });
-  }
+  };
 
   highlightActivity(activityId: string): void {
     this.selectedActivityId.set(activityId);
@@ -263,9 +262,9 @@ export class MapComponent implements OnInit, OnDestroy {
         marker.openPopup();
         const latLng = marker.getLatLng();
         this.mapService.setView(this.map!, [latLng.lat, latLng.lng], this.zoom);
-      }
+      };
     });
-  }
+  };
 
   getUserLocation(): void {
     if (!this.map) return;

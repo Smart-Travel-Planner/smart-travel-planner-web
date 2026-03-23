@@ -22,13 +22,13 @@ export class TripPlannerComponent {
 
   getLocationName(locationId: string): string {
     return this.locationMap().get(locationId) ?? locationId;
-  }
+  };
 
   goToActivities(): void {
     this.router.navigate(['/trips', this.trip().id, 'activities']);
-  }
+  };
 
   goToNewActivity(): void {
     this.router.navigate(['/trips', this.trip().id, 'activities', 'new']);
-  }
-}
+  };
+};

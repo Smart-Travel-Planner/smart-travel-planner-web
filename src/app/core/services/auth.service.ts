@@ -1,5 +1,4 @@
 import { jwtDecode, JwtPayload } from 'jwt-decode';
-// import { jwtDecode, JwtPayload } from './../../../../node_modules/jwt-decode/build/cjs/index.d';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
@@ -17,7 +16,6 @@ import { environment } from '../../environments/environment';
 })
 export class AuthService {
   private readonly apiUrl = environment.apiUrl + '/auth';
-  // private readonly apiUrl = 'http://localhost:3000/auth';
   private readonly tokenKey = 'access_token';
 
   constructor(private http: HttpClient, private router: Router) {}

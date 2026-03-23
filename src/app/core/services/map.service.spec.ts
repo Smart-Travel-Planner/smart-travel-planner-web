@@ -8,7 +8,6 @@ describe('MapService', () => {
     TestBed.configureTestingModule({});
     service = TestBed.inject(MapService);
 
-    // Crear un elemento div en el DOM para Leaflet
     const div = document.createElement('div');
     div.id = 'test-map';
     div.style.width = '400px';

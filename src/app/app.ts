@@ -8,7 +8,6 @@ import { FooterComponent } from './shared/footer/footer';
   selector: 'app-root',
   imports: [RouterOutlet, NavbarComponent, FooterComponent, MatIconModule],
   templateUrl: './app.html',
-  // template: '<router-outlet />',
   styleUrl: './app.css'
 })
 export class App {

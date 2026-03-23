@@ -66,7 +66,7 @@ export class TripFormComponent implements OnInit {
       end_date: formValue.end_date || undefined,
       image_url: formValue.image_url || undefined,
       destination: formValue.destination || undefined,
-    }
+    };
 
     const id = this.tripId();
 
@@ -80,7 +80,7 @@ export class TripFormComponent implements OnInit {
         next: trip => this.router.navigate(['/trips', trip.id]),
         error: () => this.errorMessage.set('Error creando el viaje'),
       });
-    }
+    };
   };
 
   isInvalid(controlName: string): boolean {

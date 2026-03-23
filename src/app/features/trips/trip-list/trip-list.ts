@@ -67,7 +67,7 @@ export class TripListComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadTrips();
-  }
+  };
 
   private loadTrips(): void {
     this.tripsService.getMyTrips().subscribe({
@@ -137,4 +137,4 @@ export class TripListComponent implements OnInit {
     this.dateFromValue.set('');
     this.dateToValue.set('');
   };
-}
+};

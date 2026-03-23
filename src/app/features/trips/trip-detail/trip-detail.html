@@ -10,7 +10,6 @@
     </div>
 
     <div class="relative w-full flex flex-col items-end justify-start gap-4 px-6 pb-6 overflow-hidden">
-    <!-- <div class="relative w-full min-h-64 flex flex-col items-end justify-between px-6 pb-6 overflow-hidden"> -->
       <div class="relative w-full max-w-4xl mx-auto flex justify-between items-start z-10 pt-4">
         <div class="bg-black/30 backdrop-blur-sm px-4 py-2 rounded-2xl">
           <h1 class="text-xl md:text-3xl font-extrabold tracking-tight drop-shadow-md">
@@ -59,26 +58,26 @@
             <p class="text-sm font-semibold text-white">{{ trip()!.total_budget }} €</p>
           </div>
         </div>
-@if (requirements()) {
-  <button
-    (click)="openAiInfo()"
-    class="bg-indigo-600/40 hover:bg-indigo-600/60 backdrop-blur-sm px-3 py-2 rounded-xl flex items-center gap-2 border border-indigo-400/30 transition-all active:scale-95 group">
-    <mat-icon class="text-indigo-200 text-sm group-hover:rotate-12 transition-transform">auto_awesome</mat-icon>
-    <div class="text-left">
-      <p class="text-[10px] uppercase tracking-wider text-indigo-100 font-bold">Info Destino</p>
-      <p class="text-[11px] font-medium text-white/90">Ver guía IA</p>
-    </div>
-  </button>
-} @else {
-    <div
-    (click)="openAiInfo()"
-    class="bg-indigo-600/40 hover:bg-indigo-600/60 backdrop-blur-sm px-3 py-2 rounded-xl flex items-center gap-2 border border-indigo-400/30 transition-all active:scale-95 group">
-    <mat-icon class="text-indigo-200 text-sm group-hover:rotate-12 transition-transform">auto_awesome</mat-icon>
-    <div class="text-left">
-      <p class="text-[11px] font-medium text-white/90">Cargando respuesta de la IA</p>
-    </div>
-  </div>
-}
+        @if (requirements()) {
+          <button
+            (click)="openAiInfo()"
+            class="bg-indigo-600/40 hover:bg-indigo-600/60 backdrop-blur-sm px-3 py-2 rounded-xl flex items-center gap-2 border border-indigo-400/30 transition-all active:scale-95 group">
+            <mat-icon class="text-indigo-200 text-sm group-hover:rotate-12 transition-transform">auto_awesome</mat-icon>
+            <div class="text-left">
+              <p class="text-[10px] uppercase tracking-wider text-indigo-100 font-bold">Info Destino</p>
+              <p class="text-[11px] font-medium text-white/90">Ver guía IA</p>
+            </div>
+          </button>
+        } @else {
+            <div
+            (click)="openAiInfo()"
+            class="bg-indigo-600/40 hover:bg-indigo-600/60 backdrop-blur-sm px-3 py-2 rounded-xl flex items-center gap-2 border border-indigo-400/30 transition-all active:scale-95 group">
+            <mat-icon class="text-indigo-200 text-sm group-hover:rotate-12 transition-transform">auto_awesome</mat-icon>
+            <div class="text-left">
+              <p class="text-[11px] font-medium text-white/90">Cargando respuesta de la IA</p>
+            </div>
+          </div>
+        }
       </div>
     </div>
 

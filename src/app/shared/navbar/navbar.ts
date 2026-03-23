@@ -11,16 +11,13 @@ import { MatIconModule } from '@angular/material/icon';
 })
 export class NavbarComponent {
   authService = inject(AuthService);
-  // isAuthenticated = signal<boolean>(false);
-
-  // this.isAuthenticated.set(authService.isLoggedIn());
 
   isMenuOpen = signal(false);
 
   onLogout() {
     this.closeMenu();
     this.authService.logout();
-  }
+  };
 
   toggleMenu() {
     this.isMenuOpen.update((value) => !value);
@@ -28,11 +25,11 @@ export class NavbarComponent {
       document.body.style.overflow = 'hidden';
     } else {
       document.body.style.overflow = '';
-    }
-  }
+    };
+  };
 
   closeMenu() {
     this.isMenuOpen.set(false);
     document.body.style.overflow = '';
-  }
-}
+  };
+};

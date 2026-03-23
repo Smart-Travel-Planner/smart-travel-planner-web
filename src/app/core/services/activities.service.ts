@@ -9,32 +9,19 @@ import { environment } from '../../environments/environment';
 })
 export class ActivitiesService {
   private readonly apiUrl = environment.apiUrl + '/activities';
-  // private readonly apiURL = 'http://localhost:3000/activities';
   private http = inject(HttpClient);
 
   private _activities = signal<Activity[]>([]);
   private _loading = signal<boolean>(false);
   private _errorMessage = signal<string | null>(null);
-  // private _selectedHobby = signal<string>('');
 
-  // selectedHobby = this._selectedHobby.asReadonly();
   activities = this._activities.asReadonly();
   loading = this._loading.asReadonly();
   errorMessage = this._errorMessage.asReadonly();
 
   mapFilteredActivities = computed(() => {
     const allActivities = this._activities();
-    // const filterValue = this._selectedHobby();
-
-    // if (!filterValue || filterValue === '') {
       return allActivities;
-    // }
-
-    // return allActivities.filter(e => {
-    //   if (!e.category) return false;
-
-    //   return String(e.category).trim() === String(filterValue).trim();
-    // });
   });
 
   eventsCount = computed(() => this._activities().length);
@@ -55,8 +42,6 @@ export class ActivitiesService {
       }
     });
   }
-
-
 
   getActivitiesByTrip(tripId: string): Observable<Activity[]> {
     return this.http.get<Activity[]>(`${this.apiUrl}/trip/${tripId}`);

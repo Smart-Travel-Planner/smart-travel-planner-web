@@ -15,4 +15,4 @@ export class TravelRequirementsDialogComponent {
   private dialogRef = inject(MatDialogRef<TravelRequirementsDialogComponent>);
 
   close() { this.dialogRef.close(); }
-}
+};

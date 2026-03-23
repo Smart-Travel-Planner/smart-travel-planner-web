@@ -45,26 +45,23 @@ constructor() {
     place_id: [''],
   });
 
-  // onLocationSelected(coords: { lat: number; lng: number }): void {
-  //   this.selectedCoords.set(coords);
-  //   this.locationForm.patchValue({ lat: coords.lat, lng: coords.lng });
-  // }
-onLocationSelected(coords: { lat: number; lng: number }): void {
-  this.selectedCoords.set(coords);
-  this.locationForm.patchValue({ lat: coords.lat, lng: coords.lng });
+  onLocationSelected(coords: { lat: number; lng: number }): void {
+    this.selectedCoords.set(coords);
+    this.locationForm.patchValue({ lat: coords.lat, lng: coords.lng });
 
-  this.isLoadingAddress.set(true);
-  this.http.get<any>(
-    `https://nominatim.openstreetmap.org/reverse?lat=${coords.lat}&lon=${coords.lng}&format=json`,
-    { headers: { 'Accept-Language': 'es' } }
-  ).subscribe({
-    next: (result) => {
-      this.locationForm.patchValue({ address: result.display_name });
-      this.isLoadingAddress.set(false);
-    },
-    error: () => this.isLoadingAddress.set(false),
-  });
-}
+    this.isLoadingAddress.set(true);
+    this.http.get<any>(
+      `https://nominatim.openstreetmap.org/reverse?lat=${coords.lat}&lon=${coords.lng}&format=json`,
+      { headers: { 'Accept-Language': 'es' } }
+    ).subscribe({
+      next: (result) => {
+        this.locationForm.patchValue({ address: result.display_name });
+        this.isLoadingAddress.set(false);
+      },
+      error: () => this.isLoadingAddress.set(false),
+    });
+  };
+  
   onSubmit(): void {
     if (this.locationForm.invalid) return;
 

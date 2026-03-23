@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { TripRequirementsDialog } from './trip-requirements-dialog';
+import { TravelRequirementsDialogComponent } from './trip-requirements-dialog';
 
 describe('TripRequirementsDialog', () => {
-  let component: TripRequirementsDialog;
-  let fixture: ComponentFixture<TripRequirementsDialog>;
+  let component: TravelRequirementsDialogComponent;
+  let fixture: ComponentFixture<TravelRequirementsDialogComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [TripRequirementsDialog]
+      imports: [TravelRequirementsDialogComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(TripRequirementsDialog);
+    fixture = TestBed.createComponent(TravelRequirementsDialogComponent);
     component = fixture.componentInstance;
     await fixture.whenStable();
   });

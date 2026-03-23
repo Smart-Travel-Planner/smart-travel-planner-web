@@ -9,7 +9,6 @@ import { environment } from '../../environments/environment';
 })
 export class LocationsService {
   private readonly apiUrl = environment.apiUrl + '/locations';
-  // private readonly apiURL = 'http://localhost:3000/locations';
   private http = inject(HttpClient);
 
   getLocations(): Observable<TripLocation[]> {

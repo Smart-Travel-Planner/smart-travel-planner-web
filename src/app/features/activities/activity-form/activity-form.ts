@@ -79,7 +79,6 @@ export class ActivityFormComponent implements OnInit {
       this.isEditMode.set(true);
       this.activityId.set(id);
       this.loadActivity(id);
-      // this.loadTripDestination(tripId);
     };
 
     this.activityForm.get('start_time')?.valueChanges.subscribe(() => this.validateActivityDates());
@@ -144,7 +143,7 @@ export class ActivityFormComponent implements OnInit {
     this.activityForm.patchValue({ location_id: location.id});
     this.locationSearch.set('');
     this.mapComponent()?.highlightLocationMarker(location.id);
-};
+  };
 
   clearLocation(): void {
     this.selectedLocation.set(null);

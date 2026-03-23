@@ -20,9 +20,9 @@ export class ConfirmDialogComponent {
 
   confirm(): void {
     this.dialogRef.close(true);
-  }
+  };
 
   cancel(): void {
     this.dialogRef.close(false);
-  }
-}
+  };
+};

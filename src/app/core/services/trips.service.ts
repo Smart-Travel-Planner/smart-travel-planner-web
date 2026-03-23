@@ -10,7 +10,6 @@ import { TravelRequirement } from '../models/travel-requirement.model';
 })
 export class TripsService {
   private readonly apiUrl = environment.apiUrl + '/trips';
-  // private readonly apiUrl = 'http://localhost:3000/trips';
 
   constructor(private http: HttpClient) {}
 
@@ -29,7 +28,7 @@ export class TripsService {
   getTravelRequirements(tripId: string): Observable<TravelRequirement> {
     return this.http.get<TravelRequirement>(`${this.apiUrl}/${tripId}/requirements`);
   }
-  
+
   createTrip(data: CreateTripRequest): Observable<Trip> {
     return this.http.post<Trip>(this.apiUrl, data);
   }

@@ -53,7 +53,6 @@
             (click)="resetDateFilters()"
             class="order-last sm:order-first flex items-center gap-1 px-3 py-1 text-sm bg-black/50 hover:bg-slate-600 border border-slate-300 hover:border-slate-600 rounded-lg transition-all" title="Borrar fechas">
             <mat-icon class="text-base">close</mat-icon>
-            <!-- Borrar fechas -->
           </button>
         }
         <div class="flex flex-col">
@@ -145,7 +144,6 @@
                           hover:bg-slate-100 dark:border-slate-600 dark:text-slate-400 dark:hover:bg-slate-800
                           transition-colors" title="Editar viaje">
                     <mat-icon class="text-base">edit</mat-icon>
-                    <!-- Editar -->
                   </button>
                   <button
                     (click)="deleteTrip(trip.id, trip.title)"
@@ -153,7 +151,6 @@
                           hover:bg-red-300 hover:text-slate-800 hover:border-red-300
                           transition-colors" title="Eliminar viaje">
                     <mat-icon class="text-base">delete</mat-icon>
-                    <!-- Borrar -->
                   </button>
                 </div>
               } @else {
@@ -163,7 +160,6 @@
                 (click)="goToDetail(trip.id)"
                 class="flex items-center gap-1 px-3 py-1.5 rounded-lg text-sm border border-primary text-primary hover:text-slate-800 hover:bg-white transition-colors" title="Detalles del viaje">
                 <mat-icon class="text-base">visibility</mat-icon>
-                <!-- Ver detalle -->
               </button>
             </div>
           </div>
