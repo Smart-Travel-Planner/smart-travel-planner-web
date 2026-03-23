@@ -16,10 +16,11 @@ import { FormatDatePipe } from '../../../shared/pipes/format-date-pipe';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialogComponent } from '../../../shared/components/confirm-dialog/confirm-dialog';
 import { NavigationService } from '../../../core/services/navigation.service';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-activity-list',
-  imports: [MapComponent, MatIconModule, BackButtonComponent, FormatDatePipe],
+  imports: [MapComponent, MatIconModule, BackButtonComponent, FormatDatePipe, FormsModule],
   templateUrl: './activity-list.html',
   styleUrl: './activity-list.css',
 })

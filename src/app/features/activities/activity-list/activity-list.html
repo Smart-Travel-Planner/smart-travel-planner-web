@@ -8,7 +8,8 @@
     <div class="absolute inset-0 bg-linear-to-t from-slate-950 via-slate-900/40 to-transparent"></div>
   </div>
 
-  <div class="relative w-full min-h-48 flex flex-col justify-end pt-16 px-6 pb-6 overflow-hidden">
+  <div class="relative w-full flex flex-col justify-start px-6 pb-6 overflow-hidden">
+  <!-- <div class="relative w-full min-h-48 flex flex-col justify-end px-6 pb-6 overflow-hidden"> -->
     <div class="relative w-full max-w-4xl px-4 mx-auto flex justify-between items-end z-10 pt-4">
       <div class="bg-black/30 backdrop-blur-sm px-4 py-2 rounded-2xl">
         <h1 class="text-xl md:text-3xl font-extrabold tracking-tight drop-shadow-md">
@@ -29,31 +30,16 @@
   </div>
 
   <section class="w-full max-w-4xl px-4 mb-6">
-    <div class="bg-white backdrop-blur-xl border border-slate-200 rounded-2xl px-3 py-2 flex items-center gap-3">
-      <button
-        (click)="setCategory('all')"
-        title="Todas"
-        class="px-4 py-2 rounded-lg text-sm transition-all"
-        [class.bg-black]="activeCategory() === 'all'"
-        [class.text-white]="activeCategory() === 'all'"
-        [class.text-slate-600]="activeCategory() !== 'all'"
-        [class.hover:bg-slate-100]="activeCategory() !== 'all'">
-        Todas
-      </button>
-      <div class="w-px h-5 bg-slate-200"></div>
-      @for (category of categories; track category) {
-        <button
-          (click)="setCategory(category)"
-          [title]="category"
-          class="w-6 h-6 rounded-full transition-all hover:scale-110"
-          [style.background-color]="categoryColors[category]"
-          [class.ring-2]="activeCategory() === category"
-          [class.ring-white]="activeCategory() === category"
-          [class.ring-offset-2]="activeCategory() === category"
-          [class.ring-offset-transparent]="activeCategory() === category"
-          [class.opacity-40]="activeCategory() !== 'all' && activeCategory() !== category">
-        </button>
-      }
+    <div class="inline-block bg-white backdrop-blur-xl border border-slate-200 rounded-2xl px-3 py-2">
+      <select
+        [ngModel]="activeCategory()"
+        (ngModelChange)="setCategory($event)"
+        class="w-full text-sm text-slate-700 bg-transparent focus:outline-none cursor-pointer py-1">
+        <option value="all">Todas las categorías</option>
+        @for (category of categories; track category) {
+          <option [value]="category">{{ category }}</option>
+        }
+      </select>
     </div>
   </section>
 

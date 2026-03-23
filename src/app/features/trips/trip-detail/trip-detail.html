@@ -1,5 +1,5 @@
 
-<main class="min-h-screen w-full text-white flex flex-col items-center pb-8">
+<main class="min-h-screen w-full text-white flex flex-col items-center">
   @if (trip()) {
     <app-back-button (backClick)="goBack()"></app-back-button>
 
@@ -9,7 +9,8 @@
       <div class="absolute inset-0 bg-linear-to-t from-slate-950 via-slate-900/40 to-transparent"></div>
     </div>
 
-    <div class="relative w-full min-h-64 flex flex-col items-end justify-between pt-16 px-6 pb-6 overflow-hidden">
+    <div class="relative w-full flex flex-col items-end justify-start gap-4 px-6 pb-6 overflow-hidden">
+    <!-- <div class="relative w-full min-h-64 flex flex-col items-end justify-between px-6 pb-6 overflow-hidden"> -->
       <div class="relative w-full max-w-4xl mx-auto flex justify-between items-start z-10 pt-4">
         <div class="bg-black/30 backdrop-blur-sm px-4 py-2 rounded-2xl">
           <h1 class="text-xl md:text-3xl font-extrabold tracking-tight drop-shadow-md">
@@ -34,7 +35,7 @@
         </span>
       </div>
 
-      <div class="relative w-full max-w-4xl mx-auto flex flex-wrap gap-3 z-10 mt-4">
+      <div class="relative w-full max-w-4xl mx-auto flex flex-wrap gap-3 z-10 mt-2">
         <div class="bg-black/30 backdrop-blur-sm px-3 py-2 rounded-xl flex items-center gap-2">
           <mat-icon class="text-slate-300 text-sm">calendar_today</mat-icon>
           <div>
