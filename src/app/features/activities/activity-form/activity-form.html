@@ -1,14 +1,14 @@
 <main class="relative min-h-screen w-full text-white flex flex-col items-center overflow-x-hidden">
 
   <div
-    class="fixed inset-0 z-0 w-full h-full bg-cover bg-center bg-no-repeat"
+    class="absolute inset-0 z-0 w-full h-full bg-cover bg-center bg-no-repeat"
     style="background-image: url('https://res.cloudinary.com/dux4gqdow/image/upload/v1773662802/pietro-de-grandi-T7K4aEPoGGk-unsplash_nqzjxq.jpg')">
     <div class="absolute inset-0 bg-linear-to-b from-slate-950/80 via-slate-900/60 to-slate-950/90"></div>
   </div>
 
   <app-back-button (backClick)="goBack()" label="Cancelar"></app-back-button>
 
-  <div class="relative z-10 w-full flex flex-col items-center pt-20 pb-16 px-4 md:px-6">
+  <div class="relative z-10 w-full flex flex-col items-center pt-6 pb-16 px-4 md:px-6">
 
     <div class="w-full max-w-4xl mx-auto mb-4 flex">
       <div class="bg-black/30 backdrop-blur-sm px-4 py-2 rounded-2xl">
@@ -162,7 +162,7 @@
                 @for (location of filteredLocations(); track location.id) {
                   <li
                     (click)="setLocation(location)"
-                    class="px-4 py-2.5 text-sm text-slate-700 hover:bg-slate-100 cursor-pointer transition-colors">
+                    class="px-4 py-2.5 text-sm bg-white text-slate-800 hover:bg-slate-200 cursor-pointer transition-colors">
                     {{ location.name }}
                   </li>
                 }
