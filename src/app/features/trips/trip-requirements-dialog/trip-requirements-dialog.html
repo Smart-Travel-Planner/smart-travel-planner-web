@@ -1,0 +1,38 @@
+<div class="bg-slate-900 text-white p-6 rounded-xl border border-indigo-500/30 shadow-2xl">
+  <div class="flex justify-between items-center border-b border-slate-700 pb-4 mb-4">
+    <h2 class="text-xl font-bold flex items-center gap-2 text-indigo-300">
+      <mat-icon>auto_awesome</mat-icon> Información de Viaje (IA)
+    </h2>
+    <button (click)="close()" class="text-slate-400 hover:text-white">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+
+  <div class="space-y-6">
+    <section>
+      <h3 class="text-sm font-bold uppercase tracking-widest text-indigo-200 mb-2">Documentación</h3>
+      <div class="bg-white/5 p-3 rounded-lg border border-white/10">
+        <p class="text-sm text-slate-200">{{ data.documentation?.['visa_info'] }}</p>
+      </div>
+    </section>
+
+    <section>
+      <h3 class="text-sm font-bold uppercase tracking-widest text-indigo-200 mb-2">Salud y Vacunas</h3>
+      <ul class="grid grid-cols-1 gap-2">
+        @for (v of $any(data.health_info?.['vaccines']); track v) {
+          <li class="bg-white/5 p-2 rounded-lg text-sm flex items-center gap-2">
+            <mat-icon class="text-green-400 text-xs">check_circle</mat-icon> {{ v }}
+          </li>
+        }
+      </ul>
+    </section>
+
+    <section>
+      <h3 class="text-sm font-bold uppercase tracking-widest text-indigo-200 mb-2">Moneda y Cambio</h3>
+      <div class="flex justify-between bg-indigo-500/10 p-3 rounded-lg border border-indigo-500/20">
+        <span class="text-sm">Moneda: <strong>{{ data.currency_info?.['currency'] }}</strong></span>
+        <span class="text-sm">Ratio: <strong>{{ data.currency_info?.['exchange_rate'] }}</strong></span>
+      </div>
+    </section>
+  </div>
+</div>

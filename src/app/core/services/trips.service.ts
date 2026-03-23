@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Trip, CreateTripRequest, UpdateTripRequest } from '../models/trip.model';
 import { environment } from '../../environments/environment';
+import { TravelRequirement } from '../models/travel-requirement.model';
 
 @Injectable({
   providedIn: 'root'
@@ -25,6 +26,10 @@ export class TripsService {
     return this.http.get<Trip>(`${this.apiUrl}/${id}`);
   }
 
+  getTravelRequirements(tripId: string): Observable<TravelRequirement> {
+    return this.http.get<TravelRequirement>(`${this.apiUrl}/${tripId}/requirements`);
+  }
+  
   createTrip(data: CreateTripRequest): Observable<Trip> {
     return this.http.post<Trip>(this.apiUrl, data);
   }

@@ -59,6 +59,26 @@
             <p class="text-sm font-semibold text-white">{{ trip()!.total_budget }} €</p>
           </div>
         </div>
+@if (requirements()) {
+  <button
+    (click)="openAiInfo()"
+    class="bg-indigo-600/40 hover:bg-indigo-600/60 backdrop-blur-sm px-3 py-2 rounded-xl flex items-center gap-2 border border-indigo-400/30 transition-all active:scale-95 group">
+    <mat-icon class="text-indigo-200 text-sm group-hover:rotate-12 transition-transform">auto_awesome</mat-icon>
+    <div class="text-left">
+      <p class="text-[10px] uppercase tracking-wider text-indigo-100 font-bold">Info Destino</p>
+      <p class="text-[11px] font-medium text-white/90">Ver guía IA</p>
+    </div>
+  </button>
+} @else {
+    <div
+    (click)="openAiInfo()"
+    class="bg-indigo-600/40 hover:bg-indigo-600/60 backdrop-blur-sm px-3 py-2 rounded-xl flex items-center gap-2 border border-indigo-400/30 transition-all active:scale-95 group">
+    <mat-icon class="text-indigo-200 text-sm group-hover:rotate-12 transition-transform">auto_awesome</mat-icon>
+    <div class="text-left">
+      <p class="text-[11px] font-medium text-white/90">Cargando respuesta de la IA</p>
+    </div>
+  </div>
+}
       </div>
     </div>
 
