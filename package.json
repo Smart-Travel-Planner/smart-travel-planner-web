@@ -48,6 +48,7 @@
     "@angular/material": "^21.2.0",
     "@tailwindcss/postcss": "^4.1.12",
     "@types/leaflet": "^1.9.21",
+    "@vitest/coverage-v8": "^4.1.1",
     "jsdom": "^27.1.0",
     "postcss": "^8.5.3",
     "tailwindcss": "^4.1.12",
