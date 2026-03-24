@@ -41,25 +41,20 @@ export class TripExplorerComponent {
   constructor() {
     effect(() => {
       const destination = this.trip().destination;
-    console.log('effect ejecutado, destination:', destination);
       if (destination) {
         this.geocodingService.getCoordsByDestination(destination).subscribe({
           next: coords => {
-          console.log('coords obtenidas:', coords);
             this.tripDestinationCoords.set(coords);
             this.cdr.detectChanges();
           },
           error: async () => {
-          console.log('error geocoding, usando ubicación por defecto');
             const coords = await this.geocodingService.getUserLocationOrDefault();
             this.tripDestinationCoords.set(coords);
             this.cdr.detectChanges();
           },
         });
       } else {
-      console.log('sin destination, usando ubicación por defecto');
         this.geocodingService.getUserLocationOrDefault().then(coords => {
-        console.log('coords por defecto:', coords);
           this.tripDestinationCoords.set(coords);
           this.cdr.detectChanges();
         });
