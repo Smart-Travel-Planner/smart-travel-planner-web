@@ -42,6 +42,7 @@ Smart Travel Planner es una aplicación full-stack que permite a los usuarios cr
 - **Mapa interactivo**: Marcadores de actividades con Leaflet, resaltado al seleccionar una actividad y geolocalización del usuario
 - **Drawer de actividad**: Panel lateral (bottom sheet en móvil) con detalle completo de la actividad, incluyendo imagen de la ubicación si está disponible
 - **Gestión de ubicaciones**: Creación de localizaciones reutilizables con selección en mapa
+- **Consulta agéntica IA**: Búsqueda de requisitos del viaje mediante un agente de IA
 - **Diseño responsive**: Mobile-first con Tailwind CSS
 
 ---
@@ -120,31 +121,32 @@ src/app/
 │
 ├── features/
 │   ├── auth/
-│   │   ├── login/          # Pantalla de inicio de sesión
-│   │   └── register/       # Pantalla de registro
+│   │   ├── login/                      # Pantalla de inicio de sesión
+│   │   └── register/                   # Pantalla de registro
 │   ├── activities/
-│   │   ├── activity-form/  # Formulario de creación/edición de actividad
-│   │   ├── activity-list/  # Listado de actividades con mapa y drawer
-│   │   └── location-dialog/# Diálogo de creación de ubicación
-│   ├── calendar/           # Componente de calendario (FullCalendar)
+│   │   ├── activity-form/              # Formulario de creación/edición de actividad
+│   │   ├── activity-list/              # Listado de actividades con mapa y drawer
+│   │   └── location-dialog/            # Diálogo de creación de ubicación
+│   ├── calendar/                       # Componente de calendario (FullCalendar)
 │   └── trips/
-│       ├── trip-detail/    # Shell del detalle del viaje
-│       ├── trip-explorer/  # Vista pública: mapa + lista (visitantes)
-│       ├── trip-form/      # Formulario de creación/edición de viaje
-│       ├── trip-list/      # Listado de viajes con filtros
-│       └── trip-planner/   # Vista de planificación: calendario + lista (owner)
+│       ├── trip-detail/                # Shell del detalle del viaje
+│       ├── trip-explorer/              # Vista pública: mapa + lista (visitantes)
+│       ├── trip-form/                  # Formulario de creación/edición de viaje
+│       ├── trip-list/                  # Listado de viajes con filtros
+│       ├── trip-planner/               # Vista de planificación: calendario + lista (owner)
+│       └── trip-requirements-dialog/   # Vista de requisitos del viaje: datos devueltos por el agente IA
 │
 └── shared/
     ├── components/
-    │   ├── back-button/        # Botón de navegación atrás
-    │   ├── confirm-dialog/     # Diálogo de confirmación reutilizable
-    │   ├── auth-error-dialog/  # Diálogo de error de autenticación
-    │   └── map/                # Componente de mapa Leaflet reutilizable
-    ├── footer/                 # Footer de la aplicación
-    ├── home/                   # Pantalla de inicio con carrusel
-    ├── navbar/                 # Barra de navegación
+    │   ├── back-button/                # Botón de navegación atrás
+    │   ├── confirm-dialog/             # Diálogo de confirmación reutilizable
+    │   ├── auth-error-dialog/          # Diálogo de error de autenticación
+    │   └── map/                        # Componente de mapa Leaflet reutilizable
+    ├── footer/                         # Footer de la aplicación
+    ├── home/                           # Pantalla de inicio con carrusel
+    ├── navbar/                         # Barra de navegación
     └── pipes/
-        └── format-date-pipe    # Pipe de formateo de fechas
+        └── format-date-pipe            # Pipe de formateo de fechas
 ```
 
 ---
@@ -245,33 +247,28 @@ Los mapas de localización (`locationMap`) se implementan como `computed()` deri
 ### `effect()` para inicialización dependiente de inputs
 En `TripExplorerComponent`, la geocodificación del destino se lanza mediante `effect()` en lugar de `ngOnInit()`, garantizando que el valor del `input()` esté disponible en el momento de la ejecución.
 
-### `:host { display: block }` en componentes con mapa
-Los componentes que contienen Leaflet necesitan que su elemento host ocupe ancho completo. Sin esta regla, el mapa inicializa con ancho 0 y no renderiza los tiles.
-
-### Leaflet con `invalidateSize()`
-Tras inicializar el mapa dentro de un `@if`, se llama a `invalidateSize()` para forzar el recálculo de dimensiones del contenedor y garantizar la correcta renderización.
 
 ---
 
 ## 12. Capturas de pantalla
 
 ### Login y Registro
-![Login y Registro](/public/login-register.png)
+![Login y Registro](/public/PantallaLogin.png)
 
 ### Listado de viajes
-![Listado de viajes](/public/trip-list.png)
+![Listado de viajes](/public/PantallaTripList.png)
 
 ### Detalle del viaje — Vista del owner
-![Detalle del viaje](/public/trip-detail.gif)
+![Detalle del viaje](/public/PantallaTripDetail.gif)
 
 ### Listado de actividades con mapa
-![Listado de actividades](/public/activity-list.png)
+![Listado de actividades](/public/PantallaActivitiesList.png)
 
 ### Drawer de actividad
-![Drawer de actividad](/public/activity-drawer.gif)
+![Drawer de actividad](/public/PantallaDrawerActivity.png)
 
 ### Calendario con drag & drop
-![Calendario](/public/calendar-drag-drop.gif)
+![Calendario](/public/PantallaCalendarDragAndDrop.gif)
 
 ---
 
