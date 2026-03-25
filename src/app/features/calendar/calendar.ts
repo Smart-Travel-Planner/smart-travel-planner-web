@@ -74,6 +74,10 @@ export class CalendarComponent implements OnInit {
 
   ngOnInit(): void {
     if (this.trip?.id) {
+      this.calendarOptions.update(options => ({
+        ...options,
+        initialDate: this.trip.start_date,
+      }));
       this.loadActivities();
     }
   };
