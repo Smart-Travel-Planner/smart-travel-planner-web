@@ -300,4 +300,10 @@ export class MapComponent implements OnInit, OnDestroy {
 
     this.mapService.setView(this.map, coordsArray, 15);
   };
+
+  panTo(lat: number, lng: number): void {
+    if (this.map) {
+      this.mapService.setView(this.map, [lat, lng], this.zoom);
+    };
+  };
 };

@@ -126,7 +126,10 @@ export class ActivityFormComponent implements OnInit {
         });
         if (activity.location_id) {
           const location = this.locations().find(loc => loc.id === activity.location_id);
-          if (location) this.selectedLocation.set(location);
+          if (location) {
+            this.selectedLocation.set(location)
+            setTimeout(() => this.mapComponent()?.panTo(location.lat, location.lng), 200);
+          };
         }
       },
       error: () => this.errorMessage.set('Error cargando la actividad'),

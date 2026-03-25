@@ -148,7 +148,7 @@ export class TripDetailComponent implements OnInit {
       data: data,
       width: '95vw',
       maxWidth: '500px',
-      panelClass: 'custom-ai-modal' 
+      panelClass: 'custom-ai-modal'
     });
   }
 }
