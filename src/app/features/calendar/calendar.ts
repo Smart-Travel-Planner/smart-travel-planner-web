@@ -32,6 +32,7 @@ export class CalendarComponent implements OnInit {
       plugins: [dayGridPlugin, interactionPlugin, timeGridPlugin],
       initialView: 'dayGridMonth',
       locale: esLocale,
+      timeZone: 'UTC',
       headerToolbar: {
         left: 'prev,next today',
         center: 'title',
@@ -144,7 +145,7 @@ export class CalendarComponent implements OnInit {
   private onEventClick(arg: EventClickArg): void {
     const { id, extendedProps } = arg.event;
     if (extendedProps['tripId']) {
-      this.router.navigate(['/trips', extendedProps['tripId'], 'activities', id]);
+      this.router.navigate(['/trips', extendedProps['tripId'], 'activities']);
     };
   };
 
