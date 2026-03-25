@@ -1,4 +1,3 @@
-
 import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { TripsService } from '../../../core/services/trips.service';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -67,7 +66,7 @@ export class TripDetailComponent implements OnInit {
     this.loadTrip(id);
     this.loadActivities(id);
     this.loadLocations();
-    this.loadRequirements(id);
+    // this.loadRequirements(id);
   }
 
   private loadTrip(id: string): void {
@@ -141,14 +140,39 @@ export class TripDetailComponent implements OnInit {
   };
 
   openAiInfo(): void {
-    const data = this.requirements();
-    if (!data) return;
+    // const data = this.requirements();
+    // if (!data) return;
 
+    // this.dialog.open(TravelRequirementsDialogComponent, {
+    //   data: data,
+    //   width: '95vw',
+    //   maxWidth: '500px',
+    //   panelClass: 'custom-ai-modal'
+    // });
+      const tripId = this.trip()?.id;
+    if (!tripId) return;
+
+    const cached = this.requirements();
+    if (cached) {
+      this.openRequirementsDialog(cached);
+      return;
+    }
+
+    this.tripsService.getTravelRequirements(tripId).subscribe({
+      next: reqs => {
+        this.requirements.set(reqs);
+        this.openRequirementsDialog(reqs);
+      },
+      error: () => this.errorMessage.set('Error cargando los requisitos del destino'),
+    });
+  };
+
+  private openRequirementsDialog(data: TravelRequirement): void {
     this.dialog.open(TravelRequirementsDialogComponent, {
-      data: data,
+      data,
       width: '95vw',
       maxWidth: '500px',
-      panelClass: 'custom-ai-modal'
+      panelClass: 'custom-ai-modal',
     });
-  }
+  };
 }
