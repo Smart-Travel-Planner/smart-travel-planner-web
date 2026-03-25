@@ -1,4 +1,4 @@
-import { Component, computed, inject, OnInit, signal, viewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, computed, inject, OnInit, signal, viewChild } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivitiesService } from '../../../core/services/activities.service';
 import { LocationsService } from '../../../core/services/locations.service';
@@ -10,7 +10,7 @@ import { LocationDialogComponent } from '../location-dialog/location-dialog';
 import { TripsService } from '../../../core/services/trips.service';
 import { MapComponent } from '../../../shared/components/map/map';
 import { GeocodingService } from '../../../core/services/geocoding.service';
-import { toDateTimeInput } from '../../../core/utils/date.utils';
+import { adjustHours, toDateTimeInput } from '../../../core/utils/date.utils';
 import { BackButtonComponent } from '../../../shared/components/back-button/back-button';
 import { MatIconModule } from '@angular/material/icon';
 import { NavigationService } from '../../../core/services/navigation.service';
@@ -32,6 +32,7 @@ export class ActivityFormComponent implements OnInit {
   private mapComponent = viewChild<MapComponent>('mapRef');
   private geocodingService = inject(GeocodingService);
   private navigationService = inject(NavigationService);
+  private cdr = inject(ChangeDetectorRef);
 
   categories = Object.values(ActivityCategory);
   locations = signal<TripLocation[]>([]);
@@ -92,17 +93,31 @@ export class ActivityFormComponent implements OnInit {
           start: trip.start_date,
           end: trip.end_date ?? undefined,
         });
+        if (!this.isEditMode()) {
+          const safeStart = adjustHours(trip.start_date, 2);
+          const safeEnd = trip.end_date ? adjustHours(trip.end_date, -2) : safeStart;
+
+          this.activityForm.patchValue({
+            start_time: toDateTimeInput(safeStart),
+            end_time: toDateTimeInput(safeEnd)
+          });
+
+          this.validateActivityDates();
+          this.cdr.detectChanges();
+        };
         if (trip.destination) {
           this.geocodingService.getCoordsByDestination(trip.destination).subscribe({
             next: coords => this.tripDestinationCoords.set(coords),
             error: async () => {
               const coords = await this.geocodingService.getUserLocationOrDefault();
               this.tripDestinationCoords.set(coords);
+              this.cdr.detectChanges();
             },
           });
         } else {
           this.geocodingService.getUserLocationOrDefault().then(coords => {
             this.tripDestinationCoords.set(coords);
+            this.cdr.detectChanges();
           });
         };
       },
