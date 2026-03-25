@@ -203,7 +203,6 @@
       <section class="flex items-center justify-center sm:justify-end gap-4 mb-6">
         <button
           type="submit"
-          (click)="onSubmit()"
           [disabled]="activityForm.invalid"
           [title]="activityForm.invalid ? 'Por favor, rellena todos los campos obligatorios (*)' : (isEditMode() ? 'Guardar cambios' : 'Crear actividad')"
           class="flex items-center gap-2.5 px-8 py-3 rounded-xl text-base font-bold transition-all shadow-lg
