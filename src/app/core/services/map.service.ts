@@ -13,8 +13,15 @@ export class MapService {
 
     const map = L.map(config.containerId).setView(config.center, config.zoom);
 
-    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '&copy; OpenStreetMap contributors',
+    // L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    //   attribution: '&copy; OpenStreetMap contributors',
+    // }).addTo(map);
+    // L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+    //   attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+    // }).addTo(map);
+    L.tileLayer('https://{s}.google.com/vt/lyrs=m&hl=es&x={x}&y={y}&z={z}', { // temporal
+      subdomains: ['mt0', 'mt1', 'mt2', 'mt3'],
+      attribution: 'Mapas de Google'
     }).addTo(map);
 
     this.maps.set(config.containerId, map);
