@@ -156,7 +156,7 @@ export class ActivityFormComponent implements OnInit {
   openLocationDialog(): void {
     const dialogRef = this.dialog.open(LocationDialogComponent, {
       width: '90vw',
-      maxWidth: '500px',
+      maxWidth: '900px',
       data: {tripDestinationCoords: this.tripDestinationCoords()},
     });
 
