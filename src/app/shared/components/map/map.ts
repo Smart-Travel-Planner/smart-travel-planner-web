@@ -20,6 +20,7 @@ export class MapComponent implements OnInit, OnDestroy {
   @Input() zoom: number = 13;
   @Input() initialCoords?: { lat: number; lng: number};
   @Input() set activities(value: Activity[]) {
+    this._activitiesProvided.set(true);
     this._activities.set(value);
   };
   @Input() set locations(value: TripLocation[]) {
@@ -36,6 +37,7 @@ export class MapComponent implements OnInit, OnDestroy {
   private _activities = signal<Activity[]>([]);
   private _locations = signal<TripLocation[]>([]);
   private _centerLocation = signal<TripLocation | null>(null);
+  private _activitiesProvided = signal(false);
   private map: L.Map | undefined;
   private activityMarkers: ActivityMarker[] = [];
   private locationMarkers: Map<string, L.Marker> = new Map();
@@ -48,7 +50,7 @@ export class MapComponent implements OnInit, OnDestroy {
     effect(() => {
       const activities = this._activities();
       const locations = this._locations();
-      if (this.mode !== 'view' || activities.length === 0) return;
+      if (this.mode !== 'view') return;
 
       if (this.map) {
         this.paintActivityMarkers(activities, locations);
@@ -63,7 +65,7 @@ export class MapComponent implements OnInit, OnDestroy {
     effect(() => {
       const locations = this._locations();
       if (locations.length === 0) return;
-      if (this._activities().length > 0) return;
+      if (this._activitiesProvided()) return;
 
       if (this.map) {
         this.paintLocationMarkers(locations);
