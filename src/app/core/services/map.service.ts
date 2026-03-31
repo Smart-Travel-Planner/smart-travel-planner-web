@@ -20,19 +20,19 @@ export class MapService {
     this.maps.set(config.containerId, map);
 
     return map;
-  }
+  };
 
   destroyMap(containerId: string): void {
     const map = this.maps.get(containerId);
     if (map) {
       map.remove();
       this.maps.delete(containerId);
-    }
-  }
+    };
+  };
 
   getMap(containerId: string): L.Map | undefined {
     return this.maps.get(containerId);
-  }
+  };
 
   createMarker(map: L.Map, config: MarkerConfig): L.Marker {
     const marker = L.marker([config.lat, config.lng], {
@@ -42,30 +42,28 @@ export class MapService {
 
     if (config.popup) {
       marker.bindPopup(config.popup);
-    }
-
+    };
     return marker;
-  }
+  };
 
   removeMarker(marker: L.Marker): void {
     marker.remove();
-  }
+  };
 
   removeMarkers(markers: L.Marker[]): void {
     markers.forEach((marker) => marker.remove());
-  }
+  };
 
   setView(map: L.Map, coords: [number, number], zoom?: number): void {
     map.setView(coords, zoom || map.getZoom());
-  }
+  };
 
   getUserLocation(): Promise<{ lat: number; lng: number }> {
     return new Promise((resolve, reject) => {
       if (!navigator.geolocation) {
         reject(new Error('Geolocalización no soportada'));
         return;
-      }
-
+      };
       navigator.geolocation.getCurrentPosition(
         (position) => {
           resolve({
@@ -78,20 +76,21 @@ export class MapService {
         }
       );
     });
-  }
+  };
 
   onMapClick(map: L.Map, callback: (lat: number, lng: number) => void): void {
     map.on('click', (e: L.LeafletMouseEvent) => {
       callback(e.latlng.lat, e.latlng.lng);
     });
-  }
+  };
 
   onMarkerDragEnd(marker: L.Marker, callback: (lat: number, lng: number) => void): void {
     marker.on('dragend', (event) => {
       const position = event.target.getLatLng();
       callback(position.lat, position.lng);
     });
-  }
+  };
+
   createDefaultIcon(): L.Icon {
     return L.icon({
       iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png',
@@ -101,7 +100,7 @@ export class MapService {
       popupAnchor: [1, -34],
       shadowSize: [41, 41],
     });
-  }
+  };
 
   createActiveIcon(): L.Icon {
     return L.icon({
@@ -112,7 +111,7 @@ export class MapService {
       popupAnchor: [1, -34],
       shadowSize: [41, 41],
     });
-  }
+  };
 
   createUserIcon(): L.Icon {
     return L.icon({
@@ -123,7 +122,7 @@ export class MapService {
       popupAnchor: [1, -34],
       shadowSize: [41, 41],
     });
-  }
+  };
 
   createSelectionIcon(): L.Icon {
     return L.icon({
@@ -134,10 +133,10 @@ export class MapService {
       popupAnchor: [1, -34],
       shadowSize: [41, 41],
     });
-  }
+  };
 
   invalidateSize(containerId: string): void {
     const map = this.maps.get(containerId);
     if (map) map.invalidateSize();
-  }
-}
+  };
+};

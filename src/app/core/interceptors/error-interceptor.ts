@@ -19,17 +19,17 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
           notificationService.showError('No se encontró el recurso solicitado');
           break;
         case 500:
-          notificationService.showError('Error interno del servidor. Intántalo de nuevo más tarde.');
+          notificationService.showError(
+            'Error interno del servidor. Inténtalo de nuevo más tarde.',
+          );
           break;
         case 0:
           notificationService.showError('Sin conexión. Comprueba tu conexión a internet.');
           break;
         default:
-          notificationService.showError('Ha ocurrido un error inesperado. Inténtalo de nuevo.')
-      };
-
+          notificationService.showError('Ha ocurrido un error inesperado. Inténtalo de nuevo.');
+      }
       return throwError(() => error);
-
-    })
+    }),
   );
 };

@@ -5,6 +5,7 @@ import { Activity } from '../../../core/models/activity.model';
 import { CalendarComponent } from '../../calendar/calendar';
 import { MatIconModule } from '@angular/material/icon';
 import { ACTIVITY_CATEGORY_COLORS } from '../../../core/enums/activity-category-colors.enum';
+import { NavigationService } from '../../../core/services/navigation.service';
 
 @Component({
   selector: 'app-trip-planner',
@@ -13,6 +14,7 @@ import { ACTIVITY_CATEGORY_COLORS } from '../../../core/enums/activity-category-
 })
 export class TripPlannerComponent {
   private router = inject(Router);
+  private navigationService = inject(NavigationService);
 
   trip = input.required<Trip>();
   activities = input.required<Activity[]>();
@@ -25,6 +27,7 @@ export class TripPlannerComponent {
   };
 
   goToActivities(): void {
+    this.navigationService.setPreviousUrl(`/trips/${this.trip().id}`);
     this.router.navigate(['/trips', this.trip().id, 'activities']);
   };
 

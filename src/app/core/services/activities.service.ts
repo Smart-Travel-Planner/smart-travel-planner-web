@@ -41,7 +41,7 @@ export class ActivitiesService {
         this._loading.set(false);
       }
     });
-  }
+  };
 
   getActivitiesByTrip(tripId: string): Observable<Activity[]> {
     return this.http.get<Activity[]>(`${this.apiUrl}/trip/${tripId}`);
@@ -61,5 +61,5 @@ export class ActivitiesService {
 
   deleteActivity(id: string): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${id}`);
-  }
+  };
 }

@@ -49,7 +49,7 @@ export class ActivityFormComponent implements OnInit {
     const search = this.locationSearch().toLowerCase();
     if (!search) return this.locations();
     return this.locations().filter(loc => loc.name.toLowerCase().includes(search));
-  })
+  });
 
   activityForm: FormGroup = this.fb.group({
     title: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(80)]],
@@ -238,7 +238,6 @@ export class ActivityFormComponent implements OnInit {
   };
 
   goBack(): void {
-    const id = this.tripId();
     this.router.navigate([this.navigationService.getPreviousUrl()]);
   };
 };

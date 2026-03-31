@@ -8,9 +8,9 @@ export class NavigationService {
 
   setPreviousUrl(url: string): void {
     this.previousUrl.set(url);
-  }
+  };
 
   getPreviousUrl(): string {
     return this.previousUrl();
-  }
+  };
 }

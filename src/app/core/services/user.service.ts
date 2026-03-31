@@ -12,5 +12,5 @@ export class UsersService {
 
   getPublicProfile(id: string): Observable<{ id: string; name: string }> {
     return this.http.get<{ id: string; name: string }>(`${this.apiUrl}/${id}/public`);
-  }
-}
+  };
+};
