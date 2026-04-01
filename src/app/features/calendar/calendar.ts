@@ -12,6 +12,7 @@ import { ActivitiesService } from '../../core/services/activities.service';
 import { Trip } from '../../core/models/trip.model';
 import { Activity } from '../../core/models/activity.model';
 import { ACTIVITY_CATEGORY_COLORS } from '../../core/enums/activity-category-colors.enum';
+import { NavigationService } from '../../core/services/navigation.service';
 
 @Component({
   selector: 'app-calendar',
@@ -23,6 +24,7 @@ export class CalendarComponent implements OnInit {
   private tripsService = inject(TripsService);
   private activitiesService = inject(ActivitiesService);
   private router = inject(Router);
+  private navigationService = inject(NavigationService);
 
   @Input({ required: true }) trip!: Trip;
 
@@ -74,6 +76,10 @@ export class CalendarComponent implements OnInit {
 
   ngOnInit(): void {
     if (this.trip?.id) {
+      this.calendarOptions.update(options => ({
+        ...options,
+        initialDate: this.trip.start_date,
+      }));
       this.loadActivities();
     }
   };
@@ -140,7 +146,8 @@ export class CalendarComponent implements OnInit {
   private onEventClick(arg: EventClickArg): void {
     const { id, extendedProps } = arg.event;
     if (extendedProps['tripId']) {
-      this.router.navigate(['/trips', extendedProps['tripId'], 'activities', id]);
+    this.navigationService.setPreviousUrl(`/trips/${extendedProps['tripId']}`);
+    this.router.navigate(['/trips', extendedProps['tripId'], 'activities']);
     };
   };
 
