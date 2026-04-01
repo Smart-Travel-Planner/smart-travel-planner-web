@@ -77,7 +77,7 @@ export class TripExplorerComponent {
     if (activity) {
       this.selectedActivity.set(activity);
       this.highlightedActivityId.set(activityId);
-    }
+    };
     const element = document.getElementById(`activity-${activityId}`);
     if (element) element.scrollIntoView({ behavior: 'smooth', block: 'center' });
   };

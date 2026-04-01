@@ -67,6 +67,7 @@ export class TripListComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadTrips();
+    this.navigationService.setPreviousUrl(`/trips`);
   };
 
   private loadTrips(): void {
@@ -104,6 +105,7 @@ export class TripListComponent implements OnInit {
   };
 
   goToCreate(): void {
+    this.navigationService.setPreviousUrl(`/trips`);
     this.router.navigate(['/trips/new']);
   };
 

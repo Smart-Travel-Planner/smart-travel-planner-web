@@ -63,12 +63,12 @@ export class TripDetailComponent implements OnInit {
     if (!id) {
       this.router.navigate(['/trips']);
       return;
-    }
+    };
     this.loadTrip(id);
     this.loadActivities(id);
     this.loadLocations();
     this.loadRequirements(id);
-  }
+  };
 
   private loadTrip(id: string): void {
     this.tripsService.getTripById(id).subscribe({
@@ -80,40 +80,40 @@ export class TripDetailComponent implements OnInit {
       },
       error: () => this.errorMessage.set('Error cargando el viaje'),
     });
-  }
+  };
 
   private loadActivities(tripId: string): void {
     this.activitiesService.getActivitiesByTrip(tripId).subscribe({
       next: activities => this.activities.set(activities),
       error: () => this.errorMessage.set('Error cargando las actividades'),
     });
-  }
+  };
 
   private loadCreatorName(userId: string): void {
     this.usersService.getPublicProfile(userId).subscribe({
       next: profile => this.creatorName.set(profile.name),
       error: () => this.creatorName.set(null),
     });
-  }
+  };
 
   private loadLocations(): void {
     this.locationsService.getLocations().subscribe({
       next: locations => this.locations.set(locations),
       error: () => {},
     });
-  }
+  };
 
   private loadRequirements(tripId: string): void {
     this.tripsService.getTravelRequirements(tripId).subscribe({
       next: reqs => this.requirements.set(reqs),
       error: () => console.warn('No se encontraron requisitos de IA para este viaje')
     });
-  }
+  };
 
   goToEdit(): void {
     this.navigationService.setPreviousUrl(`/trips/${this.trip()?.id}`);
     this.router.navigate(['/trips', this.trip()?.id, 'edit']);
-  }
+  };
 
   goBack(): void {
     this.router.navigate(['/trips']);
@@ -148,7 +148,7 @@ export class TripDetailComponent implements OnInit {
       data: data,
       width: '95vw',
       maxWidth: '500px',
-      panelClass: 'custom-ai-modal' 
+      panelClass: 'custom-ai-modal'
     });
-  }
-}
+  };
+};

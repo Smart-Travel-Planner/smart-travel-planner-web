@@ -22,15 +22,15 @@ export class LocationDialogComponent {
   private locationsService = inject(LocationsService);
   private dialogRef = inject(MatDialogRef<LocationDialogComponent>);
   private dialogData = inject<LocationDialogData>(MAT_DIALOG_DATA);
-private http = inject(HttpClient);
-isLoadingAddress = signal<boolean>(false);
+  private http = inject(HttpClient);
+  isLoadingAddress = signal<boolean>(false);
 
   tripDestinationCoords = this.dialogData?.tripDestinationCoords;
 
-constructor() {
-  console.log('dialogData:', this.dialogData);
-  console.log('tripDestinationCoords:', this.tripDestinationCoords);
-}
+  constructor() {
+    console.log('dialogData:', this.dialogData);
+    console.log('tripDestinationCoords:', this.tripDestinationCoords);
+  };
   categories = Object.values(ActivityCategory);
   errorMessage = signal<string>('');
   selectedCoords = signal<{ lat: number; lng: number } | null>(null);
@@ -61,7 +61,7 @@ constructor() {
       error: () => this.isLoadingAddress.set(false),
     });
   };
-  
+
   onSubmit(): void {
     if (this.locationForm.invalid) return;
 

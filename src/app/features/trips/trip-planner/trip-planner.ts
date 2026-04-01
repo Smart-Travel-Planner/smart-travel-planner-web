@@ -32,6 +32,7 @@ export class TripPlannerComponent {
   };
 
   goToNewActivity(): void {
+    this.navigationService.setPreviousUrl(`/trips/${this.trip().id}/activities`);
     this.router.navigate(['/trips', this.trip().id, 'activities', 'new']);
   };
 };

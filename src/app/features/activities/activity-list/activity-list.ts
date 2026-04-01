@@ -173,7 +173,6 @@ export class ActivityListComponent implements OnInit {
   };
 
   goBack(): void {
-    // this.router.navigate(['/trips', this.tripId()]);
     this.router.navigate([this.navigationService.getPreviousUrl()]);
   };
 };

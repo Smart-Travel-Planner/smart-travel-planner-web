@@ -53,7 +53,7 @@ export class TripFormComponent implements OnInit {
         });
       },
       error: () => this.errorMessage.set('Error cargando el viaje'),
-    })
+    });
   };
 
   onSubmit(): void {
@@ -89,7 +89,6 @@ export class TripFormComponent implements OnInit {
   };
 
   goBack(): void {
-    const id = this.tripId();
     this.router.navigate([this.navigationService.getPreviousUrl()]);
   };
 };
