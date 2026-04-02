@@ -11,7 +11,7 @@ import { filter } from 'rxjs';
 export class FooterComponent {
   private router = inject(Router);
 
-  isHome =signal(true);
+  isHome = signal(true);
 
   constructor() {
     this.router.events.pipe(

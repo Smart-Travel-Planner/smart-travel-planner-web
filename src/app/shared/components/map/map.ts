@@ -58,7 +58,7 @@ export class MapComponent implements OnInit, OnDestroy {
         setTimeout(() => {
           if (this.map) {
             this.paintActivityMarkers(activities, locations);
-          }
+          };
         }, 100);
       };
     });
@@ -73,7 +73,7 @@ export class MapComponent implements OnInit, OnDestroy {
         setTimeout(() => {
           if (this.map) {
             this.paintLocationMarkers(locations);
-          }
+          };
         }, 100);
       };
     });
@@ -97,9 +97,9 @@ export class MapComponent implements OnInit, OnDestroy {
               icon: this.mapService.createDefaultIcon(),
               popup: location.name,
             });
-          }
+          };
         }, 100)
-      }
+      };
     });
   };
 
@@ -108,8 +108,6 @@ export class MapComponent implements OnInit, OnDestroy {
       this.initMap();
       setTimeout(() => {
         this.mapService.invalidateSize(this.containerId);
-        console.log('after invalidate, tiles:', document.querySelectorAll('.leaflet-tile').length);
-        console.log('after invalidate, size:', this.map?.getSize());
       }, 100);
       if (this.mode === 'select') {
         this.setupSelectionMode();

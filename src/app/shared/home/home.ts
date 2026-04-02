@@ -1,5 +1,4 @@
 import { Component, computed, inject, OnInit, signal } from '@angular/core';
-import { RouterLink, RouterLinkActive } from '@angular/router';
 import { Slide } from '../../core/models/carrusel.model';
 import { environment } from '../../environments/environment';
 import { HttpClient } from '@angular/common/http';
@@ -38,7 +37,7 @@ export class HomeComponent implements OnInit {
 
   private warmUpServer(): void {
     this.http.get(`${environment.apiUrl}/health`).subscribe({
-      error: () => {} // silencioso — no importa si falla
+      error: () => {}
     });
   }
 
