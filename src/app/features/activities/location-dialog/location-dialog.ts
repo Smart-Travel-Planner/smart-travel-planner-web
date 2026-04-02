@@ -27,10 +27,7 @@ export class LocationDialogComponent {
 
   tripDestinationCoords = this.dialogData?.tripDestinationCoords;
 
-  constructor() {
-    console.log('dialogData:', this.dialogData);
-    console.log('tripDestinationCoords:', this.tripDestinationCoords);
-  };
+  constructor() { };
   categories = Object.values(ActivityCategory);
   errorMessage = signal<string>('');
   selectedCoords = signal<{ lat: number; lng: number } | null>(null);
