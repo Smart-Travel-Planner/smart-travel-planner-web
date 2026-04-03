@@ -203,6 +203,22 @@ export class MapComponent implements OnInit, OnDestroy {
         this.highlightActivity(activity.id);
       });
 
+      setTimeout(() => {
+        const el = marker.getElement();
+        if (el) {
+          el.setAttribute('tabindex', '0');
+          el.setAttribute('aria-label', activity.title);
+          el.addEventListener('keydown', (e: KeyboardEvent) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              this.selectedActivityId.set(activity.id);
+              this.markerClicked.emit(activity.id);
+              this.highlightActivity(activity.id);
+            }
+          });
+        }
+      }, 100);
+
       this.activityMarkers.push({ activityId: activity.id, marker });
     });
   };

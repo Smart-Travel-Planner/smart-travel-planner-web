@@ -78,6 +78,7 @@ export class TripExplorerComponent {
       this.selectedActivity.set(activity);
       this.highlightedActivityId.set(activityId);
     };
+    this.mapComponent()?.highlightActivity(activityId);
     const element = document.getElementById(`activity-${activityId}`);
     if (element) {
       element.scrollIntoView({ behavior: 'smooth', block: 'center' });
