@@ -148,7 +148,7 @@
       </section>
 
       @if (errorMessage()) {
-        <div class="p-5 bg-red-600/15 border border-red-600/30 rounded-2xl text-red-200 text-center text-sm font-medium shadow-lg animate-pulse">
+        <div role="alert" class="p-5 bg-red-600/15 border border-red-600/30 rounded-2xl text-red-200 text-center text-sm font-medium shadow-lg animate-pulse">
           ⚠️ {{ errorMessage() }}
         </div>
       }
