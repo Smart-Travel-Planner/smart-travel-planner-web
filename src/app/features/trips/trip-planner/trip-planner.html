@@ -15,16 +15,18 @@
         <div class="flex items-center gap-2">
           <button
             (click)="goToActivities()"
+            aria-label="Ver Mapa y actividades"
             class="hidden lg:flex items-center gap-1 px-3 py-1.5 rounded-lg text-sm font-semibold bg-blue-500/20 border border-blue-400 text-blue-300 hover:bg-blue-500 hover:text-white transition-colors"
             title="Ver mapa y actividades">
-            <mat-icon class="text-base">map</mat-icon>
+            <mat-icon class="text-base" aria-hidden="true">map</mat-icon>
           </button>
 
           <button
             (click)="goToNewActivity()"
+            aria-label="Nueva actividad"
             class="flex items-center gap-1 px-3 py-1.5 rounded-lg text-sm font-semibold bg-blue-500/20 border border-blue-400 text-blue-300 hover:bg-blue-500 hover:text-white transition-colors"
             title="Nueva actividad">
-            <mat-icon class="text-base">add</mat-icon>
+            <mat-icon class="text-base" aria-hidden="true">add</mat-icon>
           </button>
         </div>
       </div>

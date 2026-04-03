@@ -24,10 +24,13 @@
     <form [formGroup]="tripForm" (ngSubmit)="onSubmit()" class="w-full max-w-4xl flex flex-col gap-8">
       <section class="bg-sky-50 rounded-3xl border border-slate-100 p-8 flex flex-col gap-6 shadow-2xl">
         <div class="flex flex-col gap-1.5">
-          <label class="text-xs uppercase tracking-wider text-slate-600 font-bold ml-1">Título *</label>
+          <label for="title" class="text-xs uppercase tracking-wider text-slate-600 font-bold ml-1">Título *</label>
           <input
+            id="title"
             type="text"
             formControlName="title"
+            aria-required="true"
+            [attr.aria-describedby]="isInvalid('title') ? 'title-error' : null"
             placeholder="Ej: Verano en Japón con amigos"
             class="w-full bg-slate-50 border rounded-xl px-4 py-3 text-sm text-slate-950 focus:outline-none transition-all shadow-inner"
             [class.border-red-500]="isInvalid('title')"
@@ -37,7 +40,7 @@
             [class.focus:border-red-600]="isInvalid('title')"
           />
           @if (isInvalid('title')) {
-            <div class="flex flex-col mt-1 ml-1 gap-0.5">
+            <div id="title-error" class="flex flex-col mt-1 ml-1 gap-0.5" role="alert">
               @if (tripForm.get('title')?.hasError('required')) {
                 <span class="text-[11px] text-red-600 font-medium">El título es obligatorio.</span>
               }
@@ -51,20 +54,25 @@
         </div>
 
         <div class="flex flex-col gap-1.5">
-          <label class="text-xs uppercase tracking-wider text-slate-600 font-bold ml-1">Destino</label>
+          <label for="destination" class="text-xs uppercase tracking-wider text-slate-600 font-bold ml-1">Destino</label>
           <input
+            id="destination"
             type="text"
             formControlName="destination"
+            aria-required="false"
             placeholder="Ej: Tokio, Kyoto, Osaka"
             class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm text-slate-950 focus:outline-none focus:border-blue-500 transition-all shadow-inner"/>
         </div>
 
         <div class="flex flex-col sm:flex-row gap-6">
           <div class="flex flex-col gap-1.5 flex-1">
-            <label class="text-xs uppercase tracking-wider text-slate-600 font-bold ml-1">Fecha de inicio *</label>
+            <label for="start_date" class="text-xs uppercase tracking-wider text-slate-600 font-bold ml-1">Fecha de inicio *</label>
             <input
+              id="start_date"
               type="datetime-local"
               formControlName="start_date"
+              aria-required="true"
+              [attr.aria-describedby]="isInvalid('start_date') ? 'start_date-error' : null"
               class="w-full bg-slate-50 border rounded-xl px-4 py-3 text-sm text-slate-950 focus:outline-none transition-all shadow-inner"
               [class.border-red-500]="isInvalid('start_date')"
               [class.bg-red-50]="isInvalid('start_date')"
@@ -72,24 +80,29 @@
               [class.focus:border-blue-500]="!isInvalid('start_date')"
             />
             @if (isInvalid('start_date')) {
-              <span class="text-[11px] text-red-600 font-medium ml-1 mt-1">La fecha de inicio es necesaria.</span>
+              <span id="start_date-error" class="text-[11px] text-red-600 font-medium ml-1 mt-1" role="alert">La fecha de inicio es necesaria.</span>
             }
           </div>
           <div class="flex flex-col gap-1.5 flex-1">
-            <label class="text-xs uppercase tracking-wider text-slate-600 font-bold ml-1">Fecha final</label>
+            <label for="end_date" class="text-xs uppercase tracking-wider text-slate-600 font-bold ml-1">Fecha final</label>
             <input
+              id="end_date"
               type="datetime-local"
               formControlName="end_date"
+              aria-required="false"
               class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm text-slate-950 focus:outline-none focus:border-blue-500 transition-all shadow-inner"/>
           </div>
         </div>
 
         <div class="flex flex-col gap-1.5">
-          <label class="text-xs uppercase tracking-wider text-slate-600 font-bold ml-1">Presupuesto total (€) *</label>
+          <label for="total_budget" class="text-xs uppercase tracking-wider text-slate-600 font-bold ml-1">Presupuesto total (€) *</label>
           <input
+            id="total_budget"
             type="number"
             formControlName="total_budget"
             placeholder="Ej: 3500"
+            aria-required="true"
+            [attr.aria-describedby]="isInvalid('total_budget') ? 'total_budget-error' : null"
             class="w-full bg-slate-50 border rounded-xl px-4 py-3 text-sm text-slate-950 focus:outline-none transition-all shadow-inner"
             [class.border-red-500]="isInvalid('total_budget')"
             [class.bg-red-50]="isInvalid('total_budget')"
@@ -97,7 +110,7 @@
             [class.focus:border-blue-500]="!isInvalid('total_budget')"
           />
           @if (isInvalid('total_budget')) {
-            <div class="flex flex-col mt-1 ml-1 gap-0.5">
+            <div id="total_budget-error" class="flex flex-col mt-1 ml-1 gap-0.5" role="alert">
               @if (tripForm.get('total_budget')?.hasError('required')) {
                 <span class="text-[11px] text-red-600 font-medium">El presupuesto es obligatorio.</span>
               }
@@ -109,17 +122,20 @@
         </div>
 
         <div class="flex flex-col gap-1.5">
-          <label class="text-xs uppercase tracking-wider text-slate-600 font-bold ml-1">URL de imagen de portada</label>
+          <label for="image_url" class="text-xs uppercase tracking-wider text-slate-600 font-bold ml-1">URL de imagen de portada</label>
           <input
+            id="image_url"
             type="text"
             formControlName="image_url"
             placeholder="https://ejemplo.com/imagen.jpg"
+            aria-required="false"
             class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm text-slate-950 focus:outline-none focus:border-blue-500 transition-all shadow-inner"/>
         </div>
 
         <div class="flex flex-col gap-3 pt-2">
-          <label class="flex items-center gap-3.5 cursor-pointer group">
+          <label for="is_public" class="flex items-center gap-3.5 cursor-pointer group">
             <input
+              id="is_public"
               type="checkbox"
               formControlName="is_public"
               class="w-5 h-5 rounded border-slate-300 text-blue-600 focus:ring-blue-500 focus:ring-2 transition-all"/>
@@ -145,7 +161,7 @@
           class="flex items-center gap-2.5 px-8 py-3 rounded-xl text-base font-bold transition-all shadow-lg
                  bg-blue-600 text-white hover:bg-blue-700 hover:scale-105
                  disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 disabled:bg-slate-500">
-          <mat-icon class="text-lg">save</mat-icon>
+          <mat-icon class="text-lg" aria-hidden="true">save</mat-icon>
           {{ isEditMode() ? 'Guardar cambios' : 'Crear viaje' }}
         </button>
       </section>

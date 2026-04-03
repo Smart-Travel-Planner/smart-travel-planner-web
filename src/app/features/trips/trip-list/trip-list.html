@@ -15,8 +15,10 @@
 
       <button
         (click)="goToCreate()"
-        class="flex items-center gap-2 bg-blue-500 hover:bg-blue-600 transition-all px-4 py-2 rounded-xl shadow-2xl shadow-blue-900/40 text-sm font-medium" title="Nuevo viaje">
-        <mat-icon>add</mat-icon>
+        aria-label="Nuevo viaje"
+        class="flex items-center gap-2 bg-blue-500 hover:bg-blue-600 transition-all px-4 py-2 rounded-xl shadow-2xl shadow-blue-900/40 text-sm font-medium"
+        title="Nuevo viaje">
+        <mat-icon aria-hidden="true">add</mat-icon>
       </button>
     </div>
 
@@ -51,8 +53,10 @@
         @if (dateFrom() || dateTo()) {
           <button
             (click)="resetDateFilters()"
-            class="order-last sm:order-first flex items-center gap-1 px-3 py-1 text-sm bg-black/50 hover:bg-slate-600 border border-slate-300 hover:border-slate-600 rounded-lg transition-all" title="Borrar fechas">
-            <mat-icon class="text-base">close</mat-icon>
+            aria-label="Borrar fechas"
+            class="order-last sm:order-first flex items-center gap-1 px-3 py-1 text-sm bg-black/50 hover:bg-slate-600 border border-slate-300 hover:border-slate-600 rounded-lg transition-all"
+            title="Borrar fechas">
+            <mat-icon class="text-base" aria-hidden="true">close</mat-icon>
           </button>
         }
         <div class="flex flex-col">
@@ -84,10 +88,13 @@
   @if (hasTrips()) {
     <section class="w-full max-w-7xl grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 py-8 px-4">
       @for (trip of filteredTrips(); track trip.id) {
-        <article class="group bg-white dark:bg-slate-900 rounded-xl overflow-hidden shadow-sm border border-slate-100 dark:border-slate-800 transition-all hover:shadow-md">
+        <article
+          [attr.aria-label]="'Viaje: ' + trip.title"
+          class="group bg-white dark:bg-slate-900 rounded-xl overflow-hidden shadow-sm border border-slate-100 dark:border-slate-800 transition-all hover:shadow-md">
 
           <div class="relative h-36 w-full overflow-hidden">
             <div
+              aria-hidden="true"
               class="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-105"
               (click)="goToDetail(trip.id)"
               [style.background-image]="'url(' + (trip.image_url || defaultImage) + ')'">
@@ -113,26 +120,26 @@
                 </h3>
                 @if (trip.destination) {
                   <div class="flex items-center gap-1 text-slate-500 dark:text-slate-400 mt-1">
-                    <mat-icon class="text-sm">location_on</mat-icon>
+                    <mat-icon class="text-sm" aria-hidden="true">location_on</mat-icon>
                     <span class="text-sm">{{ trip.destination }}</span>
                   </div>
                 }
               </div>
               <div class="flex flex-col items-end gap-1 text-slate-500 dark:text-slate-400">
                 <div class="flex items-center gap-1">
-                  <mat-icon class="text-sm">calendar_today</mat-icon>
+                  <mat-icon class="text-sm" aria-hidden="true">calendar_today</mat-icon>
                   <span class="text-xs font-medium">{{ trip.start_date | formatDate }}</span>
                 </div>
                 @if (trip.end_date) {
                   <div class="flex items-center gap-1">
-                    <mat-icon class="text-sm">event</mat-icon>
+                    <mat-icon class="text-sm" aria-hidden="true">event</mat-icon>
                     <span class="text-xs font-medium">{{ trip.end_date | formatDate }}</span>
                   </div>
                 }
               </div>
             </div>
             <div class="flex items-center gap-1 text-slate-500 dark:text-slate-400 mt-1">
-              <mat-icon class="text-sm">payments</mat-icon>
+              <mat-icon class="text-sm" aria-hidden="true">payments</mat-icon>
               <span class="text-sm font-medium">{{ trip.total_budget }} €</span>
             </div>
             <div class="flex items-cen  ter justify-between mt-4 pt-3 border-t border-slate-100 dark:border-slate-800">
@@ -140,17 +147,19 @@
                 <div class="flex gap-2">
                   <button
                     (click)="goToEdit(trip.id)"
+                    [attr.aria-label]="'Editar viaje ' + trip.title"
                     class="flex items-center gap-1 px-3 py-1.5 rounded-lg text-sm border border-slate-300 text-slate-600
                           hover:bg-slate-100 dark:border-slate-600 dark:text-slate-400 dark:hover:bg-slate-800
                           transition-colors" title="Editar viaje">
-                    <mat-icon class="text-base">edit</mat-icon>
+                    <mat-icon class="text-base" aria-hidden="true">edit</mat-icon>
                   </button>
                   <button
                     (click)="deleteTrip(trip.id, trip.title)"
+                    [attr.aria-label]="'Eliminar viaje ' + trip.title"
                     class="flex items-center gap-1 px-3 py-1.5 rounded-lg text-sm font-semibold border border-red-300 text-red-300
                           hover:bg-red-300 hover:text-slate-800 hover:border-red-300
                           transition-colors" title="Eliminar viaje">
-                    <mat-icon class="text-base">delete</mat-icon>
+                    <mat-icon class="text-base" aria-hidden="true">delete</mat-icon>
                   </button>
                 </div>
               } @else {
@@ -158,8 +167,9 @@
               }
               <button
                 (click)="goToDetail(trip.id)"
+                [attr.aria-label]="'Detalle de ' + trip.title"
                 class="flex items-center gap-1 px-3 py-1.5 rounded-lg text-sm border border-primary text-primary hover:text-slate-800 hover:bg-white transition-colors" title="Detalles del viaje">
-                <mat-icon class="text-base">visibility</mat-icon>
+                <mat-icon class="text-base" aria-hidden="true">visibility</mat-icon>
               </button>
             </div>
           </div>
@@ -168,25 +178,25 @@
     </section>
   } @else if (hasDateFilter()) {
     <div class="w-full max-w-4xl flex flex-col items-center justify-center py-16 px-4 text-center">
-      <mat-icon class="text-slate-400 text-5xl mb-4">calendar_today</mat-icon>
+      <mat-icon aria-hidden="true" class="text-slate-400 text-5xl mb-4">calendar_today</mat-icon>
       <p class="text-slate-300 text-lg font-semibold">No hay viajes en ese período</p>
       <p class="text-slate-400 text-sm mt-2">Prueba con otras fechas o elimina los filtros.</p>
       <button
         (click)="resetDateFilters()"
         class="mt-6 flex items-center gap-2 px-4 py-2 rounded-lg border border-slate-400 text-slate-300 hover:bg-slate-700 transition-colors text-sm" title="Borrar filtros">
-        <mat-icon class="text-base">close</mat-icon>
+        <mat-icon class="text-base" aria-hidden="true">close</mat-icon>
         Borrar filtros
       </button>
     </div>
   } @else {
     <div class="w-full max-w-4xl flex flex-col items-center justify-center py-16 px-4 text-center">
-      <mat-icon class="text-slate-400 text-5xl mb-4">luggage</mat-icon>
+      <mat-icon aria-hidden="true" class="text-slate-400 text-5xl mb-4">luggage</mat-icon>
       <p class="text-slate-300 text-lg font-semibold">¡Todavía no tienes viajes!</p>
       <p class="text-slate-400 text-sm mt-2">Crea tu primer viaje y empieza a planificar tu próxima aventura.</p>
       <button
         (click)="goToCreate()"
         class="mt-6 flex items-center gap-2 bg-blue-500 hover:bg-blue-600 transition-all px-6 py-3 rounded-xl text-sm font-medium shadow-lg" title="Nuevo viaje">
-        <mat-icon class="text-base">add</mat-icon>
+        <mat-icon class="text-base" aria-hidden="true">add</mat-icon>
         Crear mi primer viaje
       </button>
     </div>

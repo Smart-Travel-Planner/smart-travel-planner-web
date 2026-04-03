@@ -79,7 +79,10 @@ export class TripExplorerComponent {
       this.highlightedActivityId.set(activityId);
     };
     const element = document.getElementById(`activity-${activityId}`);
-    if (element) element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      element.focus();
+    };
   };
 
   closeDrawer(): void {
