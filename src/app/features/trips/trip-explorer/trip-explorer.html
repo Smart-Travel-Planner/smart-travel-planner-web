@@ -181,11 +181,6 @@
         </div>
       }
       @for (activity of activities(); track activity.id) {
-        <!-- (keydown.enter)="onActivityClicked(activity)"
-        (keydown.space)="$event.preventDefault(); onActivityClicked(activity)" -->
-        <!-- role="button"
-        type="button"
-        tabindex="0" -->
         <button
           [id]="'activity-' + activity.id"
           (click)="onActivityClicked(activity)"

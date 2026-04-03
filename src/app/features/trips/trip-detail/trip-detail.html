@@ -1,5 +1,5 @@
 
-<main class="min-h-screen w-full text-white flex flex-col items-center">
+<main aria-labelledby="trip-title" class="min-h-screen w-full text-white flex flex-col items-center">
   @if (trip()) {
     <app-back-button (backClick)="goBack()"></app-back-button>
 
@@ -12,18 +12,18 @@
     <div class="relative w-full flex flex-col items-end justify-start gap-4 px-6 pb-6 overflow-hidden">
       <div class="relative w-full max-w-4xl mx-auto flex justify-between items-start z-10 pt-4">
         <div class="bg-black/30 backdrop-blur-sm px-4 py-2 rounded-2xl">
-          <h1 class="text-xl md:text-3xl font-extrabold tracking-tight drop-shadow-md">
+          <h1 id="trip-title" class="text-xl md:text-3xl font-extrabold tracking-tight drop-shadow-md">
             {{ trip()!.title }}
           </h1>
           @if (trip()!.destination) {
             <p class="text-slate-200 mt-1 text-sm font-medium flex items-center gap-1">
-              <mat-icon class="text-sm">location_on</mat-icon>
+              <mat-icon aria-hidden="true" class="text-sm">location_on</mat-icon>
               {{ trip()!.destination }}
             </p>
           }
           @if (creatorName()) {
             <p class="text-slate-300 mt-1 text-xs flex items-center gap-1">
-              <mat-icon class="text-xs">person</mat-icon>
+              <mat-icon aria-hidden="true" class="text-xs">person</mat-icon>
               Creado por {{ creatorName() }}
             </p>
           }
@@ -36,7 +36,7 @@
 
       <div class="relative w-full max-w-4xl mx-auto flex flex-wrap gap-3 z-10 mt-2">
         <div class="bg-black/30 backdrop-blur-sm px-3 py-2 rounded-xl flex items-center gap-2">
-          <mat-icon class="text-slate-300 text-sm">calendar_today</mat-icon>
+          <mat-icon aria-hidden="true" class="text-slate-300 text-sm">calendar_today</mat-icon>
           <div>
             <p class="text-[10px] uppercase tracking-wider text-slate-200">Inicio</p>
             <p class="text-sm font-semibold text-white">{{ trip()!.start_date | formatDate }}</p>
@@ -44,7 +44,7 @@
         </div>
         @if (trip()!.end_date) {
           <div class="bg-black/30 backdrop-blur-sm px-3 py-2 rounded-xl flex items-center gap-2">
-            <mat-icon class="text-slate-300 text-sm">event</mat-icon>
+            <mat-icon aria-hidden="true" class="text-slate-300 text-sm">event</mat-icon>
             <div>
               <p class="text-[10px] uppercase tracking-wider text-slate-200">Fin</p>
               <p class="text-sm font-semibold text-white">{{ trip()!.end_date | formatDate }}</p>
@@ -52,7 +52,7 @@
           </div>
         }
         <div class="bg-black/30 backdrop-blur-sm px-3 py-2 rounded-xl flex items-center gap-2">
-          <mat-icon class="text-slate-300 text-sm">payments</mat-icon>
+          <mat-icon aria-hidden="true" class="text-slate-300 text-sm">payments</mat-icon>
           <div>
             <p class="text-[10px] uppercase tracking-wider text-slate-200">Presupuesto</p>
             <p class="text-sm font-semibold text-white">{{ trip()!.total_budget }} €</p>
@@ -62,21 +62,23 @@
           <button
             (click)="openAiInfo()"
             class="bg-indigo-600/40 hover:bg-indigo-600/60 backdrop-blur-sm px-3 py-2 rounded-xl flex items-center gap-2 border border-indigo-400/30 transition-all active:scale-95 group">
-            <mat-icon class="text-indigo-200 text-sm group-hover:rotate-12 transition-transform">auto_awesome</mat-icon>
+            <mat-icon aria-hidden="true" class="text-indigo-200 text-sm group-hover:rotate-12 transition-transform">auto_awesome</mat-icon>
             <div class="text-left">
               <p class="text-[10px] uppercase tracking-wider text-indigo-100 font-bold">Info Destino</p>
               <p class="text-[11px] font-medium text-white/90">Ver guía IA</p>
             </div>
           </button>
         } @else {
-            <div
+          <button
+            type="button"
             (click)="openAiInfo()"
+            aria-label="Cargar información IA del destino"
             class="bg-indigo-600/40 hover:bg-indigo-600/60 backdrop-blur-sm px-3 py-2 rounded-xl flex items-center gap-2 border border-indigo-400/30 transition-all active:scale-95 group">
-            <mat-icon class="text-indigo-200 text-sm group-hover:rotate-12 transition-transform">auto_awesome</mat-icon>
+            <mat-icon aria-hidden="true" class="text-indigo-200 text-sm group-hover:rotate-12 transition-transform">auto_awesome</mat-icon>
             <div class="text-left">
               <p class="text-[11px] font-medium text-white/90">Cargando respuesta de la IA</p>
             </div>
-          </div>
+          </button>
         }
       </div>
     </div>
@@ -99,15 +101,17 @@
       <section class="w-full max-w-7xl px-4 mt-8 mb-12 flex gap-2">
         <button
           (click)="goToEdit()"
+          [attr.aria-label]="'Editar viaje ' + trip()!.title"
           class="flex items-center gap-1 px-3 py-1.5 rounded-lg text-sm border border-slate-950 text-slate-950 bg-slate-100
                 hover:bg-slate-700 hover:text-slate-100 transition-colors" title="Editar viaje">
-          <mat-icon class="text-base">edit</mat-icon>
+          <mat-icon aria-hidden="true" class="text-base">edit</mat-icon>
         </button>
         <button
           (click)="deleteTrip()"
+          [attr.aria-label]="'Borrar viaje ' + trip()!.title"
           class="flex items-center gap-1 px-3 py-1.5 rounded-lg text-sm font-semibold border border-red-300 text-red-500 bg-slate-100
                 hover:bg-red-400 hover:text-white hover:border-red-400 transition-colors" title="Eliminar viaje">
-          <mat-icon class="text-base">delete</mat-icon>
+          <mat-icon aria-hidden="true" class="text-base">delete</mat-icon>
         </button>
       </section>
     }
