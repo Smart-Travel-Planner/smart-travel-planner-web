@@ -1,6 +1,6 @@
 
 <main class="relative z-10 flex-1 w-full flex flex-col items-center justify-end overflow-hidden">
-  <div class="absolute inset-0 z-0">
+  <div aria-hidden="true" class="absolute inset-0 z-0">
     @for (slide of slides(); track $index) {
       <div
         class="absolute inset-0 bg-cover bg-center transition-opacity duration-1000 ease-in-out"
