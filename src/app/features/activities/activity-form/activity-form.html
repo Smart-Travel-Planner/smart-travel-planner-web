@@ -1,6 +1,7 @@
 <main class="relative min-h-screen w-full text-white flex flex-col items-center overflow-x-hidden">
 
   <div
+    aria-hidden="true"
     class="absolute inset-0 z-0 w-full h-full bg-cover bg-center bg-no-repeat"
     style="background-image: url('https://res.cloudinary.com/dux4gqdow/image/upload/v1773662802/pietro-de-grandi-T7K4aEPoGGk-unsplash_nqzjxq.jpg')">
     <div class="absolute inset-0 bg-linear-to-b from-slate-950/80 via-slate-900/60 to-slate-950/90"></div>
@@ -28,10 +29,13 @@
 
       <section class="bg-sky-50 rounded-3xl border border-slate-100 p-8 flex flex-col gap-6 shadow-2xl">
         <div class="flex flex-col gap-1.5">
-          <label class="text-xs uppercase tracking-wider text-slate-600 font-bold ml-1">Título *</label>
+          <label for="title" class="text-xs uppercase tracking-wider text-slate-600 font-bold ml-1">Título *</label>
           <input
+            id="title"
             type="text"
             formControlName="title"
+            aria-required="true"
+            [attr.aria-describedby]="isInvalid('title') ? 'title-error' : null"
             placeholder="Ej: Visita al museo"
             class="w-full bg-slate-50 border rounded-xl px-4 py-3 text-sm text-slate-950 focus:outline-none transition-all shadow-inner"
             [class.border-red-500]="isInvalid('title')"
@@ -40,7 +44,7 @@
             [class.focus:border-blue-500]="!isInvalid('title')"
             [class.focus:border-red-600]="isInvalid('title')"/>
           @if (isInvalid('title')) {
-            <div class="flex flex-col mt-1 ml-1 gap-0.5">
+            <div id="title-error" role="alert" class="flex flex-col mt-1 ml-1 gap-0.5">
               @if (activityForm.get('title')?.hasError('required')) {
                 <span class="text-[11px] text-red-600 font-medium">El título es obligatorio.</span>
               }
@@ -54,9 +58,11 @@
         </div>
 
         <div class="flex flex-col gap-1.5">
-          <label class="text-xs uppercase tracking-wider text-slate-600 font-bold ml-1">Categoría *</label>
+          <label for="category" class="text-xs uppercase tracking-wider text-slate-600 font-bold ml-1">Categoría *</label>
           <select
+            id="category"
             formControlName="category"
+            aria-required="true"
             class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm text-slate-950 focus:outline-none focus:border-blue-500 transition-all shadow-inner">
             @for (category of categories; track category) {
               <option [value]="category">{{ category }}</option>
@@ -66,9 +72,11 @@
 
         <div class="flex flex-col sm:flex-row gap-6">
           <div class="flex flex-col gap-1.5 flex-1">
-            <label class="text-xs uppercase tracking-wider text-slate-600 font-bold ml-1">Inicio *</label>
+            <label for="start_time" class="text-xs uppercase tracking-wider text-slate-600 font-bold ml-1">Inicio *</label>
             <input
+              id="start_time"
               type="datetime-local"
+              [attr.aria-describedby]="activityForm.get('start_time')?.errors?.['beforeTripStart'] ? 'start-before-error' : activityForm.get('start_time')?.errors?.['afterTripEnd'] ? 'start-after-error' : null"
               formControlName="start_time"
               class="w-full bg-slate-50 border rounded-xl px-4 py-3 text-sm text-slate-950 focus:outline-none transition-all shadow-inner"
               [class.border-red-500]="activityForm.get('start_time')?.errors?.['beforeTripStart'] || activityForm.get('start_time')?.errors?.['afterTripEnd']"
@@ -76,35 +84,39 @@
               [class.border-slate-200]="!activityForm.get('start_time')?.errors?.['beforeTripStart'] && !activityForm.get('start_time')?.errors?.['afterTripEnd']"
               [class.focus:border-blue-500]="!activityForm.get('start_time')?.errors?.['beforeTripStart'] && !activityForm.get('start_time')?.errors?.['afterTripEnd']"/>
             @if (activityForm.get('start_time')?.errors?.['beforeTripStart']) {
-              <span class="text-[11px] text-red-600 font-medium ml-1 mt-1">La fecha de inicio no puede ser anterior al inicio del viaje.</span>
+              <span id="start-before-error" role="alert" class="text-[11px] text-red-600 font-medium ml-1 mt-1">La fecha de inicio no puede ser anterior al inicio del viaje.</span>
             }
             @if (activityForm.get('start_time')?.errors?.['afterTripEnd']) {
-              <span class="text-[11px] text-red-600 font-medium ml-1 mt-1">La fecha de inicio no puede ser posterior al final del viaje.</span>
+              <span id="start-after-error" role="alert" class="text-[11px] text-red-600 font-medium ml-1 mt-1">La fecha de inicio no puede ser posterior al final del viaje.</span>
             }
           </div>
           <div class="flex flex-col gap-1.5 flex-1">
-            <label class="text-xs uppercase tracking-wider text-slate-600 font-bold ml-1">Fin</label>
+            <label for="end_time" class="text-xs uppercase tracking-wider text-slate-600 font-bold ml-1">Fin</label>
             <input
+              id="end_time"
               type="datetime-local"
               formControlName="end_time"
+              [attr.aria-describedby]="activityForm.get('end_time')?.errors?.['beforeStartTime'] ? 'end-before-error' : activityForm.get('end_time')?.errors?.['endAfterTripEnd'] ? 'end-after-error' : null"
               class="w-full bg-slate-50 border rounded-xl px-4 py-3 text-sm text-slate-950 focus:outline-none transition-all shadow-inner"
               [class.border-red-500]="activityForm.get('end_time')?.errors?.['beforeStartTime'] || activityForm.get('end_time')?.errors?.['endAfterTripEnd']"
               [class.bg-red-50]="activityForm.get('end_time')?.errors?.['beforeStartTime'] || activityForm.get('end_time')?.errors?.['endAfterTripEnd']"
               [class.border-slate-200]="!activityForm.get('end_time')?.errors?.['beforeStartTime'] && !activityForm.get('end_time')?.errors?.['endAfterTripEnd']"
               [class.focus:border-blue-500]="!activityForm.get('end_time')?.errors?.['beforeStartTime'] && !activityForm.get('end_time')?.errors?.['endAfterTripEnd']"/>
             @if (activityForm.get('end_time')?.errors?.['beforeStartTime']) {
-              <span class="text-[11px] text-red-600 font-medium ml-1 mt-1">La fecha de fin no puede ser anterior al inicio de la actividad.</span>
+              <span id="end-before-error" role="alert" class="text-[11px] text-red-600 font-medium ml-1 mt-1">La fecha de fin no puede ser anterior al inicio de la actividad.</span>
             }
             @if (activityForm.get('end_time')?.errors?.['endAfterTripEnd']) {
-              <span class="text-[11px] text-red-600 font-medium ml-1 mt-1">La fecha de fin no puede ser posterior al final del viaje.</span>
+              <span id="end-after-error" role="alert" class="text-[11px] text-red-600 font-medium ml-1 mt-1">La fecha de fin no puede ser posterior al final del viaje.</span>
             }
           </div>
         </div>
 
         <div class="flex flex-col gap-1.5">
-          <label class="text-xs uppercase tracking-wider text-slate-600 font-bold ml-1">Coste (€) *</label>
+          <label for="cost" class="text-xs uppercase tracking-wider text-slate-600 font-bold ml-1">Coste (€) *</label>
           <input
+            id="cost"
             type="number"
+            [attr.aria-describedby]="isInvalid('cost') ? 'cost-error' : null"
             formControlName="cost"
             placeholder="0"
             class="w-full bg-slate-50 border rounded-xl px-4 py-3 text-sm text-slate-950 focus:outline-none transition-all shadow-inner"
@@ -114,13 +126,14 @@
             [class.focus:border-blue-500]="!isInvalid('cost')"
             [class.focus:border-red-600]="isInvalid('cost')"/>
           @if (isInvalid('cost')) {
-            <span class="text-[11px] text-red-600 font-medium ml-1 mt-1">El coste debe ser un valor igual o mayor a 0.</span>
+            <span id="cost-error" role="alert" class="text-[11px] text-red-600 font-medium ml-1 mt-1">El coste debe ser un valor igual o mayor a 0.</span>
           }
         </div>
 
         <div class="flex flex-col gap-1.5">
-          <label class="text-xs uppercase tracking-wider text-slate-600 font-bold ml-1">Notas</label>
+          <label for="user_notes" class="text-xs uppercase tracking-wider text-slate-600 font-bold ml-1">Notas</label>
           <textarea
+            id="user_notes"
             formControlName="user_notes"
             placeholder="Añade notas o detalles sobre la actividad..."
             rows="3"
@@ -148,7 +161,11 @@
           </div>
         } @else {
           <div class="flex flex-col gap-1.5">
+            <label for="location" class="text-xs uppercase tracking-wider text-slate-600 font-bold ml-1">
+              Buscar ubicación
+            </label>
             <input
+              id="location"
               type="text"
               [value]="locationSearch()"
               (input)="locationSearch.set($any($event.target).value)"
@@ -157,10 +174,13 @@
             @if (locationSearch()) {
               <ul class="mt-1 border border-slate-200 rounded-xl overflow-hidden shadow-sm">
                 @for (location of filteredLocations(); track location.id) {
-                  <li
-                    (click)="setLocation(location)"
-                    class="px-4 py-2.5 text-sm bg-white text-slate-800 hover:bg-slate-200 cursor-pointer transition-colors">
-                    {{ location.name }}
+                  <li>
+                    <button
+                      type="button"
+                      (click)="setLocation(location)"
+                      class="px-4 py-2.5 text-sm bg-white text-slate-800 hover:bg-slate-200 cursor-pointer transition-colors">
+                      {{ location.name }}
+                    </button>
                   </li>
                 }
                 @if (filteredLocations().length === 0) {
@@ -175,7 +195,7 @@
           type="button"
           (click)="openLocationDialog()"
           class="self-start flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-semibold border border-slate-300 text-slate-600 hover:bg-slate-100 transition-colors">
-          <mat-icon class="text-base">add</mat-icon>
+          <mat-icon aria-hidden="true" class="text-base">add</mat-icon>
           Crear nueva ubicación
         </button>
 
@@ -195,7 +215,7 @@
       </section>
 
       @if (errorMessage()) {
-        <div class="p-5 bg-red-600/15 border border-red-600/30 rounded-2xl text-red-200 text-center text-sm font-medium shadow-lg animate-pulse">
+        <div role="alert" class="p-5 bg-red-600/15 border border-red-600/30 rounded-2xl text-red-200 text-center text-sm font-medium shadow-lg animate-pulse">
           ⚠️ {{ errorMessage() }}
         </div>
       }
@@ -205,11 +225,12 @@
           type="submit"
           (click)="onSubmit()"
           [disabled]="activityForm.invalid"
+          [attr.aria-disabled]="activityForm.invalid"
           [title]="activityForm.invalid ? 'Por favor, rellena todos los campos obligatorios (*)' : (isEditMode() ? 'Guardar cambios' : 'Crear actividad')"
           class="flex items-center gap-2.5 px-8 py-3 rounded-xl text-base font-bold transition-all shadow-lg
                  bg-blue-600 text-white hover:bg-blue-700 hover:scale-105
                  disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 disabled:bg-slate-500">
-          <mat-icon class="text-lg">save</mat-icon>
+          <mat-icon aria-hidden="true" class="text-lg">save</mat-icon>
           {{ isEditMode() ? 'Guardar cambios' : 'Crear actividad' }}
         </button>
       </section>
