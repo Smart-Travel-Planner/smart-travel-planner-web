@@ -19,6 +19,7 @@ import { TripPlannerComponent } from '../trip-planner/trip-planner';
 import { TripExplorerComponent } from '../trip-explorer/trip-explorer';
 import { TravelRequirement } from '../../../core/models/travel-requirement.model';
 import { TravelRequirementsDialogComponent } from '../trip-requirements-dialog/trip-requirements-dialog';
+import { AiService } from '../../../core/services/ai.service';
 
 @Component({
   selector: 'app-trip-detail',
@@ -36,6 +37,7 @@ export class TripDetailComponent implements OnInit {
   private authService = inject(AuthService);
   private navigationService = inject(NavigationService);
   private dialog = inject(MatDialog);
+  private aiService = inject(AiService);
 
   trip = signal<Trip | null>(null);
   activities = signal<Activity[]>([]);
@@ -67,7 +69,6 @@ export class TripDetailComponent implements OnInit {
     this.loadTrip(id);
     this.loadActivities(id);
     this.loadLocations();
-    this.loadRequirements(id);
   };
 
   private loadTrip(id: string): void {
@@ -76,7 +77,8 @@ export class TripDetailComponent implements OnInit {
         this.trip.set(trip);
         if (trip.is_public && trip.user_id !== this.authService.getCurrentUserId()) {
           this.loadCreatorName(trip.user_id);
-        }
+        };
+        this.loadRequirements(id);
       },
       error: () => this.errorMessage.set('Error cargando el viaje'),
     });
@@ -106,7 +108,25 @@ export class TripDetailComponent implements OnInit {
   private loadRequirements(tripId: string): void {
     this.tripsService.getTravelRequirements(tripId).subscribe({
       next: reqs => this.requirements.set(reqs),
-      error: () => console.warn('No se encontraron requisitos de IA para este viaje')
+      error: () => {
+        if (!this.isOwner()) return;
+
+        const destination = this.trip()?.destination;
+        if (!destination) return;
+
+        this.aiService.generateRequirements(destination).subscribe({
+          next: generated => {
+            this.tripsService.createTravelRequirements({
+              trip_id: tripId,
+              ...generated,
+            }).subscribe({
+              next: saved => this.requirements.set(saved),
+              error: () => console.warn('Error guardando los requisitos generados por la IA'),
+            });
+          },
+          error: () => console.warn('Error generando requisitos con la IA'),
+        });
+      },
     });
   };
 

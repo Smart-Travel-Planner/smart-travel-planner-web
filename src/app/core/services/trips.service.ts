@@ -26,8 +26,9 @@ export class TripsService {
   };
 
   getTravelRequirements(tripId: string): Observable<TravelRequirement> {
-    return this.http.get<TravelRequirement>(`${this.apiUrl}/${tripId}/requirements`);
+    return this.http.get<TravelRequirement>(`${environment.apiUrl}/travel-requirements/trip/${tripId}`);
   };
+
 
   createTrip(data: CreateTripRequest): Observable<Trip> {
     return this.http.post<Trip>(this.apiUrl, data);
@@ -39,5 +40,17 @@ export class TripsService {
 
   deleteTrip(id: string): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${id}`);
+  };
+
+  createTravelRequirements(data: {
+    trip_id: string;
+    documentation?: Record<string, unknown>;
+    health_info?: Record<string, unknown>;
+    currency_info?: Record<string, unknown>;
+  }): Observable<TravelRequirement> {
+    return this.http.post<TravelRequirement>(
+      `${environment.apiUrl}/travel-requirements`,
+      data
+    );
   };
 };
