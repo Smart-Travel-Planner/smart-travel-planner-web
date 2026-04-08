@@ -17,10 +17,11 @@ import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialogComponent } from '../../../shared/components/confirm-dialog/confirm-dialog';
 import { NavigationService } from '../../../core/services/navigation.service';
 import { FormsModule } from '@angular/forms';
+import { ActivityDrawerComponent } from '../../../shared/components/activity-drawer/activity-drawer';
 
 @Component({
   selector: 'app-activity-list',
-  imports: [MapComponent, MatIconModule, BackButtonComponent, FormatDatePipe, FormsModule],
+  imports: [MapComponent, MatIconModule, BackButtonComponent, FormatDatePipe, FormsModule, ActivityDrawerComponent],
   templateUrl: './activity-list.html',
   styleUrl: './activity-list.css',
 })
@@ -137,9 +138,9 @@ export class ActivityListComponent implements OnInit {
     this.highlightedActivityId.set(null);
   };
 
-  getActivityLocation(locationId: string): TripLocation | undefined {
-    return this.locations().find(l => l.id === locationId);
-  };
+  // getActivityLocation(locationId: string): TripLocation | undefined {
+  //   return this.locations().find(l => l.id === locationId);
+  // };
 
   goToEditActivity(id: string): void {
     this.navigationService.setPreviousUrl(`/trips/${this.tripId()}/activities`);

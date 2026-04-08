@@ -8,10 +8,11 @@ import { ACTIVITY_CATEGORY_COLORS } from '../../../core/enums/activity-category-
 import { GeocodingService } from '../../../core/services/geocoding.service';
 import { inject, OnInit } from '@angular/core';
 import { FormatDatePipe } from '../../../shared/pipes/format-date-pipe';
+import { ActivityDrawerComponent } from '../../../shared/components/activity-drawer/activity-drawer';
 
 @Component({
   selector: 'app-trip-explorer',
-  imports: [MapComponent, MatIconModule, FormatDatePipe],
+  imports: [MapComponent, MatIconModule, FormatDatePipe, ActivityDrawerComponent],
   templateUrl: './trip-explorer.html',
   styleUrl: './trip-explorer.css',
 })
@@ -62,9 +63,9 @@ export class TripExplorerComponent {
     });
   };
 
-  getActivityLocation(locationId: string): TripLocation | undefined {
-    return this.locations().find(l => l.id === locationId);
-  };
+  // getActivityLocation(locationId: string): TripLocation | undefined {
+  //   return this.locations().find(l => l.id === locationId);
+  // };
 
   onActivityClicked(activity: Activity): void {
     this.selectedActivity.set(activity);
