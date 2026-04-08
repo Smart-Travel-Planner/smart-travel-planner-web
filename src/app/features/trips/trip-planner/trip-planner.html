@@ -33,7 +33,7 @@
       <button
         (click)="goToActivities()"
         class="lg:hidden w-full mt-2 mb-1 flex items-center justify-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold border border-blue-400 text-blue-300 hover:bg-blue-500 hover:text-white transition-colors">
-        <mat-icon class="text-base">map</mat-icon>
+        <mat-icon aria-hidden="true" class="text-base">map</mat-icon>
         Ver mapa y actividades
       </button>
     </div>
@@ -47,10 +47,10 @@
               <p class="text-sm font-semibold text-slate-900">{{ activity.title }}</p>
               <div class="flex flex-wrap items-center gap-2">
                 @if (activity.location_id) {
-                  <span class="flex items-center gap-1 text-xs text-slate-600">
-                    <mat-icon class="text-xs">location_on</mat-icon>
+                  <address class="flex items-center gap-1 text-xs text-slate-600">
+                    <mat-icon aria-hidden="true" class="text-xs">location_on</mat-icon>
                     {{ getLocationName(activity.location_id) }}
-                  </span>
+                  </address>
                 }
                 <span
                   class="px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider text-black"

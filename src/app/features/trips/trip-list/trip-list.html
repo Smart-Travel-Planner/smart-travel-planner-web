@@ -81,7 +81,7 @@
   </div>
 
   @if (errorMessage()) {
-    <div role="alert" class="w-full max-w-4xl p-4 mb-6 bg-red-500/10 border border-red-500/20 rounded-2xl text-red-400 text-center">
+    <div role="alert" aria-live="polite" class="w-full max-w-4xl p-4 mb-6 bg-red-500/10 border border-red-500/20 rounded-2xl text-red-400 text-center">
       {{ errorMessage() }}
     </div>
   }
@@ -122,26 +122,26 @@
                 @if (trip.destination) {
                   <div class="flex items-center gap-1 text-slate-500 dark:text-slate-400 mt-1">
                     <mat-icon class="text-sm" aria-hidden="true">location_on</mat-icon>
-                    <span class="text-sm">{{ trip.destination }}</span>
+                    <address class="text-sm">{{ trip.destination }}</address>
                   </div>
                 }
               </div>
               <div class="flex flex-col items-end gap-1 text-slate-500 dark:text-slate-400">
                 <div class="flex items-center gap-1">
                   <mat-icon class="text-sm" aria-hidden="true">calendar_today</mat-icon>
-                  <span class="text-xs font-medium">{{ trip.start_date | formatDate }}</span>
+                  <time [attr.datetime]="trip.start_date" class="text-xs font-medium">{{ trip.start_date | formatDate }}</time>
                 </div>
                 @if (trip.end_date) {
                   <div class="flex items-center gap-1">
                     <mat-icon class="text-sm" aria-hidden="true">event</mat-icon>
-                    <span class="text-xs font-medium">{{ trip.end_date | formatDate }}</span>
+                    <time [attr.datetime]="trip.end_date" class="text-xs font-medium">{{ trip.end_date | formatDate }}</time>
                   </div>
                 }
               </div>
             </div>
             <div class="flex items-center gap-1 text-slate-500 dark:text-slate-400 mt-1">
               <mat-icon class="text-sm" aria-hidden="true">payments</mat-icon>
-              <span class="text-sm font-medium">{{ trip.total_budget }} €</span>
+              <data [value]="trip.total_budget" class="text-sm font-medium">{{ trip.total_budget }} €</data>
             </div>
             <div class="flex items-cen  ter justify-between mt-4 pt-3 border-t border-slate-100 dark:border-slate-800">
               @if (isOwner(trip)) {
