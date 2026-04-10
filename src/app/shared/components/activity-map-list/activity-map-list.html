@@ -1,0 +1,113 @@
+
+  <section aria-label="Filtrar actividades" class="w-full max-w-7xl px-4 mb-6 mx-auto">
+    <div class="inline-block backdrop-blur-xl border border-slate-200 rounded-2xl px-3 py-2"
+      [class.bg-white]="!darkMode()"
+      [class.bg-slate-900]="darkMode()">
+      <select
+        [ngModel]="activeCategory()"
+        (ngModelChange)="setCategory($event)"
+        aria-label="Filtrar por categoría"
+        class="w-full text-sm bg-transparent focus:outline-none cursor-pointer py-1"
+        [class.text-slate-700]="!darkMode()"
+        [class.text-slate-300]="darkMode()">
+        <option value="all" class="text-slate-800">Todas las categorías</option>
+        @for (category of categories; track category) {
+          <option [value]="category" class="text-slate-900">{{ category }}</option>
+        }
+      </select>
+    </div>
+  </section>
+
+  @if (errorMessage()) {
+    <div role="alert" aria-live="polite" class="w-full max-w-4xl px-4 mb-6 p-4 bg-red-500/10 border border-red-500/20 rounded-2xl text-red-400 text-center">
+      {{ errorMessage() }}
+    </div>
+  }
+
+  <div class="w-full max-w-7xl px-4 mx-auto flex flex-col lg:flex-row gap-6 items-start">
+    <section aria-label="Mapa del viaje" tabindex="-1" class="w-full lg:flex-1 rounded-2xl overflow-hidden border border-white/10 shadow-xl lg:sticky lg:top-6 shrink-0" style="height: 480px;">
+      @if (tripDestinationCoords()) {
+        <app-map #mapRef
+          mode="view"
+          [containerId]="containerId()"
+          [activities]="filteredActivities()"
+          [locations]="locations()"
+          [centerCoords]="[tripDestinationCoords()!.lat, tripDestinationCoords()!.lng]"
+          (markerClicked)="onMarkerClicked($event)">
+        </app-map>
+      } @else {
+        <div class="w-full h-full bg-black/30 backdrop-blur-sm flex items-center justify-center" aria-busy="true" aria-label="Cargando mapa">
+          <p class="text-slate-400 text-sm flex items-center gap-2">
+            <mat-icon aria-hidden="true" class="animate-spin text-base">autorenew</mat-icon>
+            Cargando mapa...
+          </p>
+        </div>
+      }
+    </section>
+
+    <section aria-label="Lista de actividades" class="w-full lg:w-96 flex flex-col gap-3 pb-4 shrink-0">
+      @if (filteredActivities().length === 0) {
+        <div class="w-full flex flex-col items-center justify-center py-16 text-center bg-black/30 backdrop-blur-sm rounded-2xl border border-white/10">
+          <mat-icon aria-hidden="true" class="text-slate-400 text-5xl mb-4">event_busy</mat-icon>
+          <p class="text-slate-300 text-lg font-semibold">No hay actividades en esta categoría</p>
+          <p class="text-slate-400 text-sm mt-2">Prueba con otro filtro o crea una nueva actividad.</p>
+        </div>
+      }
+      @for (activity of filteredActivities(); track activity.id) {
+        <button
+          type="button"
+          [id]="'activity-' + activity.id"
+          (click)="onActivityClicked(activity)"
+          [attr.aria-label]="'Ver actividad: ' + activity.title"
+          [attr.aria-pressed]="highlightedActivityId() === activity.id"
+          class="w-full text-left rounded-xl border shadow-sm hover:shadow-md transition-all cursor-pointer overflow-hidden"
+          [class.bg-white]="!darkMode()"
+          [class.border-slate-100]="!darkMode()"
+          [class.bg-slate-900]="darkMode()"
+          [class.border-slate-800]="darkMode()"
+          [class.ring-2]="highlightedActivityId() === activity.id"
+          [class.ring-blue-400]="highlightedActivityId() === activity.id">
+          <div class="h-1 w-full" aria-hidden="true" [style.background-color]="categoryColors[activity.category]"></div>
+          <div class="px-4 py-3 flex items-center justify-between gap-3">
+            <div class="flex flex-col min-w-0">
+              <h3 class="text-sm font-bold truncate"
+                [class.text-slate-900]="!darkMode()"
+                [class.text-slate-100]="darkMode()">
+                {{ activity.title }}
+              </h3>
+              <div class="flex items-center gap-1 text-xs mt-0.5"
+                [class.text-slate-500]="!darkMode()"
+                [class.text-slate-400]="darkMode()">
+                <mat-icon aria-hidden="true" class="text-xs">schedule</mat-icon>
+                <time [attr.datetime]="activity.start_time">{{ activity.start_time | formatDate }}</time>
+              </div>
+            </div>
+            <div class="flex items-center gap-2 shrink-0">
+              <data [value]="activity.cost" class="text-sm font-semibold"
+                [class.text-slate-700]="!darkMode()"
+                [class.text-slate-300]="darkMode()">
+                {{ activity.cost }} €
+              </data>
+              <span
+                class="px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider text-black"
+                [style.background-color]="categoryColors[activity.category]">
+                {{ activity.category }}
+              </span>
+            </div>
+          </div>
+        </button>
+      }
+    </section>
+  </div>
+
+  <app-activity-drawer
+    [activity]="selectedActivity()"
+    [locations]="locations()"
+    [isOpen]="isDrawerOpen()"
+    [readonly]="readonly()"
+    [darkMode]="darkMode()"
+    (close)="closeDrawer()"
+    (edit)="onEditActivity($event)"
+    (delete)="onDeleteActivity($event)">
+  </app-activity-drawer>
+

@@ -1,4 +1,4 @@
-<main class="min-h-screen w-full text-white flex flex-col items-center pb-16">
+<!-- <main class="min-h-screen w-full text-white flex flex-col items-center pb-16">
   <app-back-button (backClick)="goBack()"></app-back-button>
 
   <div
@@ -126,5 +126,54 @@
     (edit)="goToEditActivity($event)"
     (delete)="deleteActivity($event)">
   </app-activity-drawer>
+
+</main> -->
+
+<main class="min-h-screen w-full text-white flex flex-col items-center pb-16">
+  <app-back-button (backClick)="goBack()"></app-back-button>
+
+  <div
+    aria-hidden="true"
+    class="fixed inset-0 bg-cover bg-center -z-10"
+    [style.background-image]="'url(' + (trip()?.image_url || defaultImage) + ')'">
+    <div class="absolute inset-0 bg-linear-to-t from-slate-950 via-slate-900/40 to-transparent"></div>
+  </div>
+
+  <div class="relative w-full flex flex-col justify-start px-6 pb-6 overflow-hidden">
+    <div class="relative w-full max-w-4xl px-4 mx-auto flex justify-between items-end z-10 pt-4">
+      <div class="bg-black/30 backdrop-blur-sm px-4 py-2 rounded-2xl">
+        <h1 class="text-xl md:text-3xl font-extrabold tracking-tight drop-shadow-md">
+          Actividades
+          @if (trip()) {
+            <span class="text-blue-400"> · {{ trip()!.title }}</span>
+          }
+        </h1>
+        <p class="text-slate-200 mt-1 text-sm font-medium">Gestiona los eventos de tu viaje</p>
+      </div>
+      <button
+        (click)="goToCreate()"
+        aria-label="Nueva actividad"
+        class="flex items-center gap-2 bg-blue-500 hover:bg-blue-600 transition-all px-4 py-2 rounded-xl shadow-2xl shadow-blue-900/40 text-sm font-medium"
+        title="Nueva actividad">
+        <mat-icon aria-hidden="true">add</mat-icon>
+      </button>
+    </div>
+  </div>
+
+  @if (errorMessage()) {
+    <div role="alert" aria-live="polite" class="w-full max-w-4xl px-4 mb-6 p-4 bg-red-500/10 border border-red-500/20 rounded-2xl text-red-400 text-center">
+      {{ errorMessage() }}
+    </div>
+  }
+
+  <app-activity-map-list
+    [tripId]="tripId()"
+    [locations]="locations()"
+    [tripDestinationCoords]="tripDestinationCoords()"
+    containerId="activity-map"
+    [darkMode]="true"
+    [readonly]="false"
+    (editActivity)="goToEditActivity($event)">
+  </app-activity-map-list>
 
 </main>

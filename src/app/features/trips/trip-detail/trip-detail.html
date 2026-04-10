@@ -92,12 +92,15 @@
         [locationMap]="locationMap()">
       </app-trip-planner>
     } @else {
-      <app-trip-explorer
-      class="mb-8"
-        [trip]="trip()!"
-        [activities]="activities()"
-        [locations]="locations()">
-      </app-trip-explorer>
+      <app-activity-map-list
+        class="mb-8"
+        [tripId]="trip()!.id"
+        [locations]="locations()"
+        [tripDestinationCoords]="tripDestinationCoords()"
+        containerId="explorer-map"
+        [darkMode]="false"
+        [readonly]="true">
+      </app-activity-map-list>
     }
 
     @if (isOwner()) {
