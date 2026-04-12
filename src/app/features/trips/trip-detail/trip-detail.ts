@@ -240,29 +240,16 @@ export class TripDetailComponent implements OnInit {
 
   constructor() {
     effect(() => {
+      if (!this.trip()) return;
       const destination = this.trip()?.destination;
-    if (!this.trip()) return;      if (!destination) {
-        this.geocodingService.getUserLocationOrDefault().then(coords => {
-          this.tripDestinationCoords.set(coords);
-console.log('No hay destino cargado, usa el getUserLocationDefault')
-          this.cdr.detectChanges();
-        });
-        return;
-      }
-      this.geocodingService.getCoordsByDestination(destination).subscribe({
+      this.geocodingService.getDestinationOrUserCoords(destination).subscribe({
         next: coords => {
-          this.tripDestinationCoords.set(coords);
-console.log('Hay destino cargado, usa el getCoordsByDestination')
-          this.cdr.detectChanges();
-        },
-        error: async () => {
-          const coords = await this.geocodingService.getUserLocationOrDefault();
           this.tripDestinationCoords.set(coords);
           this.cdr.detectChanges();
         },
       });
     });
-  }
+  };
 
   ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get('id');

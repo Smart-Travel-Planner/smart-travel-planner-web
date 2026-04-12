@@ -87,25 +87,34 @@ export class ActivityFormComponent implements OnInit {
 
   private loadTripDestination(tripId: string): void {
     this.tripsService.getTripById(tripId).subscribe({
-      next: trip => {
-        this.tripDateRange.set({
-          start: trip.start_date,
-          end: trip.end_date ?? undefined,
-        });
-        if (trip.destination) {
-          this.geocodingService.getCoordsByDestination(trip.destination).subscribe({
-            next: coords => this.tripDestinationCoords.set(coords),
-            error: async () => {
-              const coords = await this.geocodingService.getUserLocationOrDefault();
-              this.tripDestinationCoords.set(coords);
-            },
-          });
-        } else {
-          this.geocodingService.getUserLocationOrDefault().then(coords => {
-            this.tripDestinationCoords.set(coords);
-          });
-        };
-      },
+      // next: trip => {
+      //   this.tripDateRange.set({
+      //     start: trip.start_date,
+      //     end: trip.end_date ?? undefined,
+      //   });
+      //   if (trip.destination) {
+      //     this.geocodingService.getCoordsByDestination(trip.destination).subscribe({
+      //       next: coords => this.tripDestinationCoords.set(coords),
+      //       error: async () => {
+      //         const coords = await this.geocodingService.getUserLocationOrDefault();
+      //         this.tripDestinationCoords.set(coords);
+      //       },
+      //     });
+      //   } else {
+      //     this.geocodingService.getUserLocationOrDefault().then(coords => {
+      //       this.tripDestinationCoords.set(coords);
+      //     });
+      //   };
+      // },
+next: trip => {
+  this.tripDateRange.set({
+    start: trip.start_date,
+    end: trip.end_date ?? undefined,
+  });
+  this.geocodingService.getDestinationOrUserCoords(trip.destination).subscribe({
+    next: coords => this.tripDestinationCoords.set(coords),
+  });
+},
     });
   };
 
