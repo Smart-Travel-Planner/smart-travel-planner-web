@@ -31,7 +31,7 @@ export class HomeComponent implements OnInit {
     this.startAutoPlay();
   };
 
-  ngDestroy(): void {
+  ngOnDestroy(): void {
     this.stopAutoPlay();
   };
 
