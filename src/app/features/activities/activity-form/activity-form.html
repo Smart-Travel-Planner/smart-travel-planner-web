@@ -221,9 +221,9 @@
       }
 
       <section class="flex items-center justify-center sm:justify-end gap-4 mb-6">
+        <!-- (click)="onSubmit()" -->
         <button
           type="submit"
-          (click)="onSubmit()"
           [disabled]="activityForm.invalid"
           [attr.aria-disabled]="activityForm.invalid"
           [title]="activityForm.invalid ? 'Por favor, rellena todos los campos obligatorios (*)' : (isEditMode() ? 'Guardar cambios' : 'Crear actividad')"

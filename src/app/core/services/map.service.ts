@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
-import { MapConfig, MarkerConfig } from '../models/map-apis.model';
+import { ActivityMarker, MapConfig, MarkerConfig } from '../models/map-apis.model';
 import * as L from 'leaflet';
+import { Activity } from '../models/activity.model';
+import { TripLocation } from '../models/location.model';
 
 @Injectable({
   providedIn: 'root',
@@ -138,5 +140,102 @@ export class MapService {
   invalidateSize(containerId: string): void {
     const map = this.maps.get(containerId);
     if (map) map.invalidateSize();
+  };
+
+  paintActivityMarkers(
+    map: L.Map,
+    activities: Activity[],
+    locations: TripLocation[],
+    onMarkerClick: (activityId: string) => void
+  ): ActivityMarker[] {
+    const locationMap = new Map(locations.map(l => [l.id, l]));
+    const activityMarkers: ActivityMarker[] = [];
+
+    activities.forEach(activity => {
+      if (!activity.location_id) return;
+      const location = locationMap.get(activity.location_id);
+      if (!location) return;
+
+      const marker = this.createMarker(map, {
+        lat: location.lat,
+        lng: location.lng,
+        icon: this.createDefaultIcon(),
+        popup: activity.title,
+      });
+
+      marker.on('click', () => onMarkerClick(activity.id));
+
+      setTimeout(() => {
+        const el = marker.getElement();
+        if (el) {
+          el.setAttribute('tabindex', '0');
+          el.setAttribute('aria-label', activity.title);
+          el.addEventListener('keydown', (e: KeyboardEvent) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              onMarkerClick(activity.id);
+            }
+          });
+        }
+      }, 100);
+
+      activityMarkers.push({ activityId: activity.id, marker });
+    });
+
+    return activityMarkers;
+  };
+
+  paintLocationMarkers(
+    map: L.Map,
+    locations: TripLocation[],
+    onMarkerClick: (locationId: string) => void
+  ): Map<string, L.Marker> {
+    const locationMarkers = new Map<string, L.Marker>();
+
+    locations.forEach(location => {
+      const marker = this.createMarker(map, {
+        lat: location.lat,
+        lng: location.lng,
+        icon: this.createDefaultIcon(),
+        popup: location.name,
+      });
+
+      marker.on('click', () => onMarkerClick(location.id));
+      locationMarkers.set(location.id, marker);
+    });
+
+    return locationMarkers;
+  };
+
+  highlightActivityMarker(
+    activityMarkers: ActivityMarker[],
+    activityId: string,
+    map: L.Map,
+    zoom: number
+  ): void {
+    activityMarkers.forEach(({ activityId: id, marker }) => {
+      marker.setIcon(id === activityId ? this.createActiveIcon() : this.createDefaultIcon());
+      if (id === activityId) {
+        marker.openPopup();
+        const latLng = marker.getLatLng();
+        this.setView(map, [latLng.lat, latLng.lng], zoom);
+      };
+    });
+  };
+
+  highlightLocationMarker(
+    locationMarkers: Map<string, L.Marker>,
+    locationId: string,
+    map: L.Map,
+    zoom: number
+  ): void {
+    locationMarkers.forEach((marker, id) => {
+      marker.setIcon(id === locationId ? this.createActiveIcon() : this.createDefaultIcon());
+      if (id === locationId) {
+        marker.openPopup();
+        const latLng = marker.getLatLng();
+        this.setView(map, [latLng.lat, latLng.lng], zoom);
+      };
+    });
   };
 };
