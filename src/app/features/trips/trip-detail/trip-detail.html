@@ -93,6 +93,7 @@
       </app-trip-planner>
     } @else {
       <app-activity-map-list
+        [activities]="activities()"
         class="mb-8"
         [tripId]="trip()!.id"
         [locations]="locations()"

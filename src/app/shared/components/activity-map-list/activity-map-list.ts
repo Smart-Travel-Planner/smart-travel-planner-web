@@ -1,4 +1,4 @@
-import { Component, computed, inject, input, OnInit, output, signal, viewChild } from '@angular/core';
+import { Component, computed, effect, inject, input, OnInit, output, signal, viewChild } from '@angular/core';
 import { Activity } from '../../../core/models/activity.model';
 import { TripLocation } from '../../../core/models/location.model';
 import { ActivityCategory } from '../../../core/enums/activity-category.enum';
@@ -18,7 +18,7 @@ import { ActivitiesService } from '../../../core/services/activities.service';
   templateUrl: './activity-map-list.html',
   styleUrl: './activity-map-list.css',
 })
-export class ActivityMapListComponent implements OnInit {
+export class ActivityMapListComponent {
   private dialog = inject(MatDialog);
   private activitiesService = inject(ActivitiesService);
 
@@ -28,6 +28,8 @@ export class ActivityMapListComponent implements OnInit {
   containerId = input.required<string>();
   darkMode = input<boolean>(false);
   readonly = input<boolean>(false);
+  activitiesInput = input<Activity[] | undefined>(undefined, { alias: 'activities' });
+
 
   editActivity = output<string>();
 
@@ -36,7 +38,7 @@ export class ActivityMapListComponent implements OnInit {
   readonly categoryColors = ACTIVITY_CATEGORY_COLORS;
   readonly categories = Object.values(ActivityCategory);
 
-  activities = signal<Activity[]>([]);
+  private _activities = signal<Activity[]>([]);
   errorMessage = signal<string>('');
   activeCategory = signal<ActivityCategory | 'all'>('all');
   selectedActivity = signal<Activity | null>(null);
@@ -45,20 +47,34 @@ export class ActivityMapListComponent implements OnInit {
 
   filteredActivities = computed(() => {
     const category = this.activeCategory();
-    let activities = this.activities();
+    let activities = this._activities();
     if (category !== 'all') {
       activities = activities.filter(a => a.category === category);
     }
     return activities.sort((a, b) => a.start_time.localeCompare(b.start_time));
   });
-
-  ngOnInit(): void {
-    this.loadActivities();
-  }
+constructor() {
+  effect(() => {
+    const passed = this.activitiesInput();
+    if (passed !== undefined) {
+      this._activities.set(passed);
+    } else if (this.tripId()) {
+      this.loadActivities();
+    }
+  });
+}
+  // ngOnInit(): void {
+  //   const passed = this.activitiesInput();
+  //   if (passed !== undefined) {
+  //     this._activities.set(passed);
+  //   } else {
+  //     this.loadActivities();
+  //   }
+  // }
 
   private loadActivities(): void {
     this.activitiesService.getActivitiesByTrip(this.tripId()).subscribe({
-      next: activities => this.activities.set(activities),
+      next: activities => this._activities.set(activities),
       error: () => this.errorMessage.set('Error cargando las actividades'),
     });
   }

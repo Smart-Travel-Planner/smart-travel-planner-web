@@ -241,9 +241,10 @@ export class TripDetailComponent implements OnInit {
   constructor() {
     effect(() => {
       const destination = this.trip()?.destination;
-      if (!destination) {
+    if (!this.trip()) return;      if (!destination) {
         this.geocodingService.getUserLocationOrDefault().then(coords => {
           this.tripDestinationCoords.set(coords);
+console.log('No hay destino cargado, usa el getUserLocationDefault')
           this.cdr.detectChanges();
         });
         return;
@@ -251,6 +252,7 @@ export class TripDetailComponent implements OnInit {
       this.geocodingService.getCoordsByDestination(destination).subscribe({
         next: coords => {
           this.tripDestinationCoords.set(coords);
+console.log('Hay destino cargado, usa el getCoordsByDestination')
           this.cdr.detectChanges();
         },
         error: async () => {
