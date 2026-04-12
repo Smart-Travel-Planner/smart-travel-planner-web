@@ -1,12 +1,12 @@
 
 <main aria-labelledby="trip-title" class="min-h-screen w-full text-white flex flex-col items-center">
-  @if (trip()) {
+  @if (facade.trip()) {
     <app-back-button (backClick)="goBack()"></app-back-button>
 
     <div
       aria-hidden="true"
       class="fixed inset-0 bg-cover bg-center -z-10"
-      [style.background-image]="'url(' + (trip()!.image_url || defaultImage) + ')'">
+      [style.background-image]="'url(' + (facade.trip()!.image_url || defaultImage) + ')'">
       <div class="absolute inset-0 bg-linear-to-t from-slate-950 via-slate-900/40 to-transparent"></div>
     </div>
 
@@ -14,24 +14,24 @@
       <div class="relative w-full max-w-4xl mx-auto flex justify-between items-start z-10 pt-4">
         <div class="bg-black/30 backdrop-blur-sm px-4 py-2 rounded-2xl">
           <h1 id="trip-title" class="text-xl md:text-3xl font-extrabold tracking-tight drop-shadow-md">
-            {{ trip()!.title }}
+            {{ facade.trip()!.title }}
           </h1>
-          @if (trip()!.destination) {
+          @if (facade.trip()!.destination) {
             <address class="text-slate-200 mt-1 text-sm font-medium flex items-center gap-1">
               <mat-icon aria-hidden="true" class="text-sm">location_on</mat-icon>
-              {{ trip()!.destination }}
+              {{ facade.trip()!.destination }}
             </address>
           }
-          @if (creatorName()) {
+          @if (facade.creatorName()) {
             <p class="text-slate-300 mt-1 text-xs flex items-center gap-1">
               <mat-icon aria-hidden="true" class="text-xs">person</mat-icon>
-              Creado por <cite>{{ creatorName() }}</cite>
+              Creado por <cite>{{ facade.creatorName() }}</cite>
             </p>
           }
         </div>
         <strong class="px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider"
-          [class]="trip()!.is_public ? 'bg-green-500/90 text-white' : 'bg-slate-700/90 text-white'">
-          {{ trip()!.is_public ? 'Público' : 'Privado' }}
+          [class]="facade.trip()!.is_public ? 'bg-green-500/90 text-white' : 'bg-slate-700/90 text-white'">
+          {{ facade.trip()!.is_public ? 'Público' : 'Privado' }}
         </strong>
       </div>
 
@@ -40,15 +40,15 @@
           <mat-icon aria-hidden="true" class="text-slate-300 text-sm">calendar_today</mat-icon>
           <div>
             <p class="text-[10px] uppercase tracking-wider text-slate-200">Inicio</p>
-            <time [attr.datetime]="trip()!.start_date" class="text-sm font-semibold text-white">{{ trip()!.start_date | formatDate }}</time>
+            <time [attr.datetime]="facade.trip()!.start_date" class="text-sm font-semibold text-white">{{ facade.trip()!.start_date | formatDate }}</time>
           </div>
         </div>
-        @if (trip()!.end_date) {
+        @if (facade.trip()!.end_date) {
           <div class="bg-black/30 backdrop-blur-sm px-3 py-2 rounded-xl flex items-center gap-2">
             <mat-icon aria-hidden="true" class="text-slate-300 text-sm">event</mat-icon>
             <div>
               <p class="text-[10px] uppercase tracking-wider text-slate-200">Fin</p>
-              <time [attr.datetime]="trip()!.end_date" class="text-sm font-semibold text-white">{{ trip()!.end_date | formatDate }}</time>
+              <time [attr.datetime]="facade.trip()!.end_date" class="text-sm font-semibold text-white">{{ facade.trip()!.end_date | formatDate }}</time>
             </div>
           </div>
         }
@@ -56,10 +56,10 @@
           <mat-icon aria-hidden="true" class="text-slate-300 text-sm">payments</mat-icon>
           <div>
             <p class="text-[10px] uppercase tracking-wider text-slate-200">Presupuesto</p>
-            <data [value]="trip()!.total_budget" class="text-sm font-semibold text-white">{{ trip()!.total_budget }} €</data>
+            <data [value]="facade.trip()!.total_budget" class="text-sm font-semibold text-white">{{ facade.trip()!.total_budget }} €</data>
           </div>
         </div>
-        @if (requirements()) {
+        @if (facade.requirements()) {
           <button
             type="button"
             (click)="openAiInfo()"
@@ -85,37 +85,37 @@
       </section>
     </header>
 
-    @if (isOwner()) {
+    @if (facade.isOwner()) {
       <app-trip-planner
-        [trip]="trip()!"
-        [activities]="activities()"
-        [locationMap]="locationMap()">
+        [trip]="facade.trip()!"
+        [activities]="facade.activities()"
+        [locationMap]="facade.locationMap()">
       </app-trip-planner>
     } @else {
       <app-activity-map-list
-        [activities]="activities()"
+        [activities]="facade.activities()"
         class="mb-8"
-        [tripId]="trip()!.id"
-        [locations]="locations()"
-        [tripDestinationCoords]="tripDestinationCoords()"
+        [tripId]="facade.trip()!.id"
+        [locations]="facade.locations()"
+        [tripDestinationCoords]="facade.tripDestinationCoords()"
         containerId="explorer-map"
         [darkMode]="false"
         [readonly]="true">
       </app-activity-map-list>
     }
 
-    @if (isOwner()) {
+    @if (facade.isOwner()) {
       <menu class="w-full max-w-7xl px-4 mt-8 mb-12 flex gap-2">
         <button
           (click)="goToEdit()"
-          [attr.aria-label]="'Editar viaje ' + trip()!.title"
+          [attr.aria-label]="'Editar viaje ' + facade.trip()!.title"
           class="flex items-center gap-1 px-3 py-1.5 rounded-lg text-sm border border-slate-950 text-slate-950 bg-slate-100
                 hover:bg-slate-700 hover:text-slate-100 transition-colors" title="Editar viaje">
           <mat-icon aria-hidden="true" class="text-base">edit</mat-icon>
         </button>
         <button
           (click)="deleteTrip()"
-          [attr.aria-label]="'Borrar viaje ' + trip()!.title"
+          [attr.aria-label]="'Borrar viaje ' + facade.trip()!.title"
           class="flex items-center gap-1 px-3 py-1.5 rounded-lg text-sm font-semibold border border-red-300 text-red-500 bg-slate-100
                 hover:bg-red-400 hover:text-white hover:border-red-400 transition-colors" title="Eliminar viaje">
           <mat-icon aria-hidden="true" class="text-base">delete</mat-icon>
@@ -124,9 +124,9 @@
     }
   }
 
-  @if (errorMessage()) {
+  @if (facade.errorMessage()) {
     <div role="alert" aria-live="polite" class="w-full max-w-4xl px-4 mt-6 p-4 bg-red-500/10 border border-red-500/20 rounded-2xl text-red-400 text-center">
-      {{ errorMessage() }}
+      {{ facade.errorMessage() }}
     </div>
   }
 </main>
