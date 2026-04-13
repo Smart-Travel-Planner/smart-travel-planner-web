@@ -49,15 +49,15 @@ export class TripListComponent implements OnInit {
         ...this.myTrips(),
         ...this.publicTrips().filter(t => !myIds.has(t.id)),
       ];
-    }
+    };
 
     if (this.dateFrom()) {
       trips = trips.filter(t => t.start_date >= this.dateFrom());
-    }
+    };
 
     if (this.dateTo()) {
       trips = trips.filter(t => t.start_date <= this.dateTo());
-    }
+    };
 
     return trips;
   });

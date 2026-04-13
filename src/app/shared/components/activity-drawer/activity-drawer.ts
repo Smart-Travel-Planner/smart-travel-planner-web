@@ -26,5 +26,5 @@ export class ActivityDrawerComponent {
 
   getActivityLocation(locationId: string): TripLocation | undefined {
     return this.locations().find(l => l.id === locationId);
-  }
-}
+  };
+};

@@ -17,5 +17,5 @@ export class AiService {
       `${this.apiUrl}/generate-requirements`,
       { destination }
     );
-  }
-}
+  };
+};

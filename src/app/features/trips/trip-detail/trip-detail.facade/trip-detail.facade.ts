@@ -54,7 +54,7 @@ export class TripDetailFacade {
     this.loadTrip(tripId);
     this.loadLocations();
     this.loadActivities(tripId);
-  }
+  };
 
   private loadTrip(id: string): void {
     this.tripsService.getTripById(id).subscribe({
@@ -63,12 +63,12 @@ export class TripDetailFacade {
         this.resolveDestinationCoords(trip.destination);
         if (trip.is_public && trip.user_id !== this.authService.getCurrentUserId()) {
           this.loadCreatorName(trip.user_id);
-        }
+        };
         this.loadRequirements(id);
       },
       error: () => this._errorMessage.set('Error cargando el viaje'),
     });
-  }
+  };
 
   private resolveDestinationCoords(destination: string | undefined): void {
     this.geocodingService.getDestinationOrUserCoords(destination).subscribe({
@@ -77,21 +77,21 @@ export class TripDetailFacade {
         this.cdr.detectChanges();
       },
     });
-  }
+  };
 
   private loadCreatorName(userId: string): void {
     this.usersService.getPublicProfile(userId).subscribe({
       next: profile => this._creatorName.set(profile.name),
       error: () => this._creatorName.set(null),
     });
-  }
+  };
 
   private loadLocations(): void {
     this.locationsService.getLocations().subscribe({
       next: locations => this._locations.set(locations),
       error: () => {},
     });
-  }
+  };
 
   private loadRequirements(tripId: string): void {
     this.tripsService.getTravelRequirements(tripId).subscribe({
@@ -114,19 +114,19 @@ export class TripDetailFacade {
         });
       },
     });
-  }
+  };
 
   private loadActivities(tripId: string): void {
     this.activitiesService.getActivitiesByTrip(tripId).subscribe({
       next: activities => this._activities.set(activities),
       error: () => this._errorMessage.set('Error cargando las actividades'),
     });
-  }
+  };
 
   deleteTrip(id: string): void {
     this.tripsService.deleteTrip(id).subscribe({
       next: () => {},
       error: () => this._errorMessage.set('Error eliminando el viaje'),
     });
-  }
-}
+  };
+};

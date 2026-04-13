@@ -39,7 +39,7 @@ export class HomeComponent implements OnInit {
     this.http.get(`${environment.apiUrl}/health`).subscribe({
       error: () => {}
     });
-  }
+  };
 
   startAutoPlay(): void {
     this.intervalId = setInterval(() => {

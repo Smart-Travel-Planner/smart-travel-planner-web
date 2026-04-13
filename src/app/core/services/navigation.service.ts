@@ -13,4 +13,4 @@ export class NavigationService {
   getPreviousUrl(): string {
     return this.previousUrl();
   };
-}
+};

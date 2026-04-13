@@ -30,7 +30,6 @@ export class ActivityMapListComponent {
   readonly = input<boolean>(false);
   activitiesInput = input<Activity[] | undefined>(undefined, { alias: 'activities' });
 
-
   editActivity = output<string>();
 
   private mapComponent = viewChild<MapComponent>('mapRef');
@@ -53,64 +52,56 @@ export class ActivityMapListComponent {
     }
     return activities.sort((a, b) => a.start_time.localeCompare(b.start_time));
   });
-constructor() {
-  effect(() => {
-    const passed = this.activitiesInput();
-    if (passed !== undefined) {
-      this._activities.set(passed);
-    } else if (this.tripId()) {
-      this.loadActivities();
-    }
-  });
-}
-  // ngOnInit(): void {
-  //   const passed = this.activitiesInput();
-  //   if (passed !== undefined) {
-  //     this._activities.set(passed);
-  //   } else {
-  //     this.loadActivities();
-  //   }
-  // }
+  constructor() {
+    effect(() => {
+      const passed = this.activitiesInput();
+      if (passed !== undefined) {
+        this._activities.set(passed);
+      } else if (this.tripId()) {
+        this.loadActivities();
+      }
+    });
+  }
 
   private loadActivities(): void {
     this.activitiesService.getActivitiesByTrip(this.tripId()).subscribe({
       next: activities => this._activities.set(activities),
       error: () => this.errorMessage.set('Error cargando las actividades'),
     });
-  }
+  };
 
   setCategory(category: ActivityCategory | 'all'): void {
     this.activeCategory.set(category);
-  }
+  };
 
   onActivityClicked(activity: Activity): void {
     this.selectedActivity.set(activity);
     this.highlightedActivityId.set(activity.id);
     this.mapComponent()?.highlightActivity(activity.id);
-  }
+  };
 
   onMarkerClicked(activityId: string): void {
     const activity = this.filteredActivities().find(a => a.id === activityId);
     if (activity) {
       this.selectedActivity.set(activity);
       this.highlightedActivityId.set(activityId);
-    }
+    };
     this.mapComponent()?.highlightActivity(activityId);
     const element = document.getElementById(`activity-${activityId}`);
     if (element) {
       element.scrollIntoView({ behavior: 'smooth', block: 'center' });
       element.focus();
-    }
-  }
+    };
+  };
 
   closeDrawer(): void {
     this.selectedActivity.set(null);
     this.highlightedActivityId.set(null);
-  }
+  };
 
   onEditActivity(id: string): void {
     this.editActivity.emit(id);
-  }
+  };
 
   onDeleteActivity(activity: Activity): void {
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
@@ -131,5 +122,5 @@ constructor() {
         error: () => this.errorMessage.set('Error eliminando la actividad'),
       });
     });
-  }
-}
+  };
+};

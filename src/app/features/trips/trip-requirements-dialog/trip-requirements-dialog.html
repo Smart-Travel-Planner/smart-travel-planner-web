@@ -21,7 +21,8 @@
       <ul class="grid grid-cols-1 gap-2">
         @for (v of $any(data.health_info?.['vaccines']); track v) {
           <li class="bg-white/5 p-2 rounded-lg text-sm flex items-center gap-2">
-            <mat-icon class="text-green-400 text-xs">check_circle</mat-icon> {{ v }}
+            <mat-icon aria-hidden="true" class="text-green-400 text-xs pr-6">check_circle</mat-icon>
+            <p class=""> {{ v }} </p>
           </li>
         }
       </ul>

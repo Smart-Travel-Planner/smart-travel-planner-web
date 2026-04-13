@@ -87,34 +87,15 @@ export class ActivityFormComponent implements OnInit {
 
   private loadTripDestination(tripId: string): void {
     this.tripsService.getTripById(tripId).subscribe({
-      // next: trip => {
-      //   this.tripDateRange.set({
-      //     start: trip.start_date,
-      //     end: trip.end_date ?? undefined,
-      //   });
-      //   if (trip.destination) {
-      //     this.geocodingService.getCoordsByDestination(trip.destination).subscribe({
-      //       next: coords => this.tripDestinationCoords.set(coords),
-      //       error: async () => {
-      //         const coords = await this.geocodingService.getUserLocationOrDefault();
-      //         this.tripDestinationCoords.set(coords);
-      //       },
-      //     });
-      //   } else {
-      //     this.geocodingService.getUserLocationOrDefault().then(coords => {
-      //       this.tripDestinationCoords.set(coords);
-      //     });
-      //   };
-      // },
-next: trip => {
-  this.tripDateRange.set({
-    start: trip.start_date,
-    end: trip.end_date ?? undefined,
-  });
-  this.geocodingService.getDestinationOrUserCoords(trip.destination).subscribe({
-    next: coords => this.tripDestinationCoords.set(coords),
-  });
-},
+      next: trip => {
+        this.tripDateRange.set({
+          start: trip.start_date,
+          end: trip.end_date ?? undefined,
+        });
+        this.geocodingService.getDestinationOrUserCoords(trip.destination).subscribe({
+          next: coords => this.tripDestinationCoords.set(coords),
+        });
+      },
     });
   };
 
@@ -136,7 +117,7 @@ next: trip => {
         if (activity.location_id) {
           const location = this.locations().find(loc => loc.id === activity.location_id);
           if (location) this.selectedLocation.set(location);
-        }
+        };
       },
       error: () => this.errorMessage.set('Error cargando la actividad'),
     });
