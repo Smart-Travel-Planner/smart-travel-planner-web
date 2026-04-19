@@ -14,6 +14,9 @@ import { toDateTimeInput } from '../../../core/utils/date.utils';
 import { BackButtonComponent } from '../../../shared/components/back-button/back-button';
 import { MatIconModule } from '@angular/material/icon';
 import { NavigationService } from '../../../core/services/navigation.service';
+import { DestroyRef } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { switchMap } from 'rxjs';
 
 @Component({
   selector: 'app-activity-form',
@@ -32,6 +35,7 @@ export class ActivityFormComponent implements OnInit {
   private mapComponent = viewChild<MapComponent>('mapRef');
   private geocodingService = inject(GeocodingService);
   private navigationService = inject(NavigationService);
+  private destroyRef = inject(DestroyRef);
 
   categories = Object.values(ActivityCategory);
   locations = signal<TripLocation[]>([]);
@@ -81,33 +85,55 @@ export class ActivityFormComponent implements OnInit {
       this.loadActivity(id);
     };
 
-    this.activityForm.get('start_time')?.valueChanges.subscribe(() => this.validateActivityDates());
-    this.activityForm.get('end_time')?.valueChanges.subscribe(() => this.validateActivityDates());
+    this.activityForm.get('start_time')?.valueChanges.pipe(
+      takeUntilDestroyed(this.destroyRef)
+    ).subscribe(() => this.validateActivityDates());
+    this.activityForm.get('end_time')?.valueChanges.pipe(
+      takeUntilDestroyed(this.destroyRef)
+    ).subscribe(() => this.validateActivityDates());
   };
 
+  // private loadTripDestination(tripId: string): void {
+  //   this.tripsService.getTripById(tripId).subscribe({
+  //     next: trip => {
+  //       this.tripDateRange.set({
+  //         start: trip.start_date,
+  //         end: trip.end_date ?? undefined,
+  //       });
+  //       this.geocodingService.getDestinationOrUserCoords(trip.destination).subscribe({
+  //         next: coords => this.tripDestinationCoords.set(coords),
+  //       });
+  //     },
+  //   });
+  // };
   private loadTripDestination(tripId: string): void {
-    this.tripsService.getTripById(tripId).subscribe({
-      next: trip => {
+    this.tripsService.getTripById(tripId).pipe(
+      takeUntilDestroyed(this.destroyRef),
+      switchMap(trip => {
         this.tripDateRange.set({
           start: trip.start_date,
           end: trip.end_date ?? undefined,
         });
-        this.geocodingService.getDestinationOrUserCoords(trip.destination).subscribe({
-          next: coords => this.tripDestinationCoords.set(coords),
-        });
-      },
+        return this.geocodingService.getDestinationOrUserCoords(trip.destination);
+      })
+    ).subscribe({
+      next: coords => this.tripDestinationCoords.set(coords),
     });
-  };
+  }
 
   private loadLocations(): void {
-    this.locationsService.getLocations().subscribe({
+    this.locationsService.getLocations().pipe(
+      takeUntilDestroyed(this.destroyRef)
+    ).subscribe({
       next: locations => this.locations.set(locations),
       error: () => this.errorMessage.set('Error cargando ubicaciones'),
     });
   };
 
   private loadActivity(id: string): void {
-    this.activitiesService.getActivityById(id).subscribe({
+    this.activitiesService.getActivityById(id).pipe(
+      takeUntilDestroyed(this.destroyRef)
+    ).subscribe({
       next: activity => {
         this.activityForm.patchValue({
           ...activity,
@@ -172,12 +198,16 @@ export class ActivityFormComponent implements OnInit {
     const id = this.activityId();
 
     if (this.isEditMode() && id) {
-      this.activitiesService.updateActivity(id, payload).subscribe({
+      this.activitiesService.updateActivity(id, payload).pipe(
+        takeUntilDestroyed(this.destroyRef)
+      ).subscribe({
         next: () => this.router.navigate(['/trips', tripId, 'activities']),
         error: () => this.errorMessage.set('Error actualizando la actividad'),
       });
     } else {
-      this.activitiesService.createActivity(payload).subscribe({
+      this.activitiesService.createActivity(payload).pipe(
+        takeUntilDestroyed(this.destroyRef)
+      ).subscribe({
         next: () => this.router.navigate(['/trips', tripId, 'activities']),
         error: () => this.errorMessage.set('Error creando la actividad'),
       });

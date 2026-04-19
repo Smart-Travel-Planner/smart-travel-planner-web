@@ -12,6 +12,8 @@ import { Trip } from '../../../../core/models/trip.model';
 import { TripLocation } from '../../../../core/models/location.model';
 import { Activity } from '../../../../core/models/activity.model';
 import { TravelRequirement } from '../../../../core/models/travel-requirement.model';
+import { DestroyRef } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Injectable()
 export class TripDetailFacade {
@@ -22,6 +24,7 @@ export class TripDetailFacade {
   private aiService = inject(AiService);
   private geocodingService = inject(GeocodingService);
   private authService = inject(AuthService);
+private destroyRef = inject(DestroyRef);
 
   private _trip = signal<Trip | null>(null);
   private _locations = signal<TripLocation[]>([]);
@@ -65,7 +68,9 @@ export class TripDetailFacade {
   }
 
   private loadTrip(id: string): void {
-    this.tripsService.getTripById(id).subscribe({
+    this.tripsService.getTripById(id).pipe(
+      takeUntilDestroyed(this.destroyRef)
+    ).subscribe({
       next: trip => {
         this._trip.set(trip);
         if (trip.is_public && trip.user_id !== this.authService.getCurrentUserId()) {
@@ -78,14 +83,18 @@ export class TripDetailFacade {
   }
 
   private loadCreatorName(userId: string): void {
-    this.usersService.getPublicProfile(userId).subscribe({
+    this.usersService.getPublicProfile(userId).pipe(
+      takeUntilDestroyed(this.destroyRef)
+    ).subscribe({
       next: profile => this._creatorName.set(profile.name),
       error: () => this._creatorName.set(null),
     });
   }
 
   private loadLocations(): void {
-    this.locationsService.getLocations().subscribe({
+    this.locationsService.getLocations().pipe(
+      takeUntilDestroyed(this.destroyRef)
+    ).subscribe({
       next: locations => this._locations.set(locations),
       error: () => {},
     });
@@ -98,6 +107,7 @@ export class TripDetailFacade {
         const destination = this._trip()?.destination;
         if (!destination) return of(null);
         return this.aiService.generateRequirements(destination).pipe(
+          takeUntilDestroyed(this.destroyRef),
           switchMap(generated =>
             this.tripsService.createTravelRequirements({
               trip_id: tripId,
@@ -118,14 +128,18 @@ export class TripDetailFacade {
   }
 
   private loadActivities(tripId: string): void {
-    this.activitiesService.getActivitiesByTrip(tripId).subscribe({
+    this.activitiesService.getActivitiesByTrip(tripId).pipe(
+      takeUntilDestroyed(this.destroyRef)
+    ).subscribe({
       next: activities => this._activities.set(activities),
       error: () => this._errorMessage.set('Error cargando las actividades'),
     });
   }
 
   deleteTrip(id: string): void {
-    this.tripsService.deleteTrip(id).subscribe({
+    this.tripsService.deleteTrip(id).pipe(
+      takeUntilDestroyed(this.destroyRef)
+    ).subscribe({
       next: () => {},
       error: () => this._errorMessage.set('Error eliminando el viaje'),
     });

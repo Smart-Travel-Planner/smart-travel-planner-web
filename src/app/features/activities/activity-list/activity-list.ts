@@ -10,6 +10,9 @@ import { BackButtonComponent } from '../../../shared/components/back-button/back
 import { NavigationService } from '../../../core/services/navigation.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ActivityMapListComponent } from '../../../shared/components/activity-map-list/activity-map-list';
+import { DestroyRef } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { switchMap } from 'rxjs';
 
 @Component({
   selector: 'app-activity-list',
@@ -24,6 +27,7 @@ export class ActivityListComponent implements OnInit {
   private router = inject(Router);
   private route = inject(ActivatedRoute);
   private navigationService = inject(NavigationService);
+  private destroyRef = inject(DestroyRef);
 
   locations = signal<TripLocation[]>([]);
   tripId = signal<string>('');
@@ -46,22 +50,35 @@ export class ActivityListComponent implements OnInit {
   }
 
   private loadLocations(): void {
-    this.locationsService.getLocations().subscribe({
+    this.locationsService.getLocations().pipe(
+      takeUntilDestroyed(this.destroyRef)
+    ).subscribe({
       next: locations => this.locations.set(locations),
       error: () => this.errorMessage.set('Error cargando las ubicaciones'),
     });
   };
 
+  // private loadTripDestination(tripId: string): void {
+  //   this.tripsService.getTripById(tripId).subscribe({
+  //     next: trip => {
+  //       this.trip.set(trip);
+  //       this.geocodingService.getDestinationOrUserCoords(trip.destination).subscribe({
+  //         next: coords => this.tripDestinationCoords.set(coords),
+  //       });
+  //     },
+  //   });
+  // };
   private loadTripDestination(tripId: string): void {
-    this.tripsService.getTripById(tripId).subscribe({
-      next: trip => {
+    this.tripsService.getTripById(tripId).pipe(
+      takeUntilDestroyed(this.destroyRef),
+      switchMap(trip => {
         this.trip.set(trip);
-        this.geocodingService.getDestinationOrUserCoords(trip.destination).subscribe({
-          next: coords => this.tripDestinationCoords.set(coords),
-        });
-      },
+        return this.geocodingService.getDestinationOrUserCoords(trip.destination);
+      })
+    ).subscribe({
+      next: coords => this.tripDestinationCoords.set(coords),
     });
-  };
+  }
 
   goToEditActivity(id: string): void {
     this.navigationService.setPreviousUrl(`/trips/${this.tripId()}/activities`);
