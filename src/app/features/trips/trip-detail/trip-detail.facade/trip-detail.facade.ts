@@ -1,4 +1,6 @@
-import { ChangeDetectorRef, computed, inject, Injectable, signal } from '@angular/core';
+import { computed, inject, Injectable, signal } from '@angular/core';
+import { toObservable, toSignal } from '@angular/core/rxjs-interop';
+import { catchError, filter, of, switchMap } from 'rxjs';
 import { TripsService } from '../../../../core/services/trips.service';
 import { LocationsService } from '../../../../core/services/locations.service';
 import { ActivitiesService } from '../../../../core/services/activities.service';
@@ -20,14 +22,12 @@ export class TripDetailFacade {
   private aiService = inject(AiService);
   private geocodingService = inject(GeocodingService);
   private authService = inject(AuthService);
-  private cdr = inject(ChangeDetectorRef);
 
   private _trip = signal<Trip | null>(null);
   private _locations = signal<TripLocation[]>([]);
   private _activities = signal<Activity[]>([]);
   private _creatorName = signal<string | null>(null);
   private _requirements = signal<TravelRequirement | null>(null);
-  private _tripDestinationCoords = signal<{ lat: number; lng: number } | undefined>(undefined);
   private _errorMessage = signal<string>('');
 
   trip = this._trip.asReadonly();
@@ -35,7 +35,6 @@ export class TripDetailFacade {
   activities = this._activities.asReadonly();
   creatorName = this._creatorName.asReadonly();
   requirements = this._requirements.asReadonly();
-  tripDestinationCoords = this._tripDestinationCoords.asReadonly();
   errorMessage = this._errorMessage.asReadonly();
 
   isOwner = computed(() => {
@@ -50,83 +49,85 @@ export class TripDetailFacade {
     return map;
   });
 
+  tripDestinationCoords = toSignal(
+    toObservable(computed(() => this._trip()?.destination)).pipe(
+      filter(() => this._trip() !== null),
+      switchMap(destination =>
+        this.geocodingService.getDestinationOrUserCoords(destination)
+      )
+    )
+  );
+
   load(tripId: string): void {
     this.loadTrip(tripId);
     this.loadLocations();
     this.loadActivities(tripId);
-  };
+  }
 
   private loadTrip(id: string): void {
     this.tripsService.getTripById(id).subscribe({
       next: trip => {
         this._trip.set(trip);
-        this.resolveDestinationCoords(trip.destination);
         if (trip.is_public && trip.user_id !== this.authService.getCurrentUserId()) {
           this.loadCreatorName(trip.user_id);
-        };
+        }
         this.loadRequirements(id);
       },
       error: () => this._errorMessage.set('Error cargando el viaje'),
     });
-  };
-
-  private resolveDestinationCoords(destination: string | undefined): void {
-    this.geocodingService.getDestinationOrUserCoords(destination).subscribe({
-      next: coords => {
-        this._tripDestinationCoords.set(coords);
-        this.cdr.detectChanges();
-      },
-    });
-  };
+  }
 
   private loadCreatorName(userId: string): void {
     this.usersService.getPublicProfile(userId).subscribe({
       next: profile => this._creatorName.set(profile.name),
       error: () => this._creatorName.set(null),
     });
-  };
+  }
 
   private loadLocations(): void {
     this.locationsService.getLocations().subscribe({
       next: locations => this._locations.set(locations),
       error: () => {},
     });
-  };
+  }
 
   private loadRequirements(tripId: string): void {
-    this.tripsService.getTravelRequirements(tripId).subscribe({
-      next: reqs => this._requirements.set(reqs),
-      error: () => {
-        if (!this.isOwner()) return;
+    this.tripsService.getTravelRequirements(tripId).pipe(
+      catchError(() => {
+        if (!this.isOwner()) return of(null);
         const destination = this._trip()?.destination;
-        if (!destination) return;
-        this.aiService.generateRequirements(destination).subscribe({
-          next: generated => {
+        if (!destination) return of(null);
+        return this.aiService.generateRequirements(destination).pipe(
+          switchMap(generated =>
             this.tripsService.createTravelRequirements({
               trip_id: tripId,
               ...generated,
-            }).subscribe({
-              next: saved => this._requirements.set(saved),
-              error: () => console.warn('Error guardando los requisitos generados por la IA'),
-            });
-          },
-          error: () => console.warn('Error generando requisitos con la IA'),
-        });
+            })
+          ),
+          catchError(() => {
+            console.warn('Error generando o guardando requisitos con la IA');
+            return of(null);
+          })
+        );
+      })
+    ).subscribe({
+      next: reqs => {
+        if (reqs) this._requirements.set(reqs);
       },
     });
-  };
+  }
 
   private loadActivities(tripId: string): void {
     this.activitiesService.getActivitiesByTrip(tripId).subscribe({
       next: activities => this._activities.set(activities),
       error: () => this._errorMessage.set('Error cargando las actividades'),
     });
-  };
+  }
 
   deleteTrip(id: string): void {
     this.tripsService.deleteTrip(id).subscribe({
       next: () => {},
       error: () => this._errorMessage.set('Error eliminando el viaje'),
     });
-  };
-};
+  }
+}
