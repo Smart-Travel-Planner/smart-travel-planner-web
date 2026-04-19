@@ -1,4 +1,4 @@
-import { Component, computed, effect, inject, input, OnInit, output, signal, viewChild } from '@angular/core';
+import { Component, computed, DestroyRef, effect, inject, input, OnInit, output, signal, viewChild } from '@angular/core';
 import { Activity } from '../../../core/models/activity.model';
 import { TripLocation } from '../../../core/models/location.model';
 import { ActivityCategory } from '../../../core/enums/activity-category.enum';
@@ -11,6 +11,7 @@ import { ActivityDrawerComponent } from '../activity-drawer/activity-drawer';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog';
 import { ActivitiesService } from '../../../core/services/activities.service';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-activity-map-list',
@@ -21,6 +22,7 @@ import { ActivitiesService } from '../../../core/services/activities.service';
 export class ActivityMapListComponent {
   private dialog = inject(MatDialog);
   private activitiesService = inject(ActivitiesService);
+  private destroyRef = inject(DestroyRef);
 
   tripId = input.required<string>();
   locations = input.required<TripLocation[]>();
@@ -64,7 +66,9 @@ export class ActivityMapListComponent {
   }
 
   private loadActivities(): void {
-    this.activitiesService.getActivitiesByTrip(this.tripId()).subscribe({
+    this.activitiesService.getActivitiesByTrip(this.tripId()).pipe(
+      takeUntilDestroyed(this.destroyRef)
+    ).subscribe({
       next: activities => this._activities.set(activities),
       error: () => this.errorMessage.set('Error cargando las actividades'),
     });
@@ -112,9 +116,13 @@ export class ActivityMapListComponent {
         message: `¿Estás seguro de que quieres eliminar "${activity.title}"? Esta acción no se puede deshacer.`,
       },
     });
-    dialogRef.afterClosed().subscribe(confirmed => {
+    dialogRef.afterClosed().pipe(
+      takeUntilDestroyed(this.destroyRef)
+    ).subscribe(confirmed => {
       if (!confirmed) return;
-      this.activitiesService.deleteActivity(activity.id).subscribe({
+      this.activitiesService.deleteActivity(activity.id).pipe(
+        takeUntilDestroyed(this.destroyRef)
+      ).subscribe({
         next: () => {
           this.closeDrawer();
           this.loadActivities();

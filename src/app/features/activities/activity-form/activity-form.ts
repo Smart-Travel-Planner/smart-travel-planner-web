@@ -93,19 +93,6 @@ export class ActivityFormComponent implements OnInit {
     ).subscribe(() => this.validateActivityDates());
   };
 
-  // private loadTripDestination(tripId: string): void {
-  //   this.tripsService.getTripById(tripId).subscribe({
-  //     next: trip => {
-  //       this.tripDateRange.set({
-  //         start: trip.start_date,
-  //         end: trip.end_date ?? undefined,
-  //       });
-  //       this.geocodingService.getDestinationOrUserCoords(trip.destination).subscribe({
-  //         next: coords => this.tripDestinationCoords.set(coords),
-  //       });
-  //     },
-  //   });
-  // };
   private loadTripDestination(tripId: string): void {
     this.tripsService.getTripById(tripId).pipe(
       takeUntilDestroyed(this.destroyRef),
@@ -173,7 +160,9 @@ export class ActivityFormComponent implements OnInit {
       data: {tripDestinationCoords: this.tripDestinationCoords()},
     });
 
-    dialogRef.afterClosed().subscribe((location: TripLocation | null) => {
+    dialogRef.afterClosed().pipe(
+      takeUntilDestroyed(this.destroyRef)
+    ).subscribe((location: TripLocation | null) => {
       if (location) {
         this.locations.update(locations => [...locations, location]);
         this.setLocation(location);
