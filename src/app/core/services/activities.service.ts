@@ -11,37 +11,37 @@ export class ActivitiesService {
   private readonly apiUrl = environment.apiUrl + '/activities';
   private http = inject(HttpClient);
 
-  private _activities = signal<Activity[]>([]);
-  private _loading = signal<boolean>(false);
-  private _errorMessage = signal<string | null>(null);
+  // private _activities = signal<Activity[]>([]);
+  // private _loading = signal<boolean>(false);
+  // private _errorMessage = signal<string | null>(null);
 
-  activities = this._activities.asReadonly();
-  loading = this._loading.asReadonly();
-  errorMessage = this._errorMessage.asReadonly();
+  // activities = this._activities.asReadonly();
+  // loading = this._loading.asReadonly();
+  // errorMessage = this._errorMessage.asReadonly();
 
-  mapFilteredActivities = computed(() => {
-    const allActivities = this._activities();
-      return allActivities;
-  });
+  // mapFilteredActivities = computed(() => {
+  //   const allActivities = this._activities();
+  //     return allActivities;
+  // });
 
-  eventsCount = computed(() => this._activities().length);
+  // eventsCount = computed(() => this._activities().length);
 
-  loadEvents(): void {
-    this._loading.set(true);
-    this._errorMessage.set(null);
+  // loadEvents(): void {
+  //   this._loading.set(true);
+  //   this._errorMessage.set(null);
 
-    this.http.get<Activity[]>(this.apiUrl).subscribe({
-      next: (events) => {
-        this._activities.set(events);
-        this._loading.set(false);
-      },
-      error: (err) => {
-        console.error('Error loading events:', err);
-        this._errorMessage.set('Error al cargar los eventos');
-        this._loading.set(false);
-      }
-    });
-  };
+  //   this.http.get<Activity[]>(this.apiUrl).subscribe({
+  //     next: (events) => {
+  //       this._activities.set(events);
+  //       this._loading.set(false);
+  //     },
+  //     error: (err) => {
+  //       console.error('Error loading events:', err);
+  //       this._errorMessage.set('Error al cargar los eventos');
+  //       this._loading.set(false);
+  //     }
+  //   });
+  // };
 
   getActivitiesByTrip(tripId: string): Observable<Activity[]> {
     return this.http.get<Activity[]>(`${this.apiUrl}/trip/${tripId}`);
