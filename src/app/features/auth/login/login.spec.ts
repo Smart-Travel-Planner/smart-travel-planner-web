@@ -1,5 +1,6 @@
+
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { provideRouter } from '@angular/router';
+import { provideRouter, Router } from '@angular/router';
 import { of, throwError } from 'rxjs';
 import { vi } from 'vitest';
 import { LoginComponent } from './login';
@@ -8,7 +9,8 @@ import { AuthService } from '../../../core/services/auth.service';
 describe('LoginComponent', () => {
   let component: LoginComponent;
   let fixture: ComponentFixture<LoginComponent>;
-  let authServiceMock: Partial<AuthService>;
+  let authServiceMock: any;
+  let router: Router;
 
   beforeEach(async () => {
     authServiceMock = {
@@ -25,7 +27,11 @@ describe('LoginComponent', () => {
 
     fixture = TestBed.createComponent(LoginComponent);
     component = fixture.componentInstance;
-    await fixture.whenStable();
+
+    router = TestBed.inject(Router);
+    vi.spyOn(router, 'navigate').mockResolvedValue(true);
+
+    fixture.detectChanges();
   });
 
   it('should create', () => {
@@ -38,9 +44,7 @@ describe('LoginComponent', () => {
   });
 
   it('should call login with form values on submit', () => {
-    (authServiceMock.login as ReturnType<typeof vi.fn>).mockReturnValue(
-      of({ access_token: 'fake-token' })
-    );
+    authServiceMock.login.mockReturnValue(of({ access_token: 'fake-token' }));
 
     component.loginForm.setValue({ email: 'test@test.com', password: '123456' });
     component.onSubmit();
@@ -49,16 +53,16 @@ describe('LoginComponent', () => {
       email: 'test@test.com',
       password: '123456',
     });
+    expect(router.navigate).toHaveBeenCalledWith(['/trips']);
   });
 
   it('should show error message on login failure', () => {
-    (authServiceMock.login as ReturnType<typeof vi.fn>).mockReturnValue(
-      throwError(() => new Error('error'))
-    );
+    authServiceMock.login.mockReturnValue(throwError(() => new Error('error')));
 
     component.loginForm.setValue({ email: 'test@test.com', password: '123456' });
     component.onSubmit();
 
     expect(component.errorMessage).toBe('Credenciales incorrectas');
+    expect(component.isLoading).toBe(false);
   });
 });
