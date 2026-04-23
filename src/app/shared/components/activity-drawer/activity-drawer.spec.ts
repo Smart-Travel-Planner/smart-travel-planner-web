@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ActivityDrawer } from './activity-drawer';
+import { ActivityDrawerComponent } from './activity-drawer';
 
 describe('ActivityDrawer', () => {
-  let component: ActivityDrawer;
-  let fixture: ComponentFixture<ActivityDrawer>;
+  let component: ActivityDrawerComponent;
+  let fixture: ComponentFixture<ActivityDrawerComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ActivityDrawer]
+      imports: [ActivityDrawerComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(ActivityDrawer);
+    fixture = TestBed.createComponent(ActivityDrawerComponent);
     component = fixture.componentInstance;
     await fixture.whenStable();
   });

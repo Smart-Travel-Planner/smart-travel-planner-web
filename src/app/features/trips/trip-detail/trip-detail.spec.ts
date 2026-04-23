@@ -1,18 +1,17 @@
+
 // import { ComponentFixture, TestBed } from '@angular/core/testing';
 // import { provideRouter, ActivatedRoute } from '@angular/router';
 // import { of, throwError } from 'rxjs';
 // import { vi } from 'vitest';
-// import { Component, Input } from '@angular/core';
 // import { TripDetailComponent } from './trip-detail';
 // import { TripsService } from '../../../core/services/trips.service';
 // import { AuthService } from '../../../core/services/auth.service';
+// import { ActivitiesService } from '../../../core/services/activities.service';
+// import { LocationsService } from '../../../core/services/locations.service';
+// import { UsersService } from '../../../core/services/user.service';
+// import { NavigationService } from '../../../core/services/navigation.service';
+// import { MatDialog } from '@angular/material/dialog';
 // import { Trip } from '../../../core/models/trip.model';
-// import { CalendarComponent } from '../../calendar/calendar';
-
-// @Component({ selector: 'app-calendar', template: '' })
-// class CalendarStubComponent {
-//   @Input() trip: any;
-// }
 
 // describe('TripDetailComponent', () => {
 //   let component: TripDetailComponent;
@@ -34,6 +33,7 @@
 //     tripsServiceMock = {
 //       getTripById: vi.fn().mockReturnValue(of(mockTrip)),
 //       deleteTrip: vi.fn().mockReturnValue(of(void 0)),
+//       getTravelRequirements: vi.fn().mockReturnValue(of(null)),
 //     };
 
 //     authServiceMock = {
@@ -47,16 +47,33 @@
 //         { provide: TripsService, useValue: tripsServiceMock },
 //         { provide: AuthService, useValue: authServiceMock },
 //         {
+//           provide: ActivitiesService,
+//           useValue: { getActivitiesByTrip: vi.fn().mockReturnValue(of([])) },
+//         },
+//         {
+//           provide: LocationsService,
+//           useValue: { getLocations: vi.fn().mockReturnValue(of([])) },
+//         },
+//         {
+//           provide: UsersService,
+//           useValue: { getPublicProfile: vi.fn().mockReturnValue(of({ name: 'Test User' })) },
+//         },
+//         {
+//           provide: NavigationService,
+//           useValue: { setPreviousUrl: vi.fn() },
+//         },
+//         {
+//           provide: MatDialog,
+//           useValue: {
+//             open: vi.fn().mockReturnValue({ afterClosed: () => of(true) }),
+//           },
+//         },
+//         {
 //           provide: ActivatedRoute,
 //           useValue: { snapshot: { paramMap: { get: () => '1' } } },
 //         },
 //       ],
-//     })
-//     .overrideComponent(TripDetailComponent, {
-//       remove: { imports: [CalendarComponent] },
-//       add: { imports: [CalendarStubComponent] },
-//     })
-//     .compileComponents();
+//     }).compileComponents();
 
 //     fixture = TestBed.createComponent(TripDetailComponent);
 //     component = fixture.componentInstance;
@@ -95,18 +112,20 @@
 //   });
 // });
 
-
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideRouter, ActivatedRoute } from '@angular/router';
 import { of, throwError } from 'rxjs';
 import { vi } from 'vitest';
 import { TripDetailComponent } from './trip-detail';
+import { TripDetailFacade } from './trip-detail.facade/trip-detail.facade';
 import { TripsService } from '../../../core/services/trips.service';
 import { AuthService } from '../../../core/services/auth.service';
 import { ActivitiesService } from '../../../core/services/activities.service';
 import { LocationsService } from '../../../core/services/locations.service';
 import { UsersService } from '../../../core/services/user.service';
 import { NavigationService } from '../../../core/services/navigation.service';
+import { GeocodingService } from '../../../core/services/geocoding.service';
+import { AiService } from '../../../core/services/ai.service';
 import { MatDialog } from '@angular/material/dialog';
 import { Trip } from '../../../core/models/trip.model';
 
@@ -130,7 +149,8 @@ describe('TripDetailComponent', () => {
     tripsServiceMock = {
       getTripById: vi.fn().mockReturnValue(of(mockTrip)),
       deleteTrip: vi.fn().mockReturnValue(of(void 0)),
-      getTravelRequirements: vi.fn().mockReturnValue(of(null)),
+      getTravelRequirements: vi.fn().mockReturnValue(throwError(() => new Error('no reqs'))),
+      createTravelRequirements: vi.fn().mockReturnValue(of(null)),
     };
 
     authServiceMock = {
@@ -141,6 +161,7 @@ describe('TripDetailComponent', () => {
       imports: [TripDetailComponent],
       providers: [
         provideRouter([]),
+        TripDetailFacade,
         { provide: TripsService, useValue: tripsServiceMock },
         { provide: AuthService, useValue: authServiceMock },
         {
@@ -157,7 +178,17 @@ describe('TripDetailComponent', () => {
         },
         {
           provide: NavigationService,
-          useValue: { setPreviousUrl: vi.fn() },
+          useValue: { setPreviousUrl: vi.fn(), getPreviousUrl: vi.fn().mockReturnValue('/trips') },
+        },
+        {
+          provide: GeocodingService,
+          useValue: {
+            getDestinationOrUserCoords: vi.fn().mockReturnValue(of({ lat: 41.4, lng: 2.1 })),
+          },
+        },
+        {
+          provide: AiService,
+          useValue: { generateRequirements: vi.fn().mockReturnValue(of({})) },
         },
         {
           provide: MatDialog,
@@ -183,16 +214,17 @@ describe('TripDetailComponent', () => {
 
   it('should load trip on init', () => {
     expect(tripsServiceMock.getTripById).toHaveBeenCalledWith('1');
-    expect(component.trip()?.title).toBe('Viaje a París');
+    expect(component.facade.trip()?.title).toBe('Viaje a París');
   });
 
   it('should return true if current user is owner', () => {
-    expect(component.isOwner()).toBe(true);
+    expect(component.facade.isOwner()).toBe(true);
   });
 
   it('should return false if trip is null', () => {
-    component.trip.set(null);
-    expect(component.isOwner()).toBe(false);
+    expect(component.facade.trip()).not.toBeNull();
+    (authServiceMock.getCurrentUserId as ReturnType<typeof vi.fn>).mockReturnValue('other-user');
+    expect(component.facade.isOwner()).toBe(false);
   });
 
   it('should show error message when loading fails', () => {
@@ -200,7 +232,7 @@ describe('TripDetailComponent', () => {
       throwError(() => new Error('error'))
     );
     component.ngOnInit();
-    expect(component.errorMessage()).toBe('Error cargando el viaje');
+    expect(component.facade.errorMessage()).toBe('Error cargando el viaje');
   });
 
   it('should call deleteTrip and navigate on delete', () => {
