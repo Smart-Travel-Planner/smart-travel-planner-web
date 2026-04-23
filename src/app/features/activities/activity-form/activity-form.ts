@@ -14,6 +14,9 @@ import { adjustHours, toDateTimeInput } from '../../../core/utils/date.utils';
 import { BackButtonComponent } from '../../../shared/components/back-button/back-button';
 import { MatIconModule } from '@angular/material/icon';
 import { NavigationService } from '../../../core/services/navigation.service';
+import { DestroyRef } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { switchMap } from 'rxjs';
 
 @Component({
   selector: 'app-activity-form',
@@ -32,7 +35,7 @@ export class ActivityFormComponent implements OnInit {
   private mapComponent = viewChild<MapComponent>('mapRef');
   private geocodingService = inject(GeocodingService);
   private navigationService = inject(NavigationService);
-  private cdr = inject(ChangeDetectorRef);
+  private destroyRef = inject(DestroyRef);
 
   categories = Object.values(ActivityCategory);
   locations = signal<TripLocation[]>([]);
@@ -50,7 +53,7 @@ export class ActivityFormComponent implements OnInit {
     const search = this.locationSearch().toLowerCase();
     if (!search) return this.locations();
     return this.locations().filter(loc => loc.name.toLowerCase().includes(search));
-  })
+  });
 
   activityForm: FormGroup = this.fb.group({
     title: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(80)]],
@@ -82,57 +85,42 @@ export class ActivityFormComponent implements OnInit {
       this.loadActivity(id);
     };
 
-    this.activityForm.get('start_time')?.valueChanges.subscribe(() => this.validateActivityDates());
-    this.activityForm.get('end_time')?.valueChanges.subscribe(() => this.validateActivityDates());
+    this.activityForm.get('start_time')?.valueChanges.pipe(
+      takeUntilDestroyed(this.destroyRef)
+    ).subscribe(() => this.validateActivityDates());
+    this.activityForm.get('end_time')?.valueChanges.pipe(
+      takeUntilDestroyed(this.destroyRef)
+    ).subscribe(() => this.validateActivityDates());
   };
 
   private loadTripDestination(tripId: string): void {
-    this.tripsService.getTripById(tripId).subscribe({
-      next: trip => {
+    this.tripsService.getTripById(tripId).pipe(
+      takeUntilDestroyed(this.destroyRef),
+      switchMap(trip => {
         this.tripDateRange.set({
           start: trip.start_date,
           end: trip.end_date ?? undefined,
         });
-        if (!this.isEditMode()) {
-          const safeStart = adjustHours(trip.start_date, 2);
-          const safeEnd = trip.end_date ? adjustHours(trip.end_date, -2) : safeStart;
-
-          this.activityForm.patchValue({
-            start_time: toDateTimeInput(safeStart),
-            end_time: toDateTimeInput(safeEnd)
-          });
-
-          this.validateActivityDates();
-          this.cdr.detectChanges();
-        };
-        if (trip.destination) {
-          this.geocodingService.getCoordsByDestination(trip.destination).subscribe({
-            next: coords => this.tripDestinationCoords.set(coords),
-            error: async () => {
-              const coords = await this.geocodingService.getUserLocationOrDefault();
-              this.tripDestinationCoords.set(coords);
-              this.cdr.detectChanges();
-            },
-          });
-        } else {
-          this.geocodingService.getUserLocationOrDefault().then(coords => {
-            this.tripDestinationCoords.set(coords);
-            this.cdr.detectChanges();
-          });
-        };
-      },
+        return this.geocodingService.getDestinationOrUserCoords(trip.destination);
+      })
+    ).subscribe({
+      next: coords => this.tripDestinationCoords.set(coords),
     });
-  };
+  }
 
   private loadLocations(): void {
-    this.locationsService.getLocations().subscribe({
+    this.locationsService.getLocations().pipe(
+      takeUntilDestroyed(this.destroyRef)
+    ).subscribe({
       next: locations => this.locations.set(locations),
       error: () => this.errorMessage.set('Error cargando ubicaciones'),
     });
   };
 
   private loadActivity(id: string): void {
-    this.activitiesService.getActivityById(id).subscribe({
+    this.activitiesService.getActivityById(id).pipe(
+      takeUntilDestroyed(this.destroyRef)
+    ).subscribe({
       next: activity => {
         this.activityForm.patchValue({
           ...activity,
@@ -141,11 +129,8 @@ export class ActivityFormComponent implements OnInit {
         });
         if (activity.location_id) {
           const location = this.locations().find(loc => loc.id === activity.location_id);
-          if (location) {
-            this.selectedLocation.set(location)
-            setTimeout(() => this.mapComponent()?.panTo(location.lat, location.lng), 200);
-          };
-        }
+          if (location) this.selectedLocation.set(location);
+        };
       },
       error: () => this.errorMessage.set('Error cargando la actividad'),
     });
@@ -175,7 +160,9 @@ export class ActivityFormComponent implements OnInit {
       data: {tripDestinationCoords: this.tripDestinationCoords()},
     });
 
-    dialogRef.afterClosed().subscribe((location: TripLocation | null) => {
+    dialogRef.afterClosed().pipe(
+      takeUntilDestroyed(this.destroyRef)
+    ).subscribe((location: TripLocation | null) => {
       if (location) {
         this.locations.update(locations => [...locations, location]);
         this.setLocation(location);
@@ -200,12 +187,16 @@ export class ActivityFormComponent implements OnInit {
     const id = this.activityId();
 
     if (this.isEditMode() && id) {
-      this.activitiesService.updateActivity(id, payload).subscribe({
+      this.activitiesService.updateActivity(id, payload).pipe(
+        takeUntilDestroyed(this.destroyRef)
+      ).subscribe({
         next: () => this.router.navigate(['/trips', tripId, 'activities']),
         error: () => this.errorMessage.set('Error actualizando la actividad'),
       });
     } else {
-      this.activitiesService.createActivity(payload).subscribe({
+      this.activitiesService.createActivity(payload).pipe(
+        takeUntilDestroyed(this.destroyRef)
+      ).subscribe({
         next: () => this.router.navigate(['/trips', tripId, 'activities']),
         error: () => this.errorMessage.set('Error creando la actividad'),
       });
@@ -256,7 +247,6 @@ export class ActivityFormComponent implements OnInit {
   };
 
   goBack(): void {
-    const id = this.tripId();
     this.router.navigate([this.navigationService.getPreviousUrl()]);
   };
 };

@@ -2,8 +2,9 @@
   type="button"
   (click)="onClick()"
   [attr.title]="label()"
+  [attr.aria-label]="label()"
   [class]="label()"
   class="fixed left-4 z-50 flex items-center justify-center w-9 h-9 rounded-full bg-black/40 backdrop-blur-sm border border-white/20 text-white hover:bg-black/80 transition-all shadow-lg active:scale-95"
   [class]="topClass()">
-  <mat-icon class="text-base">arrow_back</mat-icon>
+  <mat-icon class="text-base" aria-hidden="true">arrow_back</mat-icon>
 </button>

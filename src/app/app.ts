@@ -11,16 +11,6 @@ import { filter } from 'rxjs';
   templateUrl: './app.html',
   styleUrl: './app.css'
 })
-export class App implements AfterViewInit{
+export class App {
   protected readonly title = signal('smart-travel-planner-web');
-  private router = inject(Router);
-
-  @ViewChild('mainContent') mainContent!: ElementRef<HTMLElement>;
-
-  ngAfterViewInit(): void {
-    this.router.events.pipe(
-      filter(event => event instanceof NavigationEnd)
-    ).subscribe(() => {
-      this.mainContent.nativeElement.scrollTop = 0;
-    });
-  }}
+};

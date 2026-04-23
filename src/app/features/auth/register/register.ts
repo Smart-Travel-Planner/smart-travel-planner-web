@@ -25,7 +25,7 @@ export class RegisterComponent {
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(6)]],
     });
-  }
+  };
 
   onSubmit(): void {
     if (this.registerForm.invalid) return;
@@ -40,5 +40,5 @@ export class RegisterComponent {
         this.errorMessage = 'Error al registrarse. Inténtalo de nuevo.'
       },
     });
-  }
-}
+  };
+};

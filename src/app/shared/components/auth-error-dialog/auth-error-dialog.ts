@@ -9,4 +9,4 @@ import { MatDialogActions, MatDialogClose, MatDialogContent, MatDialogTitle } fr
 })
 export class AuthErrorDialogComponent {
 
-}
+};

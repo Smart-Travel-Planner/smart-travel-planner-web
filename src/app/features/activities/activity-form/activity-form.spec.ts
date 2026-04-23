@@ -79,10 +79,9 @@ describe('ActivityFormComponent', () => {
     };
 
     geocodingServiceMock = {
-      getCoordsByDestination: vi.fn().mockReturnValue(of({ lat: 48.8566, lng: 2.3522 })),
-      getUserLocationOrDefault: vi.fn().mockResolvedValue({ lat: 40.4168, lng: -3.7038 }),
+      getDestinationOrUserCoords: vi.fn().mockReturnValue(of({ lat: 48.8566, lng: 2.3522 })),
     };
-
+    
     matDialogMock = {
       open: vi.fn(),
     };

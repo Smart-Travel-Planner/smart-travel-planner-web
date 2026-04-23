@@ -14,8 +14,8 @@ export class FormatDatePipe implements PipeTransform {
     if (timePart) {
       const [hours, minutes] = timePart.split(':');
       return `${formattedDate} ${hours}:${minutes}`;
-    }
+    };
 
     return formattedDate;
-  }
-}
+  };
+};
