@@ -1,5 +1,4 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { ActivityDrawerComponent } from './activity-drawer';
 
 describe('ActivityDrawer', () => {
@@ -14,6 +13,11 @@ describe('ActivityDrawer', () => {
 
     fixture = TestBed.createComponent(ActivityDrawerComponent);
     component = fixture.componentInstance;
+
+    fixture.componentRef.setInput('activity', {});
+    fixture.componentRef.setInput('locations', []);
+    fixture.componentRef.setInput('isOpen', true);
+
     await fixture.whenStable();
   });
 
