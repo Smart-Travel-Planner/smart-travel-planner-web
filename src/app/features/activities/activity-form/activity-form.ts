@@ -10,7 +10,7 @@ import { LocationDialogComponent } from '../location-dialog/location-dialog';
 import { TripsService } from '../../../core/services/trips.service';
 import { MapComponent } from '../../../shared/components/map/map';
 import { GeocodingService } from '../../../core/services/geocoding.service';
-import { adjustHours, toDateTimeInput } from '../../../core/utils/date.utils';
+import { toDateTimeInput } from '../../../core/utils/date.utils';
 import { BackButtonComponent } from '../../../shared/components/back-button/back-button';
 import { MatIconModule } from '@angular/material/icon';
 import { NavigationService } from '../../../core/services/navigation.service';
