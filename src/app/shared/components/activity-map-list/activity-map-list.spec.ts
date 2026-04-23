@@ -5,6 +5,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { ActivitiesService } from '../../../core/services/activities.service';
 import { of } from 'rxjs';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { MapService } from '../../../core/services/map.service';
 
 describe('ActivityMapList', () => {
   let component: ActivityMapListComponent;
@@ -20,15 +21,24 @@ describe('ActivityMapList', () => {
   };
 
   beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [ActivityMapListComponent],
-      providers: [
+
+  await TestBed.configureTestingModule({
+    imports: [ActivityMapListComponent],
+    providers: [
         { provide: ActivitiesService, useValue: activitiesServiceMock },
-        { provide: MatDialog, useValue: matDialogMock }
+        { provide: MatDialog, useValue: matDialogMock },
+        {
+          provide: MapService,
+          useValue: {
+            initMap: vi.fn(),
+            destroyMap: vi.fn(),
+            updateMarkers: vi.fn(),
+            invalidateSize: vi.fn()
+          }
+        }
       ],
-      schemas: [NO_ERRORS_SCHEMA]
-    })
-    .compileComponents();
+    schemas: [NO_ERRORS_SCHEMA]
+    }).compileComponents();
 
     fixture = TestBed.createComponent(ActivityMapListComponent);
     component = fixture.componentInstance;
@@ -36,7 +46,7 @@ describe('ActivityMapList', () => {
     fixture.componentRef.setInput('tripId', 'test-trip-123');
     fixture.componentRef.setInput('tripDestinationCoords', { lat: 41.3851, lng: 2.1734 });
     fixture.componentRef.setInput('locations', []);
-    fixture.componentRef.setInput('containerId', 'map-container-id'); 
+    fixture.componentRef.setInput('containerId', 'map-container-id');
 
     fixture.detectChanges();
   });
