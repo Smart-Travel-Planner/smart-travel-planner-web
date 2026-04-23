@@ -8,6 +8,8 @@ import { FormatDatePipe } from '../../../shared/pipes/format-date-pipe';
 import { NavigationService } from '../../../core/services/navigation.service';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialogComponent } from '../../../shared/components/confirm-dialog/confirm-dialog';
+import { DestroyRef } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 type TripFilter = 'all' | 'mine' | 'public';
 
@@ -23,6 +25,7 @@ export class TripListComponent implements OnInit {
   private router = inject(Router);
   private navigationService = inject(NavigationService);
   private dialog = inject(MatDialog);
+  private destroyRef = inject(DestroyRef);
 
   private myTrips = signal<Trip[]>([]);
   private publicTrips = signal<Trip[]>([]);
@@ -49,15 +52,15 @@ export class TripListComponent implements OnInit {
         ...this.myTrips(),
         ...this.publicTrips().filter(t => !myIds.has(t.id)),
       ];
-    }
+    };
 
     if (this.dateFrom()) {
       trips = trips.filter(t => t.start_date >= this.dateFrom());
-    }
+    };
 
     if (this.dateTo()) {
       trips = trips.filter(t => t.start_date <= this.dateTo());
-    }
+    };
 
     return trips;
   });
@@ -67,15 +70,20 @@ export class TripListComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadTrips();
+    this.navigationService.setPreviousUrl(`/trips`);
   };
 
   private loadTrips(): void {
-    this.tripsService.getMyTrips().subscribe({
+    this.tripsService.getMyTrips().pipe(
+      takeUntilDestroyed(this.destroyRef)
+    ).subscribe({
       next: trips => this.myTrips.set(trips),
       error: () => this.errorMessage.set('Error cargando tus viajes'),
     });
 
-    this.tripsService.getPublicTrips().subscribe({
+    this.tripsService.getPublicTrips().pipe(
+      takeUntilDestroyed(this.destroyRef)
+    ).subscribe({
       next: trips => this.publicTrips.set(trips),
       error: () => this.errorMessage.set('Error cargando viajes públicos'),
     });
@@ -104,6 +112,7 @@ export class TripListComponent implements OnInit {
   };
 
   goToCreate(): void {
+    this.navigationService.setPreviousUrl(`/trips`);
     this.router.navigate(['/trips/new']);
   };
 
@@ -122,9 +131,13 @@ export class TripListComponent implements OnInit {
       },
     });
 
-    dialogRef.afterClosed().subscribe(confirmed => {
+    dialogRef.afterClosed().pipe(
+      takeUntilDestroyed(this.destroyRef)
+    ).subscribe(confirmed => {
       if (!confirmed) return;
-      this.tripsService.deleteTrip(id).subscribe({
+      this.tripsService.deleteTrip(id).pipe(
+        takeUntilDestroyed(this.destroyRef)
+      ).subscribe({
         next: () => this.loadTrips(),
         error: () => this.errorMessage.set('Error eliminando el viaje'),
       });

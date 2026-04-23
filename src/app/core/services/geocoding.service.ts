@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { MapService } from './map.service';
-import { catchError, map, Observable, of } from 'rxjs';
+import { catchError, from, map, Observable, of } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -40,5 +40,14 @@ export class GeocodingService {
   getUserLocationOrDefault(): Promise<{ lat: number; lng: number }> {
     return this.mapService.getUserLocation()
       .catch(() => this.DEFAULT_COORDS);
+  };
+
+  getDestinationOrUserCoords(destination: string | undefined): Observable<{ lat: number; lng: number }> {
+    if (!destination) {
+      return from(this.getUserLocationOrDefault());
+    };
+    return this.getCoordsByDestination(destination).pipe(
+      catchError(() => from(this.getUserLocationOrDefault()))
+    );
   };
 };

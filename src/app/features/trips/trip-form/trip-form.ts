@@ -2,7 +2,7 @@ import { Component, inject, OnInit, signal } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { TripsService } from '../../../core/services/trips.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { toDateInput, toDateTimeInput } from '../../../core/utils/date.utils';
+import { toDateTimeInput } from '../../../core/utils/date.utils';
 import { NavigationService } from '../../../core/services/navigation.service';
 import { MatIconModule } from '@angular/material/icon';
 import { BackButtonComponent } from '../../../shared/components/back-button/back-button';
@@ -53,7 +53,7 @@ export class TripFormComponent implements OnInit {
         });
       },
       error: () => this.errorMessage.set('Error cargando el viaje'),
-    })
+    });
   };
 
   onSubmit(): void {
@@ -89,7 +89,6 @@ export class TripFormComponent implements OnInit {
   };
 
   goBack(): void {
-    const id = this.tripId();
     this.router.navigate([this.navigationService.getPreviousUrl()]);
   };
 };

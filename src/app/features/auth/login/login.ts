@@ -24,7 +24,7 @@ export class LoginComponent {
       email: ['', [Validators.required, Validators.email]],
       password: ['', Validators.required],
     });
-  }
+  };
 
   onSubmit(): void {
     if (this.loginForm.invalid) return;
@@ -39,5 +39,5 @@ export class LoginComponent {
         this.errorMessage = 'Credenciales incorrectas'
       },
     });
-  }
-}
+  };
+};
