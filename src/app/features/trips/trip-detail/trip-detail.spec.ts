@@ -222,7 +222,8 @@ describe('TripDetailComponent', () => {
   });
 
   it('should return false if trip is null', () => {
-    expect(component.facade.trip()).not.toBeNull();
+    component.facade['_trip'].set(null);
+    // expect(component.facade.trip()).not.toBeNull();
     (authServiceMock.getCurrentUserId as ReturnType<typeof vi.fn>).mockReturnValue('other-user');
     expect(component.facade.isOwner()).toBe(false);
   });
