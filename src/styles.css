@@ -8,7 +8,6 @@
 
 @import "tailwindcss";
 
-/* 1. TOKENS DE DISEÑO */
 @theme {
   /* Fuentes */
 
@@ -21,7 +20,6 @@
   --shadow-card: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
 }
 
-/* 2. COMPONENTES Y SOBRESCRITURAS */
 @layer components {
   .trip-background-overlay {
     @apply fixed inset-0 bg-cover bg-center -z-10 bg-slate-950 transition-all duration-500 ease-in-out;
