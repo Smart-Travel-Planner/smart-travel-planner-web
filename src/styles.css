@@ -1,35 +1,67 @@
-/* You can add global styles to this file, and also import other style files */
-@import url('https://fonts.googleapis.com/css2?family=Pacifico&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
+
+/* GUÍA DE PRIORIDADES DE ESTILOS:
+  1. @theme: Definición de tokens globales (identidad visual).
+  2. @import "tailwindcss": Base de utilidades y reset.
+  3. @layer components: Abstracciones de componentes y ajustes de librerías (Leaflet, Material).
+  4. Estilos Globales: Ajustes de layout base (html, body).
+*/
 
 @import "tailwindcss";
-.leaflet-pane,
-.leaflet-top,
-.leaflet-bottom {
-  z-index: 0 !important;
+
+/* 1. TOKENS DE DISEÑO */
+@theme {
+  /* Fuentes */
+
+  /* Imágenes */
+  --background-image-trip-default: url('https://res.cloudinary.com/dux4gqdow/image/upload/v1773662802/pietro-de-grandi-T7K4aEPoGGk-unsplash_nqzjxq.jpg');
+  --default-image-card: url('https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=800&q=80');
+
+  /* UI Tokens */
+  --color-brand-blue: #3b82f6;
+  --shadow-card: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
 }
 
-.leaflet-control {
-  z-index: 0 !important;
+/* 2. COMPONENTES Y SOBRESCRITURAS */
+@layer components {
+  .trip-background-overlay {
+    @apply fixed inset-0 bg-cover bg-center -z-10 bg-slate-950 transition-all duration-500 ease-in-out;
+    background-image: var(--trip-bg, var(--background-image-trip-default));
+    opacity: 1;
+  }
+
+  .default-image-card {
+    @apply absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-105 cursor-pointer;
+
+    background-image: var(--card-img, var(--background-image-trip-default));
+  }
+
+  .is-loading {
+    background-image: none !important;
+    opacity: 0.5;
+  }
+
+  .leaflet-pane,
+  .leaflet-top,
+  .leaflet-bottom,
+  .leaflet-control {
+    z-index: 0 !important;
+  }
+
+  .snackbar-error {
+    @apply !bg-red-500 !text-white;
+  }
+
+  .snackbar-success {
+    @apply !bg-green-500 !text-white;
+  }
 }
 
-.snackbar-error {
-  background-color: #f44336 !important;
-  color: white !important;
-}
+@layer base {
+  html, body {
+    @apply h-full overflow-x-hidden;
+  }
 
-.snackbar-success {
-  background-color: #4caf50 !important;
-  color: white !important;
-}
-
-html, body {
-  height: 100%;
-  overflow-x: hidden;
-}
-
-app-home {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
+  app-home {
+    @apply flex flex-1 flex-col;
+  }
 }

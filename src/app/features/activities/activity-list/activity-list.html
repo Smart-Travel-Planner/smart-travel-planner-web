@@ -3,9 +3,11 @@
   <app-back-button (backClick)="goBack()"></app-back-button>
 
   <div
-    aria-hidden="true"
-    class="fixed inset-0 bg-cover bg-center -z-10"
-    [style.background-image]="'url(' + (trip()?.image_url || defaultImage) + ')'">
+  aria-hidden="true"
+  class="trip-background-overlay"
+    [style.--trip-bg]="trip()?.image_url ? 'url(' + trip()?.image_url + ')' : null"
+    [class.is-loading]="!trip()"
+    >
     <div class="absolute inset-0 bg-linear-to-t from-slate-950 via-slate-900/40 to-transparent"></div>
   </div>
 

@@ -5,11 +5,13 @@
 
     <div
       aria-hidden="true"
-      class="fixed inset-0 bg-cover bg-center -z-10"
-      [style.background-image]="'url(' + (facade.trip()!.image_url || defaultImage) + ')'">
+      class="trip-background-overlay"
+      [style.--trip-bg]="facade.trip()?.image_url ? 'url(' + facade.trip()?.image_url + ')' : null"
+      [class.is-loading]="!facade.trip()"
+      >
       <div class="absolute inset-0 bg-linear-to-t from-slate-950 via-slate-900/40 to-transparent"></div>
     </div>
-
+    
     <header class="relative w-full flex flex-col items-end justify-start gap-4 px-6 pb-6 overflow-hidden">
       <div class="relative w-full max-w-4xl mx-auto flex justify-between items-start z-10 pt-4">
         <div class="bg-black/30 backdrop-blur-sm px-4 py-2 rounded-2xl">

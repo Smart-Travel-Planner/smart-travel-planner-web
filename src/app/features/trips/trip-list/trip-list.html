@@ -1,8 +1,8 @@
 <main class="min-h-screen w-full bg-linear-to-b from-slate-900 via-slate-800 to-blue-600 text-white flex flex-col items-center pb-16">
   <div
     aria-hidden="true"
-    class="relative w-full min-h-64 flex flex-col items-center px-6 overflow-hidden bg-cover bg-center"
-    style="background-image: url('https://res.cloudinary.com/dux4gqdow/image/upload/v1773662802/pietro-de-grandi-T7K4aEPoGGk-unsplash_nqzjxq.jpg')">
+    class="relative w-full min-h-64 bg-trip-default flex flex-col items-center px-6 overflow-hidden bg-cover bg-center"
+    >
 
     <div class="absolute inset-0 bg-linear-to-t from-slate-950 via-slate-900/40 to-transparent"></div>
 
@@ -96,9 +96,9 @@
           <div class="relative h-36 w-full overflow-hidden">
             <div
               aria-hidden="true"
-              class="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-105"
+              class="default-image-card"
               (click)="goToDetail(trip.id)"
-              [style.background-image]="'url(' + (trip.image_url || defaultImage) + ')'">
+              [style.--card-img]="trip.image_url ? 'url(' + trip.image_url + ')' : null">
             </div>
             <div class="absolute top-3 left-3">
               @if (trip.is_public) {
@@ -143,7 +143,7 @@
               <mat-icon class="text-sm" aria-hidden="true">payments</mat-icon>
               <data [value]="trip.total_budget" class="text-sm font-medium">{{ trip.total_budget }} €</data>
             </div>
-            <div class="flex items-cen  ter justify-between mt-4 pt-3 border-t border-slate-100 dark:border-slate-800">
+            <div class="flex items-center justify-between mt-4 pt-3 border-t border-slate-100 dark:border-slate-800">
               @if (isOwner(trip)) {
                 <div class="flex gap-2">
                   <button

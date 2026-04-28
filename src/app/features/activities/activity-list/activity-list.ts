@@ -35,8 +35,6 @@ export class ActivityListComponent implements OnInit {
   tripDestinationCoords = signal<{ lat: number; lng: number } | undefined>(undefined);
   trip = signal<Trip | null>(null);
 
-  readonly defaultImage = 'https://res.cloudinary.com/dux4gqdow/image/upload/v1773662802/pietro-de-grandi-T7K4aEPoGGk-unsplash_nqzjxq.jpg';
-
   ngOnInit(): void {
     const tripId = this.route.snapshot.paramMap.get('tripId');
     if (!tripId) {
@@ -58,16 +56,6 @@ export class ActivityListComponent implements OnInit {
     });
   };
 
-  // private loadTripDestination(tripId: string): void {
-  //   this.tripsService.getTripById(tripId).subscribe({
-  //     next: trip => {
-  //       this.trip.set(trip);
-  //       this.geocodingService.getDestinationOrUserCoords(trip.destination).subscribe({
-  //         next: coords => this.tripDestinationCoords.set(coords),
-  //       });
-  //     },
-  //   });
-  // };
   private loadTripDestination(tripId: string): void {
     this.tripsService.getTripById(tripId).pipe(
       takeUntilDestroyed(this.destroyRef),

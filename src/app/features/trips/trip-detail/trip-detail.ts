@@ -1,5 +1,5 @@
 
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 import { FormatDatePipe } from '../../../shared/pipes/format-date-pipe';
@@ -25,8 +25,6 @@ export class TripDetailComponent implements OnInit {
   private route = inject(ActivatedRoute);
   private navigationService = inject(NavigationService);
   private dialog = inject(MatDialog);
-
-  readonly defaultImage = 'https://res.cloudinary.com/dux4gqdow/image/upload/v1773662802/pietro-de-grandi-T7K4aEPoGGk-unsplash_nqzjxq.jpg';
 
   ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get('id');

@@ -37,8 +37,6 @@ export class TripListComponent implements OnInit {
   dateFromValue = signal<string>('');
   dateToValue = signal<string>('');
 
-  readonly defaultImage = 'https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=800&q=80';
-
   filteredTrips = computed(() => {
     let trips: Trip[] = [];
 

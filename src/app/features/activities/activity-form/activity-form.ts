@@ -47,7 +47,6 @@ export class ActivityFormComponent implements OnInit {
   errorMessage = signal<string>('');
   tripDestinationCoords = signal<{ lat: number; lng: number} | undefined>(undefined);
   tripDateRange = signal<{ start: string; end: string | undefined } | null>(null);
-  readonly defaultImage = 'https://res.cloudinary.com/dux4gqdow/image/upload/v1773662802/pietro-de-grandi-T7K4aEPoGGk-unsplash_nqzjxq.jpg';
 
   filteredLocations = computed(() => {
     const search = this.locationSearch().toLowerCase();
