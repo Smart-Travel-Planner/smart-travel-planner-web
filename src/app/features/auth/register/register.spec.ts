@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { provideRouter } from '@angular/router';
+import { provideRouter, Router } from '@angular/router';
 import { of, throwError } from 'rxjs';
 import { vi } from 'vitest';
 import { RegisterComponent } from './register';
@@ -22,6 +22,10 @@ describe('RegisterComponent', () => {
         { provide: AuthService, useValue: authServiceMock },
       ],
     }).compileComponents();
+
+    const router = TestBed.inject(Router);
+
+    vi.spyOn(router, 'navigate').mockResolvedValue(true);
 
     fixture = TestBed.createComponent(RegisterComponent);
     component = fixture.componentInstance;

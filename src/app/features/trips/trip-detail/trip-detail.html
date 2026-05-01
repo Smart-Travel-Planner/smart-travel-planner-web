@@ -5,8 +5,10 @@
 
     <div
       aria-hidden="true"
-      class="fixed inset-0 bg-cover bg-center -z-10"
-      [style.background-image]="'url(' + (facade.trip()!.image_url || defaultImage) + ')'">
+      class="trip-background-overlay"
+      [style.--trip-bg]="facade.trip()?.image_url ? 'url(' + facade.trip()?.image_url + ')' : null"
+      [class.is-loading]="!facade.trip()"
+      >
       <div class="absolute inset-0 bg-linear-to-t from-slate-950 via-slate-900/40 to-transparent"></div>
     </div>
 
@@ -116,8 +118,8 @@
         <button
           (click)="deleteTrip()"
           [attr.aria-label]="'Borrar viaje ' + facade.trip()!.title"
-          class="flex items-center gap-1 px-3 py-1.5 rounded-lg text-sm font-semibold border border-red-300 text-red-500 bg-slate-100
-                hover:bg-red-400 hover:text-white hover:border-red-400 transition-colors" title="Eliminar viaje">
+          class="btn-erase-interactive"
+          title="Eliminar viaje">
           <mat-icon aria-hidden="true" class="text-base">delete</mat-icon>
         </button>
       </menu>

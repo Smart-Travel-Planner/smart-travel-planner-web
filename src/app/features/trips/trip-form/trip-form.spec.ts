@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { provideRouter, ActivatedRoute } from '@angular/router';
+import { provideRouter, ActivatedRoute, Router } from '@angular/router';
 import { of, throwError } from 'rxjs';
 import { vi } from 'vitest';
 import { TripFormComponent } from './trip-form';
@@ -39,6 +39,11 @@ describe('TripFormComponent', () => {
         },
       ],
     }).compileComponents();
+
+    const router = TestBed.inject(Router);
+
+    vi.spyOn(router, 'navigate').mockResolvedValue(true);
+
 
     fixture = TestBed.createComponent(TripFormComponent);
     component = fixture.componentInstance;

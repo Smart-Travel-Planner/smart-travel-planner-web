@@ -1,8 +1,8 @@
 <main class="min-h-screen w-full bg-linear-to-b from-slate-900 via-slate-800 to-blue-600 text-white flex flex-col items-center pb-16">
   <div
     aria-hidden="true"
-    class="relative w-full min-h-64 flex flex-col items-center px-6 overflow-hidden bg-cover bg-center"
-    style="background-image: url('https://res.cloudinary.com/dux4gqdow/image/upload/v1773662802/pietro-de-grandi-T7K4aEPoGGk-unsplash_nqzjxq.jpg')">
+    class="relative w-full min-h-64 bg-trip-default flex flex-col items-center px-6 overflow-hidden bg-cover bg-center"
+    >
 
     <div class="absolute inset-0 bg-linear-to-t from-slate-950 via-slate-900/40 to-transparent"></div>
 
@@ -17,7 +17,7 @@
       <button
         (click)="goToCreate()"
         aria-label="Nuevo viaje"
-        class="flex items-center gap-2 bg-blue-500 hover:bg-blue-600 transition-all px-4 py-2 rounded-xl shadow-2xl shadow-blue-900/40 text-sm font-medium"
+        class="flex items-center gap-2 bg-brand-blue hover:bg-blue-600 transition-all px-4 py-2 rounded-xl shadow-2xl shadow-blue-900/40 text-sm font-medium"
         title="Nuevo viaje">
         <mat-icon aria-hidden="true">add</mat-icon>
       </button>
@@ -96,9 +96,9 @@
           <div class="relative h-36 w-full overflow-hidden">
             <div
               aria-hidden="true"
-              class="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-105"
+              class="default-image-card"
               (click)="goToDetail(trip.id)"
-              [style.background-image]="'url(' + (trip.image_url || defaultImage) + ')'">
+              [style.--card-img]="trip.image_url ? 'url(' + trip.image_url + ')' : null">
             </div>
             <div class="absolute top-3 left-3">
               @if (trip.is_public) {
@@ -143,7 +143,7 @@
               <mat-icon class="text-sm" aria-hidden="true">payments</mat-icon>
               <data [value]="trip.total_budget" class="text-sm font-medium">{{ trip.total_budget }} €</data>
             </div>
-            <div class="flex items-cen  ter justify-between mt-4 pt-3 border-t border-slate-100 dark:border-slate-800">
+            <div class="flex items-center justify-between mt-4 pt-3 border-t border-slate-100 dark:border-slate-800">
               @if (isOwner(trip)) {
                 <div class="flex gap-2">
                   <button
@@ -156,11 +156,15 @@
                   </button>
                   <button
                     (click)="deleteTrip(trip.id, trip.title)"
+                    class="btn-erase-interactive"
+                    [disabled]="isDeleting() === trip.id"
                     [attr.aria-label]="'Eliminar viaje ' + trip.title"
-                    class="flex items-center gap-1 px-3 py-1.5 rounded-lg text-sm font-semibold border border-red-300 text-red-300
-                          hover:bg-red-300 hover:text-slate-800 hover:border-red-300
-                          transition-colors" title="Eliminar viaje">
-                    <mat-icon class="text-base" aria-hidden="true">delete</mat-icon>
+                    title="Eliminar viaje">
+                    @if (isDeleting() === trip.id) {
+                      <mat-icon class="animate-spin text-base">refresh</mat-icon>
+                    } @else {
+                      <mat-icon class="text-base" aria-hidden="true">delete</mat-icon>
+                    }
                   </button>
                 </div>
               } @else {
@@ -196,7 +200,7 @@
       <p class="text-slate-400 text-sm mt-2">Crea tu primer viaje y empieza a planificar tu próxima aventura.</p>
       <button
         (click)="goToCreate()"
-        class="mt-6 flex items-center gap-2 bg-blue-500 hover:bg-blue-600 transition-all px-6 py-3 rounded-xl text-sm font-medium shadow-lg" title="Nuevo viaje">
+        class="mt-6 flex items-center gap-2 bg-brand-blue  hover:bg-blue-600 transition-all px-6 py-3 rounded-xl text-sm font-medium shadow-lg" title="Nuevo viaje">
         <mat-icon class="text-base" aria-hidden="true">add</mat-icon>
         Crear mi primer viaje
       </button>

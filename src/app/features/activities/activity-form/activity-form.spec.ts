@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { provideRouter, ActivatedRoute } from '@angular/router';
+import { provideRouter, ActivatedRoute, Router } from '@angular/router';
 import { of, throwError } from 'rxjs';
 import { vi } from 'vitest';
 import { Component, Input } from '@angular/core';
@@ -81,7 +81,7 @@ describe('ActivityFormComponent', () => {
     geocodingServiceMock = {
       getDestinationOrUserCoords: vi.fn().mockReturnValue(of({ lat: 48.8566, lng: 2.3522 })),
     };
-    
+
     matDialogMock = {
       open: vi.fn(),
     };
@@ -89,7 +89,15 @@ describe('ActivityFormComponent', () => {
     await TestBed.configureTestingModule({
       imports: [ActivityFormComponent],
       providers: [
-        provideRouter([]),
+        {
+          provide: Router,
+          useValue: {
+            navigate: vi.fn().mockResolvedValue(true),
+            events: of(), // Por si el componente escucha eventos del router
+            createUrlTree: vi.fn(),
+            serializeUrl: vi.fn()
+          }
+        },
         { provide: ActivitiesService, useValue: activitiesServiceMock },
         { provide: LocationsService, useValue: locationsServiceMock },
         { provide: TripsService, useValue: tripsServiceMock },

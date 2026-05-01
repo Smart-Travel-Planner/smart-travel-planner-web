@@ -1,4 +1,4 @@
-import { Component, computed, DestroyRef, effect, inject, input, OnInit, output, signal, viewChild } from '@angular/core';
+import { Component, computed, DestroyRef, effect, inject, input, output, signal, viewChild } from '@angular/core';
 import { Activity } from '../../../core/models/activity.model';
 import { TripLocation } from '../../../core/models/location.model';
 import { ActivityCategory } from '../../../core/enums/activity-category.enum';
