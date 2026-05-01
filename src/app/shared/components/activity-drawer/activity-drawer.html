@@ -142,8 +142,7 @@
           </button>
           <button
             (click)="delete.emit(activity()!)"
-            class="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold border border-red-300 text-red-500 hover:bg-red-50 hover:border-red-400 transition-colors"
-            [class.hover:bg-red-950]="darkMode()">
+            class="btn-erase-interactive">
             <mat-icon aria-hidden="true" class="text-base">delete</mat-icon>
             Eliminar
           </button>

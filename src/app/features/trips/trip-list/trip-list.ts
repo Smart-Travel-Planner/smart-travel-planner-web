@@ -36,6 +36,7 @@ export class TripListComponent implements OnInit {
   errorMessage = signal<string>('');
   dateFromValue = signal<string>('');
   dateToValue = signal<string>('');
+  isDeleting = signal<string | null>(null);
 
   filteredTrips = computed(() => {
     let trips: Trip[] = [];
@@ -133,11 +134,17 @@ export class TripListComponent implements OnInit {
       takeUntilDestroyed(this.destroyRef)
     ).subscribe(confirmed => {
       if (!confirmed) return;
+      this.isDeleting.set(id);
       this.tripsService.deleteTrip(id).pipe(
         takeUntilDestroyed(this.destroyRef)
       ).subscribe({
         next: () => this.loadTrips(),
-        error: () => this.errorMessage.set('Error eliminando el viaje'),
+        error: () => {
+          this.isDeleting.set(null);
+          this.errorMessage.set('Error eliminando el viaje')},
+        complete: () => {
+          this.isDeleting.set(null);
+        }
       });
     });
   };

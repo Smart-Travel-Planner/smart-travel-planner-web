@@ -156,11 +156,15 @@
                   </button>
                   <button
                     (click)="deleteTrip(trip.id, trip.title)"
+                    class="btn-erase-interactive"
+                    [disabled]="isDeleting() === trip.id"
                     [attr.aria-label]="'Eliminar viaje ' + trip.title"
-                    class="flex items-center gap-1 px-3 py-1.5 rounded-lg text-sm font-semibold border border-red-300 text-red-300
-                          hover:bg-red-300 hover:text-slate-800 hover:border-red-300
-                          transition-colors" title="Eliminar viaje">
-                    <mat-icon class="text-base" aria-hidden="true">delete</mat-icon>
+                    title="Eliminar viaje">
+                    @if (isDeleting() === trip.id) {
+                      <mat-icon class="animate-spin text-base">refresh</mat-icon>
+                    } @else {
+                      <mat-icon class="text-base" aria-hidden="true">delete</mat-icon>
+                    }
                   </button>
                 </div>
               } @else {
