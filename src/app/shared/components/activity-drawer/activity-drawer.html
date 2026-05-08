@@ -140,12 +140,20 @@
             <mat-icon aria-hidden="true" class="text-base">edit</mat-icon>
             Editar
           </button>
-          <button
+          <!-- <button
             (click)="delete.emit(activity()!)"
             class="btn-erase-interactive">
             <mat-icon aria-hidden="true" class="text-base">delete</mat-icon>
             Eliminar
-          </button>
+          </button> -->
+          <app-action-button
+  variant="btn-delete"
+  ariaLabel="Eliminar actividad"
+  icon="delete"
+  label="Eliminar"
+  [fullWidth]="true"
+  (click)="delete.emit(activity()!)">
+</app-action-button>
         </div>
       }
     </div>

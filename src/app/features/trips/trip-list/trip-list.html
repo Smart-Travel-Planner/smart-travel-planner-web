@@ -154,7 +154,7 @@
                           transition-colors" title="Editar viaje">
                     <mat-icon class="text-base" aria-hidden="true">edit</mat-icon>
                   </button>
-                  <button
+                  <!-- <button
                     (click)="deleteTrip(trip.id, trip.title)"
                     class="btn-erase-interactive"
                     [disabled]="isDeleting() === trip.id"
@@ -165,7 +165,14 @@
                     } @else {
                       <mat-icon class="text-base" aria-hidden="true">delete</mat-icon>
                     }
-                  </button>
+                  </button> -->
+                  <app-action-button
+                    variant="btn-delete"
+                    [ariaLabel]="'Eliminar viaje ' + trip.title"
+                    icon="delete"
+                    [loading]="isDeleting() === trip.id"
+                    (click)="deleteTrip(trip.id, trip.title)">
+                  </app-action-button>
                 </div>
               } @else {
                 <div></div>

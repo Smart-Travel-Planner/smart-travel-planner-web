@@ -4,10 +4,11 @@ import { Activity } from '../../../core/models/activity.model';
 import { TripLocation } from '../../../core/models/location.model';
 import { ACTIVITY_CATEGORY_COLORS } from '../../../core/enums/activity-category-colors.enum';
 import { FormatDatePipe } from '../../pipes/format-date-pipe';
+import { ActionButtonComponent } from '../action-button/action-button';
 
 @Component({
   selector: 'app-activity-drawer',
-  imports: [MatIconModule, FormatDatePipe],
+  imports: [MatIconModule, FormatDatePipe, ActionButtonComponent],
   templateUrl: './activity-drawer.html',
   styleUrl: './activity-drawer.css',
 })

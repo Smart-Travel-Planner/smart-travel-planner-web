@@ -35,7 +35,7 @@
     }
 
     &:active {
-      @apply scale-95; 
+      @apply scale-95;
     }
     &:hover {
       @apply

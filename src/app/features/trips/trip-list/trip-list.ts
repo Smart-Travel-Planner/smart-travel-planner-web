@@ -10,12 +10,13 @@ import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialogComponent } from '../../../shared/components/confirm-dialog/confirm-dialog';
 import { DestroyRef } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { ActionButtonComponent } from '../../../shared/components/action-button/action-button';
 
 type TripFilter = 'all' | 'mine' | 'public';
 
 @Component({
   selector: 'app-trip-list',
-  imports: [MatIconModule, FormatDatePipe],
+  imports: [MatIconModule, FormatDatePipe, ActionButtonComponent],
   templateUrl: './trip-list.html',
   styleUrl: './trip-list.css',
 })

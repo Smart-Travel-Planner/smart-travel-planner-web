@@ -1,0 +1,69 @@
+@import "../../../../styles.css";
+
+:host {
+  display: contents;
+}
+
+/* .btn-create {
+  @apply flex items-center gap-1 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors
+  bg-blue-500 hover:bg-blue-600 text-white;
+
+  &:focus-visible {
+    @apply ring-2 ring-blue-400;
+  }
+
+  &:active {
+    @apply scale-95;
+  }
+} */
+
+/* .btn-edit {
+  @apply flex items-center gap-1 px-3 py-1.5 rounded-lg text-sm transition-colors
+  border border-slate-300 text-slate-600
+  hover:bg-slate-100
+  dark:border-slate-600 dark:text-slate-400 dark:hover:bg-slate-800;
+
+  &:focus-visible {
+    @apply ring-2 ring-slate-400;
+  }
+
+  &:active {
+    @apply scale-95;
+  }
+} */
+
+.btn-delete {
+  @apply flex justify-center items-center gap-1 px-3 py-1.5 min-w-10 min-h-10 md:min-w-8 md:min-h-8 rounded-lg text-sm font-semibold border transition-colors
+  border-btn-erase-primary text-btn-erase-primary bg-btn-erase-content;
+
+  &:focus-visible {
+    @apply ring-2 ring-btn-erase-primary;
+  }
+
+  &:active {
+    @apply scale-95;
+  }
+
+  &:hover {
+    @apply bg-btn-erase-primary text-btn-erase-content;
+  }
+}
+
+/* .btn-detail {
+  @apply flex items-center gap-1 px-3 py-1.5 rounded-lg text-sm transition-colors
+  border border-primary text-primary
+  hover:text-slate-800 hover:bg-white;
+
+  &:focus-visible {
+    @apply ring-2 ring-primary;
+  }
+
+  &:active {
+    @apply scale-95;
+  }
+} */
+
+:host(.flex-1) {
+  display: flex;
+  flex: 1;
+}

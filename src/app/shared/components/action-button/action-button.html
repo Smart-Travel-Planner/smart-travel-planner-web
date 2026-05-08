@@ -1,0 +1,15 @@
+<button
+  [class]="variant()"
+  [class.flex-1]="fullWidth()"
+  [disabled]="disabled() || loading()"
+  [attr.aria-label]="ariaLabel()"
+  [attr.title]="ariaLabel()">
+  @if (loading()) {
+    <mat-icon class="animate-spin text-base" aria-hidden="true">refresh</mat-icon>
+  } @else {
+    <mat-icon class="text-base" aria-hidden="true">{{ icon() }}</mat-icon>
+  }
+  @if (label()) {
+    <span>{{ label() }}</span>
+  }
+</button>
