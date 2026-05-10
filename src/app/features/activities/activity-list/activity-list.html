@@ -22,13 +22,13 @@
         </h1>
         <p class="text-slate-200 mt-1 text-sm font-medium">Gestiona los eventos de tu viaje</p>
       </div>
-      <button
-        (click)="goToCreate()"
-        aria-label="Nueva actividad"
-        class="bg-brand-blue  flex items-center gap-2 hover:bg-blue-600 transition-all px-4 py-2 rounded-xl shadow-2xl shadow-blue-900/40 text-sm font-medium"
-        title="Nueva actividad">
-        <mat-icon aria-hidden="true">add</mat-icon>
-      </button>
+      <app-action-button
+        variant="btn-create"
+        [ariaLabel]="'Nueva actividad'"
+        icon="add"
+        [loading]="false"
+        (click)="goToCreate()">
+      </app-action-button>
     </div>
   </div>
 

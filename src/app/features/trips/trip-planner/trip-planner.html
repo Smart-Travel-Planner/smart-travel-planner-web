@@ -20,14 +20,13 @@
             title="Ver mapa y actividades">
             <mat-icon class="text-base" aria-hidden="true">map</mat-icon>
           </button>
-
-          <button
-            (click)="goToNewActivity()"
-            aria-label="Nueva actividad"
-            class="flex items-center gap-1 px-3 py-1.5 rounded-lg text-sm font-semibold bg-blue-500/20 border border-blue-400 text-blue-300 hover:bg-brand-blue hover:text-white transition-colors"
-            title="Nueva actividad">
-            <mat-icon class="text-base" aria-hidden="true">add</mat-icon>
-          </button>
+          <app-action-button
+            variant="btn-create"
+            [ariaLabel]="'Nueva actividad'"
+            icon="add"
+            [loading]="false"
+            (click)="goToNewActivity()">
+          </app-action-button>
         </div>
       </div>
       <button

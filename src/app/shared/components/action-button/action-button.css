@@ -4,9 +4,9 @@
   display: contents;
 }
 
-/* .btn-create {
-  @apply flex items-center gap-1 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors
-  bg-blue-500 hover:bg-blue-600 text-white;
+.btn-create {
+  @apply inline-flex w-fit items-center gap-1 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors
+  bg-brand-blue hover:bg-blue-600 text-white;
 
   &:focus-visible {
     @apply ring-2 ring-blue-400;
@@ -15,7 +15,7 @@
   &:active {
     @apply scale-95;
   }
-} */
+}
 
 /* .btn-edit {
   @apply flex items-center gap-1 px-3 py-1.5 rounded-lg text-sm transition-colors

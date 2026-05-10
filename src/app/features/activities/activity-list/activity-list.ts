@@ -13,10 +13,11 @@ import { ActivityMapListComponent } from '../../../shared/components/activity-ma
 import { DestroyRef } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { switchMap } from 'rxjs';
+import { ActionButtonComponent } from '../../../shared/components/action-button/action-button';
 
 @Component({
   selector: 'app-activity-list',
-  imports: [MatIconModule, BackButtonComponent, ActivityMapListComponent],
+  imports: [MatIconModule, BackButtonComponent, ActivityMapListComponent, ActionButtonComponent],
   templateUrl: './activity-list.html',
   styleUrl: './activity-list.css',
 })

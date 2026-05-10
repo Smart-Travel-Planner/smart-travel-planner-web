@@ -13,14 +13,13 @@
         </h1>
         <p class="text-slate-200 mt-3 text-sm md:text-base font-medium">Gestiona tus próximas aventuras</p>
       </div>
-
-      <button
-        (click)="goToCreate()"
-        aria-label="Nuevo viaje"
-        class="flex items-center gap-2 bg-brand-blue hover:bg-blue-600 transition-all px-4 py-2 rounded-xl shadow-2xl shadow-blue-900/40 text-sm font-medium"
-        title="Nuevo viaje">
-        <mat-icon aria-hidden="true">add</mat-icon>
-      </button>
+      <app-action-button
+        variant="btn-create"
+        [ariaLabel]="'Nuevo viaje'"
+        icon="add"
+        [loading]="false"
+        (click)="goToCreate()">
+      </app-action-button>
     </div>
 
     <section class="w-full max-w-4xl bg-white backdrop-blur-xl border border-slate-200 rounded-2xl p-2 mb-8 flex flex-wrap gap-6 items-center justify-between">
@@ -154,18 +153,6 @@
                           transition-colors" title="Editar viaje">
                     <mat-icon class="text-base" aria-hidden="true">edit</mat-icon>
                   </button>
-                  <!-- <button
-                    (click)="deleteTrip(trip.id, trip.title)"
-                    class="btn-erase-interactive"
-                    [disabled]="isDeleting() === trip.id"
-                    [attr.aria-label]="'Eliminar viaje ' + trip.title"
-                    title="Eliminar viaje">
-                    @if (isDeleting() === trip.id) {
-                      <mat-icon class="animate-spin text-base">refresh</mat-icon>
-                    } @else {
-                      <mat-icon class="text-base" aria-hidden="true">delete</mat-icon>
-                    }
-                  </button> -->
                   <app-action-button
                     variant="btn-delete"
                     [ariaLabel]="'Eliminar viaje ' + trip.title"

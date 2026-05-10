@@ -17,10 +17,11 @@ import { NavigationService } from '../../../core/services/navigation.service';
 import { DestroyRef } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { switchMap } from 'rxjs';
+import { ActionButtonComponent } from '../../../shared/components/action-button/action-button';
 
 @Component({
   selector: 'app-activity-form',
-  imports: [ReactiveFormsModule, MapComponent, BackButtonComponent, MatIconModule],
+  imports: [ReactiveFormsModule, MapComponent, BackButtonComponent, MatIconModule, ActionButtonComponent],
   templateUrl: './activity-form.html',
   styleUrl: './activity-form.css',
 })

@@ -6,10 +6,11 @@ import { CalendarComponent } from '../../calendar/calendar';
 import { MatIconModule } from '@angular/material/icon';
 import { ACTIVITY_CATEGORY_COLORS } from '../../../core/enums/activity-category-colors.enum';
 import { NavigationService } from '../../../core/services/navigation.service';
+import { ActionButtonComponent } from '../../../shared/components/action-button/action-button';
 
 @Component({
   selector: 'app-trip-planner',
-  imports: [CalendarComponent, MatIconModule],
+  imports: [CalendarComponent, MatIconModule, ActionButtonComponent],
   templateUrl: './trip-planner.html',
 })
 export class TripPlannerComponent {
