@@ -69,11 +69,11 @@
   }
 
   .snackbar-error {
-    @apply !bg-red-500 !text-white;
+    @apply bg-red-500! text-white!;
   }
 
   .snackbar-success {
-    @apply !bg-green-500 !text-white;
+    @apply bg-green-500! text-white!;
   }
 }
 
