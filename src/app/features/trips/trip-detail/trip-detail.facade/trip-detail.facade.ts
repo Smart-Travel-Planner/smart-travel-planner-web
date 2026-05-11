@@ -96,7 +96,7 @@ private destroyRef = inject(DestroyRef);
       takeUntilDestroyed(this.destroyRef)
     ).subscribe({
       next: locations => this._locations.set(locations),
-      error: () => {},
+      error: () => this._errorMessage.set('Error cargando las ubicaciones'),
     });
   }
 

@@ -2,6 +2,7 @@ import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { Slide } from '../../core/models/carrusel.model';
 import { environment } from '../../environments/environment';
 import { HttpClient } from '@angular/common/http';
+import { noop } from 'rxjs';
 
 @Component({
   selector: 'app-home',
@@ -37,7 +38,7 @@ export class HomeComponent implements OnInit {
 
   private warmUpServer(): void {
     this.http.get(`${environment.apiUrl}/health`).subscribe({
-      error: () => {}
+      error: noop
     });
   };
 
