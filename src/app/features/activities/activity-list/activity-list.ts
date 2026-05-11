@@ -70,12 +70,12 @@ export class ActivityListComponent implements OnInit {
   }
 
   goToEditActivity(id: string): void {
-    this.navigationService.setPreviousUrl(`/trips/${this.tripId()}/activities`);
+    // this.navigationService.setPreviousUrl(`/trips/${this.tripId()}/activities`);
     this.router.navigate(['/trips', this.tripId(), 'activities', id, 'edit']);
   };
 
   goToCreate(): void {
-    this.navigationService.setPreviousUrl(`/trips/${this.tripId()}/activities`);
+    // this.navigationService.setPreviousUrl(`/trips/${this.tripId()}/activities`);
     this.router.navigate(['/trips', this.tripId(), 'activities', 'new']);
   };
 

@@ -247,6 +247,7 @@ export class ActivityFormComponent implements OnInit {
   };
 
   goBack(): void {
-    this.router.navigate([this.navigationService.getPreviousUrl()]);
+    this.router.navigate([`/trips/${this.tripId()}/activities`]);
+    // this.router.navigate([this.navigationService.getPreviousUrl()]);
   };
 };
